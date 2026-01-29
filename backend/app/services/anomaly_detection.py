@@ -12,26 +12,35 @@ def detect_anomalies(data: TelemetryData) -> list[AlertType]:
     """
     anomalies = []
     
-    # --- CONTEXTUAL AI RISK SCORING (Simulated Random Forest Logic) ---
-    # In a real deployment, this would use sklearn/loading a .pkl model.
-    # Features: [TimeOfDay, WeatherCondition, TerrainDifficulty, UserHistory]
+    anomalies = []
     
+    # --- PHASE 3: WEIGHTED AI RISK ENGINE (The "Brain") ---
+    # Formula: Risk = (Static * 0.3) + (Env * 0.4) + (Behavior * 0.3)
+    
+    # 1. Static Risk (Geofence Context)
+    # Check if inside a High Risk Zone
+    from app.services.geofence import check_geofence_breach, _GEOFENCE_CACHE
+    # We re-check here or assume caller did? Let's check to get the Risk Level.
+    zone = check_geofence_breach(data.location)
+    static_risk = 0.0
+    if zone:
+        if zone.risk_level == "HIGH": static_risk = 100.0
+        elif zone.risk_level == "MEDIUM": static_risk = 50.0
+        else: static_risk = 10.0
+    else:
+        static_risk = 0.0 # Green Zone
+        
+    # 2. Environmental Risk (Time + Weather)
     current_hour = time.localtime(data.timestamp).tm_hour
-    is_night_time = current_hour < 6 or current_hour > 18
-    weather_condition = "CLEAR" # Mock data source
+    is_night = current_hour < 6 or current_hour > 18
+    # Mock Weather: Random storm in Tawang?
+    # Let's assume CLEAR for now, unless Risk Engine script injects it.
+    env_risk = 80.0 if is_night else 20.0
     
-    # Base Probability of Incident
-    risk_score = 0.1 
+    # 3. Behavioral Anomaly (Velocity / Stagnation)
+    behavioral_anomaly = 0.0
     
-    if is_night_time:
-        risk_score += 0.4  # Night trekking significantly increases risk
-    
-    if data.is_panic:
-        risk_score = 1.0   # Immediate Certainty
-        anomalies.append(AlertType.SOS)
-
-    # 1. Dead Man's Switch / Inactivity Logic
-    # ---------------------------------------
+    # Check Inactivity (Simulating "0 velocity for > 20 mins")
     table = get_table('Prahari_Telemetry')
     try:
         response = table.query(
@@ -46,26 +55,35 @@ def detect_anomalies(data: TelemetryData) -> list[AlertType]:
             last_lat = float(last_item['location']['lat'])
             last_lng = float(last_item['location']['lng'])
             
-            # Importing locally to avoid circulars
             from app.services.geofence import haversine_distance, GeoPoint
             dist = haversine_distance(data.location, GeoPoint(lat=last_lat, lng=last_lng))
             time_diff = data.timestamp - last_time
 
-            # If user hasn't moved for X time
-            if time_diff > settings.INACTIVITY_THRESHOLD_SECONDS:
+            if time_diff > settings.INACTIVITY_THRESHOLD_SECONDS: # > 1200 normally
                  if dist < 20.0:
-                     # High Risk Context: Inactivity at NIGHT is Critical, Day is Warning
-                     if risk_score > 0.4:
-                         anomalies.append(AlertType.Unconscious) # Custom high severity
-                     else:
-                         anomalies.append(AlertType.INACTIVITY)
+                     behavioral_anomaly = 100.0 # High Probability of Injury
+            
+            # Additional Velo check
+            if hasattr(data, 'speed') and data.speed > 80.0: # Impossible human speed
+                behavioral_anomaly = 90.0
+                
     except Exception as e:
-        print(f"Error checking history for anomaly: {e}")
+        print(f"Error checking history: {e}")
 
-    # 2. Route Deviation with Risk Context
-    # ------------------------------------
-    # (Simplified: logic assumes we have a 'route' - for now we use geofence logic elsewhere)
-    # If the user is in a 'High Risk Zone' (checked in geofence service) + High Risk Score
-    # We escalate the alert severity.
+    if data.is_panic:
+        behavioral_anomaly = 100.0
+
+    # --- THE ALGORITHM ---
+    final_risk_score = (static_risk * 0.3) + (env_risk * 0.4) + (behavioral_anomaly * 0.3)
     
+    # print(f"AI BRAIN: Device {data.device_id} | Risk Score: {final_risk_score:.2f} | Context: [S:{static_risk}, E:{env_risk}, B:{behavioral_anomaly}]")
+    
+    # Thresholding Logic
+    if final_risk_score > 80.0:
+        anomalies.append(AlertType.SOS) # or CRITICAL_RISK 
+    elif final_risk_score > 60.0:
+        anomalies.append(AlertType.GEOFENCE_BREACH) # General Danger
+    elif behavioral_anomaly >= 100.0:
+        anomalies.append(AlertType.INACTIVITY)
+
     return anomalies
