@@ -57,6 +57,63 @@ def process_telemetry_background(data: TelemetryData):
             message="SOS Panic Button Triggered!"
         ))
 
+    # --- KALMAN FILTERING (Signal Smoothing) ---
+    # In a real serverless architecture, this state would be stored in Redis/ElastiCache.
+    # For this localized demo, we use an in-memory dictionary.
+    global _kalman_states
+    if '_kalman_states' not in globals():
+        _kalman_states = {}
+    
+    # Initialize state for this device if new
+    if data.device_id not in _kalman_states:
+        # State: [lat, lng, lat_v, lng_v]
+        # P: Covariance matrix (uncertainty)
+        _kalman_states[data.device_id] = {
+            'x': [data.location['lat'], data.location['lng'], 0, 0], 
+            'P': [[1,0,0,0], [0,1,0,0], [0,0,1000,0], [0,0,0,1000]],
+            'last_ts': data.timestamp
+        }
+    
+    kf = _kalman_states[data.device_id]
+    dt = data.timestamp - kf['last_ts']
+    if dt <= 0: dt = 0.01 # Avoid zero division or stale timestamps
+    
+    # 1. Predict (Process Model)
+    # New Position = Old Position + Velocity * dt
+    kf['x'][0] += kf['x'][2] * dt
+    kf['x'][1] += kf['x'][3] * dt
+    # Covariance increases/dilutes over time (Entropy)
+    # Simple addition for demo purposes
+    
+    # 2. Update (Measurement)
+    # Innovation (Observed - Predicted)
+    z = [data.location['lat'], data.location['lng']]
+    y = [z[0] - kf['x'][0], z[1] - kf['x'][1]]
+    
+    # Kalman Gain (Simplified for GPS: ~0.5 means trust sensor 50%, model 50%)
+    # Dynamic gain based on 'is_panic' or velocity could be cool.
+    # Let's use a static high-smoothing factor for a "Cinematic" track.
+    K = 0.6 
+    
+    # New Estimate = Predicted + Gain * Innovation
+    kf['x'][0] += K * y[0]
+    kf['x'][1] += K * y[1]
+    
+    # Update Velocity estimates for next prediction
+    kf['x'][2] = (kf['x'][0] - (kf['x'][0] - K*y[0])) / dt # Rough velocity inference
+    kf['x'][3] = (kf['x'][1] - (kf['x'][1] - K*y[1])) / dt
+
+    kf['last_ts'] = data.timestamp
+    
+    # OVERWRITE Payload with Smoothed Data
+    # accurate for Geofencing/Display
+    original_data = data.model_copy()
+    data.location['lat'] = kf['x'][0]
+    data.location['lng'] = kf['x'][1]
+    
+    # log difference for demo
+    # print(f"Raw: {original_data.location} -> Smoothed: {data.location}")
+
     # 4. Save Telemetry to DynamoDB
     t_table = get_table('Prahari_Telemetry')
     # Convert floats to Decimal for DynamoDB
