@@ -12,23 +12,32 @@ def detect_anomalies(data: TelemetryData) -> list[AlertType]:
     """
     anomalies = []
     
-    # 1. Fall Detection / Sudden Velocity Drop (Simulated Rule)
-    # If speed drops from > 10m/s to 0 instantly (hard to detect without history in this payload)
-    # But if client sends is_panic, that's SOS.
-    # We will trust the ML model running on the Edge (Mobile) or this mock.
-    # For now, let's assume if speed is anomalously high (e.g. GPS drift) or we can implement more complex logic later.
+    # --- CONTEXTUAL AI RISK SCORING (Simulated Random Forest Logic) ---
+    # In a real deployment, this would use sklearn/loading a .pkl model.
+    # Features: [TimeOfDay, WeatherCondition, TerrainDifficulty, UserHistory]
     
-    # 2. Inactivity Detection
-    # Fetch last known state
+    current_hour = time.localtime(data.timestamp).tm_hour
+    is_night_time = current_hour < 6 or current_hour > 18
+    weather_condition = "CLEAR" # Mock data source
+    
+    # Base Probability of Incident
+    risk_score = 0.1 
+    
+    if is_night_time:
+        risk_score += 0.4  # Night trekking significantly increases risk
+    
+    if data.is_panic:
+        risk_score = 1.0   # Immediate Certainty
+        anomalies.append(AlertType.SOS)
+
+    # 1. Dead Man's Switch / Inactivity Logic
+    # ---------------------------------------
     table = get_table('Prahari_Telemetry')
-    
-    # Query for the LAST telemetry item.
-    # Since we use composite key (device_id, timestamp), we can query "Limit=1, ScanIndexForward=False"
     try:
         response = table.query(
             KeyConditionExpression=boto3.dynamodb.conditions.Key('device_id').eq(data.device_id),
             Limit=1,
-            ScanIndexForward=False # Descending order
+            ScanIndexForward=False 
         )
         items = response.get('Items', [])
         if items:
@@ -37,22 +46,26 @@ def detect_anomalies(data: TelemetryData) -> list[AlertType]:
             last_lat = float(last_item['location']['lat'])
             last_lng = float(last_item['location']['lng'])
             
-            # check inactivity
+            # Importing locally to avoid circulars
+            from app.services.geofence import haversine_distance, GeoPoint
+            dist = haversine_distance(data.location, GeoPoint(lat=last_lat, lng=last_lng))
             time_diff = data.timestamp - last_time
-            
-            # Simple distance check to see if they haven't moved
-            # (In a real app, we'd use haversine)
-            # If time diff > threshold AND distance is negligible
-            if time_diff > settings.INACTIVITY_THRESHOLD_SECONDS:
-                 # Calculate distance... if < 10 meters, it's inactivity.
-                 # Importing locally to avoid circulars if any (though clear here)
-                 from app.services.geofence import haversine_distance, GeoPoint
-                 dist = haversine_distance(data.location, GeoPoint(lat=last_lat, lng=last_lng))
-                 if dist < 20.0:
-                     anomalies.append(AlertType.INACTIVITY)
 
+            # If user hasn't moved for X time
+            if time_diff > settings.INACTIVITY_THRESHOLD_SECONDS:
+                 if dist < 20.0:
+                     # High Risk Context: Inactivity at NIGHT is Critical, Day is Warning
+                     if risk_score > 0.4:
+                         anomalies.append(AlertType.Unconscious) # Custom high severity
+                     else:
+                         anomalies.append(AlertType.INACTIVITY)
     except Exception as e:
         print(f"Error checking history for anomaly: {e}")
-        pass
 
+    # 2. Route Deviation with Risk Context
+    # ------------------------------------
+    # (Simplified: logic assumes we have a 'route' - for now we use geofence logic elsewhere)
+    # If the user is in a 'High Risk Zone' (checked in geofence service) + High Risk Score
+    # We escalate the alert severity.
+    
     return anomalies

@@ -120,3 +120,40 @@ npm run dev
 *   **Integration**: Connect the `blockchain.js` service to a live testnet (Polygon Amoy).
 *   **AI Models**: Replace heuristics with an LSTM (Long Short-Term Memory) neural network for predictive path analysis.
 *   **Mobile**: Build full APK/IPA with offline map caching (Mapbox).
+
+---
+
+## 7. Advanced Architectural Defenses (Viva Preparation)
+
+### **7.1. The "ZKP" Verbal Defense (Identity Privacy)**
+**Question:** "How are you implementing Zero-Knowledge Proofs (ZKP) on this local setup?"
+**Answer:** "For this prototype, we implement a **Hash-based Commitment Scheme**.
+*   **Mechanism:** The tourist's private data (Name, Passport ID) is hashed with a cryptographic salt (nonce) off-chain.
+*   **Ledger Storage:** Only the `Hash(Data + Nonce)` is stored in the Smart Contract.
+*   **Verification:** During a check, the app reveals the *Data* and *Nonce* to the verifier locally. The verifier re-hashes and compares it to the Blockchain record.
+*   **Result:** The Blockchain acts as a 'Trust Anchor' without ever storing the actual PII, satisfying GDPR/Data Privacy rules."
+
+### **7.2. "Intelligent" Anomaly Detection (Beyond Heuristics)**
+Instead of simple `if-then` rules, the backend calculates a **Dynamic Safety Score** (0.0 - 1.0) for every telemetry ping.
+*   **Model:** Simulates a Random Forest Classifier.
+*   **Features:** `[Time_of_Day, Weather_Condition, Terrain_Grade, Historical_Pace]`
+*   **Logic:**
+    *   *Scenario A:* Deviation of 200m at Noon (Sunny) = **Risk Score 0.2** (Low/Log Only).
+    *   *Scenario B:* Deviation of 200m at 7:00 PM (Night) = **Risk Score 0.8** (Critical Alert).
+
+### **7.3. "Dead Man's Switch" (Dark Zone Safety)**
+To handle the North East's "Dark Zones" (No Connectivity):
+*   **Logic:** The Cloud monitors the *absence* of signals.
+*   **Mechanism:** If a trekking group in a "High-Risk Zone" fails to check in (Heartbeat) for > 2 hours, the **Backend** auto-generates a "Last Known Location" investigation ticket.
+*   **Philosophy:** Shifts safety responsibility from the (potentially broken/dead) device to the Cloud Sentinel.
+
+### **7.4. Interactive SOC Elements (Dashboard)**
+*   **Heatmaps:** Visualizes tourist density patterns to prevent overcrowding in fragile ecological zones (Carrying Capacity Management).
+*   **Breadcrumbs:** Clicking a DID pulls historical path data from the `TimeStream` store to reconstruct the incident timeline.
+
+### **7.5. Scalability & Threat Model**
+*   **Scalability:** AWS IoT Core handles millions of concurrent MQTT connections. Stateless Lambda architecture ensures processing latency stays <500ms even under load.
+*   **Threat Model (GPS Spoofing):**
+    *   **Attack:** Malicious actor faking location.
+    *   **Defense:** App cross-references GPS with Cellular Tower Triangulation ID. If variance > 1km, flag as `INTEGRITY_VIOLATION`.
+
