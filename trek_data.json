@@ -1,0 +1,600 @@
+[
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769700770.6632936,
+    "location": {
+      "lat": 27.586199999999998,
+      "lng": 91.8595
+    },
+    "speed": 1.5,
+    "heading": 45.0,
+    "battery_level": 95.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769700830.6632936,
+    "location": {
+      "lat": 27.586299999999998,
+      "lng": 91.8596
+    },
+    "speed": 1.5,
+    "heading": 45.0,
+    "battery_level": 94.9,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769700890.6632936,
+    "location": {
+      "lat": 27.586399999999998,
+      "lng": 91.8597
+    },
+    "speed": 1.5,
+    "heading": 45.0,
+    "battery_level": 94.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769700950.6632936,
+    "location": {
+      "lat": 27.586499999999997,
+      "lng": 91.8598
+    },
+    "speed": 1.5,
+    "heading": 45.0,
+    "battery_level": 94.7,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701010.6632936,
+    "location": {
+      "lat": 27.586599999999997,
+      "lng": 91.85990000000001
+    },
+    "speed": 1.5,
+    "heading": 45.0,
+    "battery_level": 94.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701070.6632936,
+    "location": {
+      "lat": 27.586699999999997,
+      "lng": 91.86000000000001
+    },
+    "speed": 1.5,
+    "heading": 45.0,
+    "battery_level": 94.5,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701130.6632936,
+    "location": {
+      "lat": 27.586799999999997,
+      "lng": 91.86010000000002
+    },
+    "speed": 1.5,
+    "heading": 45.0,
+    "battery_level": 94.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701190.6632936,
+    "location": {
+      "lat": 27.586899999999996,
+      "lng": 91.86020000000002
+    },
+    "speed": 1.5,
+    "heading": 45.0,
+    "battery_level": 94.3,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701250.6632936,
+    "location": {
+      "lat": 27.586999999999996,
+      "lng": 91.86030000000002
+    },
+    "speed": 1.5,
+    "heading": 45.0,
+    "battery_level": 94.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701310.6632936,
+    "location": {
+      "lat": 27.587099999999996,
+      "lng": 91.86040000000003
+    },
+    "speed": 1.5,
+    "heading": 45.0,
+    "battery_level": 94.1,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701370.6632936,
+    "location": {
+      "lat": 27.5878,
+      "lng": 91.86179999999999
+    },
+    "speed": 1.5,
+    "heading": 45.0,
+    "battery_level": 93.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701430.6632936,
+    "location": {
+      "lat": 27.587850000000003,
+      "lng": 91.86184999999999
+    },
+    "speed": 1.5,
+    "heading": 45.0,
+    "battery_level": 93.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701490.6632936,
+    "location": {
+      "lat": 27.5879,
+      "lng": 91.86189999999999
+    },
+    "speed": 1.5,
+    "heading": 45.0,
+    "battery_level": 93.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701550.6632936,
+    "location": {
+      "lat": 27.587950000000003,
+      "lng": 91.86195
+    },
+    "speed": 1.5,
+    "heading": 45.0,
+    "battery_level": 93.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701610.6632936,
+    "location": {
+      "lat": 27.588,
+      "lng": 91.862
+    },
+    "speed": 1.5,
+    "heading": 45.0,
+    "battery_level": 93.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701670.6632936,
+    "location": {
+      "lat": 27.58799079793168,
+      "lng": 91.86199152942832
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 90.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701730.6632936,
+    "location": {
+      "lat": 27.58799338064085,
+      "lng": 91.8619938203502
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.95,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701790.6632936,
+    "location": {
+      "lat": 27.588000819362648,
+      "lng": 91.86199690611313
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.9,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701850.6632936,
+    "location": {
+      "lat": 27.58800431980721,
+      "lng": 91.86199823575087
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.85,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701910.6632936,
+    "location": {
+      "lat": 27.587999571484403,
+      "lng": 91.86199909230142
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769701970.6632936,
+    "location": {
+      "lat": 27.587994282794877,
+      "lng": 91.86199302731495
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.75,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702030.6632936,
+    "location": {
+      "lat": 27.58799004756954,
+      "lng": 91.86200943320574
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.7,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702090.6632936,
+    "location": {
+      "lat": 27.587993189376814,
+      "lng": 91.86199512004879
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.65,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702150.6632936,
+    "location": {
+      "lat": 27.58799167187848,
+      "lng": 91.86200871877982
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702210.6632936,
+    "location": {
+      "lat": 27.587997797447223,
+      "lng": 91.86200007686789
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.55,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702270.6632936,
+    "location": {
+      "lat": 27.587995181774833,
+      "lng": 91.86200733123096
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.5,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702330.6632936,
+    "location": {
+      "lat": 27.587996739693327,
+      "lng": 91.86200230289843
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.45,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702390.6632936,
+    "location": {
+      "lat": 27.588000765930087,
+      "lng": 91.86200174502669
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702450.6632936,
+    "location": {
+      "lat": 27.588006917266533,
+      "lng": 91.86199519042519
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.35,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702510.6632936,
+    "location": {
+      "lat": 27.58799477212506,
+      "lng": 91.86199681599074
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.3,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702570.6632936,
+    "location": {
+      "lat": 27.58800756585757,
+      "lng": 91.86200106974877
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.25,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702630.6632936,
+    "location": {
+      "lat": 27.588006620579193,
+      "lng": 91.86199310229685
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702690.6632936,
+    "location": {
+      "lat": 27.588001487133447,
+      "lng": 91.86200290149479
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.15,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702750.6632936,
+    "location": {
+      "lat": 27.58800746301698,
+      "lng": 91.86199385206922
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.1,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702810.6632936,
+    "location": {
+      "lat": 27.588007663196876,
+      "lng": 91.86199949568899
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.05,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702870.6632936,
+    "location": {
+      "lat": 27.587995629883807,
+      "lng": 91.86200253741531
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 89.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702930.6632936,
+    "location": {
+      "lat": 27.587999147214397,
+      "lng": 91.8619950733728
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 88.95,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769702990.6632936,
+    "location": {
+      "lat": 27.587997744445076,
+      "lng": 91.86200402503523
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 88.9,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769703050.6632936,
+    "location": {
+      "lat": 27.588005441780016,
+      "lng": 91.86200880897577
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 88.85,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769703110.6632936,
+    "location": {
+      "lat": 27.588005062323475,
+      "lng": 91.86200991329589
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 88.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769703170.6632936,
+    "location": {
+      "lat": 27.588007216110327,
+      "lng": 91.86200287012781
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 88.75,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769703230.6632936,
+    "location": {
+      "lat": 27.58799688416381,
+      "lng": 91.86200296037943
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 88.7,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769703290.6632936,
+    "location": {
+      "lat": 27.58800243524372,
+      "lng": 91.86199795651542
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 88.65,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769703350.6632936,
+    "location": {
+      "lat": 27.58799118576391,
+      "lng": 91.86199187090533
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 88.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769703410.6632936,
+    "location": {
+      "lat": 27.588003931020737,
+      "lng": 91.86199565489339
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 88.55,
+    "is_panic": false
+  },
+  {
+    "device_id": "device_alpha_001",
+    "did": "did:eth:0x1234567890abcdef",
+    "timestamp": 1769703420.6632936,
+    "location": {
+      "lat": 27.588,
+      "lng": 91.862
+    },
+    "speed": 0.0,
+    "heading": 0.0,
+    "battery_level": 88.0,
+    "is_panic": true
+  }
+]

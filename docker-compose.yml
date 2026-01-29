@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # AWS LocalStack for simulating DynamoDB, IoT Core, Lambda, Cognito
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"            # Edge port
+      - "4510-4559:4510-4559"  # External service ports range
+    environment:
+      - SERVICES=dynamodb,iot,lambda,cognito-idp,timestream-write,timestream-query,locations
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - prahari-network
+
+  # Ganache for local Ethereum Blockchain simulation (DID & Permit Registry)
+  ganache:
+    image: trufflesuite/ganache:latest
+    ports:
+      - "8545:8545"
+    command: ["--wallet.totalAccounts", "10", "--chain.chainId", "1337"]
+    networks:
+      - prahari-network
+
+networks:
+  prahari-network:
+    driver: bridge
