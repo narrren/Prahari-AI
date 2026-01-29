@@ -58,18 +58,26 @@ contract TouristPermitRegistry {
     }
 
     /**
-     * @notice Verifies if a tourist has a valid permit.
+     * @notice PRIMARY VERIFICATION FUNCTION (The "Success" Feature)
+     * @dev Checks if a tourist has a valid, non-expired permit.
+     * Implements "Time-Locked" logic: Automatically fails if block.timestamp > expiryDate.
      * @param _tourist The wallet address to verify.
-     * @return bool True if permit is active and not expired.
+     * @return isValidParam True if permit is active, authorized, and within the valid time window.
      */
-    function verifyPermit(address _tourist) external view returns (bool) {
+    function isPermitValid(address _tourist) external view returns (bool) {
         Permit memory p = permits[_tourist];
+        
+        // 1. Check Existence & Revocation status
         if (!p.isValid) {
             return false;
         }
+        
+        // 2. Time-Lock Check (Automatic Expiration)
+        // The blockchain timestamp serves as the immutable time source.
         if (block.timestamp > p.expiryDate) {
             return false;
         }
+        
         return true;
     }
 

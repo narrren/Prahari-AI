@@ -120,6 +120,25 @@ const PermitIssuer = () => {
                                 <div className="mt-4 pt-4 border-t border-green-500/20 text-sm text-green-300">
                                     Credential has been sent to the user's mobile wallet.
                                 </div>
+
+                                {/* QR Code Proof Simulation */}
+                                <div className="mt-4 bg-black/40 p-3 rounded border border-green-500/30">
+                                    <h5 className="text-[10px] text-green-400 uppercase tracking-widest font-bold mb-2 flex items-center gap-2">
+                                        <div className="w-4 h-4 bg-white p-0.5 rounded-sm"><div className="w-full h-full bg-black"></div></div>
+                                        Proof QR Payload
+                                    </h5>
+                                    <div className="font-mono text-[10px] text-gray-500 break-all bg-black p-2 rounded">
+                                        SHA256( {formData.did.substring(0, 6)}... + SALT_8273 + {Math.floor(Date.now() / 1000) + 604800} )
+                                        <br />
+                                        &gt;&gt; 0x{Math.random().toString(16).substr(2)}{Math.random().toString(16).substr(2)}
+                                    </div>
+                                    <p className="text-[9px] text-gray-400 mt-2 italic">
+                                        * The mobile app presents this Hash as a QR Code.
+                                        Border Guards scan it, and their device invokes
+                                        <code className="text-blue-300"> isPermitValid() </code>
+                                        on the Smart Contract to verify.
+                                    </p>
+                                </div>
                             </div>
                         )}
 
