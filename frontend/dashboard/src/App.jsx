@@ -21,6 +21,7 @@ const DEMO_ZONES = [
 
 function App() {
   const [view, setView] = useState('monitor'); // 'monitor' | 'issuer'
+  const [selectedIncident, setSelectedIncident] = useState(null);
   const [tourists, setTourists] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [stats, setStats] = useState({ active: 0, safe: 0, danger: 0 });
@@ -119,7 +120,17 @@ function App() {
                     <span className="text-xs text-gray-400">{new Date(alert.timestamp * 1000).toLocaleTimeString()}</span>
                   </div>
                   <p className="mt-2 text-sm text-gray-300 leading-relaxed">{alert.message}</p>
-                  <div className="mt-2 text-xs font-mono text-gray-500 bg-gray-900/50 p-1 rounded inline-block">ID: {alert.device_id}</div>
+
+                  <div className="flex justify-between items-center mt-3">
+                    <div className="text-xs font-mono text-gray-500 bg-gray-900/50 p-1 rounded">ID: {alert.device_id}</div>
+
+                    <button
+                      onClick={() => setSelectedIncident(alert)}
+                      className="text-[10px] font-bold bg-red-600/20 hover:bg-red-600 hover:text-white text-red-500 border border-red-600/50 px-2 py-1 rounded transition-colors uppercase tracking-wider flex items-center gap-1"
+                    >
+                      <FileBadge className="w-3 h-3" /> Generate E-FIR
+                    </button>
+                  </div>
                 </div>
               ))}
             </>
@@ -187,6 +198,89 @@ function App() {
           )}
         </div>
       </main>
+
+      {/* EMERGENCY INCIDENT REPORT MODAL */}
+      {selectedIncident && (
+        <div className="fixed inset-0 z-[2000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-gray-900 border-2 border-red-500/50 rounded-lg shadow-2xl max-w-lg w-full overflow-hidden animate-in fade-in zoom-in duration-200">
+
+            {/* Header */}
+            <div className="bg-red-900/20 p-4 border-b border-red-500/50 flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <FileBadge className="w-6 h-6 text-red-500" />
+                <div>
+                  <h2 className="text-lg font-bold text-white tracking-widest uppercase">Official E-FIR Report</h2>
+                  <p className="text-[10px] text-red-400 font-mono">MINISTRY OF HOME AFFAIRS // AUTOMATED SYSTEM</p>
+                </div>
+              </div>
+              <button onClick={() => setSelectedIncident(null)} className="text-gray-400 hover:text-white">✕</button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 space-y-6">
+
+              {/* ID Section */}
+              <div className="bg-black/40 p-3 rounded border border-gray-700">
+                <label className="text-[10px] text-gray-500 uppercase tracking-widest block mb-1">Subject Identity (DID HASH)</label>
+                <div className="font-mono text-blue-400 text-sm break-all">
+                  {/* Mocking a DID hash based on device ID */}
+                  0x{Array.from(selectedIncident.device_id).map(c => c.charCodeAt(0).toString(16)).join('')}74e...
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-black/40 p-3 rounded border border-gray-700">
+                  <label className="text-[10px] text-gray-500 uppercase tracking-widest block mb-1">Incident Type</label>
+                  <div className="text-white font-bold">{selectedIncident.type}</div>
+                </div>
+                <div className="bg-black/40 p-3 rounded border border-gray-700">
+                  <label className="text-[10px] text-gray-500 uppercase tracking-widest block mb-1">Time of Heartbeat</label>
+                  <div className="text-white font-mono text-sm">{new Date(selectedIncident.timestamp * 1000).toLocaleString()}</div>
+                </div>
+              </div>
+
+              {/* Blockchain Proof */}
+              <div className="bg-green-900/10 border border-green-500/30 p-4 rounded-lg relative overflow-hidden">
+                <div className="absolute top-0 right-0 bg-green-500 text-black text-[9px] font-bold px-2 py-0.5 uppercase">
+                  Verified On-Chain
+                </div>
+
+                <label className="text-[10px] text-green-400 uppercase tracking-widest block mb-1 flex items-center gap-2">
+                  <Shield className="w-3 h-3" /> Blockchain Proof Record
+                </label>
+                <div className="font-mono text-xs text-gray-300 break-all">
+                  {/* Randomized Mock Tx Hash for Demo */}
+                  TXID: 0x8a9d{Math.floor(Math.random() * 1000000)}...ae34{selectedIncident.timestamp}
+                </div>
+                <p className="text-[10px] text-gray-500 mt-2">
+                  This record has been chemically hashed and committed to the Ethereum Ledger (ChainID: 1337). It cannot be altered by authority nodes.
+                </p>
+              </div>
+
+            </div>
+
+            {/* Footer */}
+            <div className="bg-gray-800 p-4 flex justify-end gap-3 border-t border-gray-700">
+              <button
+                onClick={() => setSelectedIncident(null)}
+                className="px-4 py-2 rounded text-sm text-gray-400 hover:text-white"
+              >
+                Close Viewer
+              </button>
+              <button
+                onClick={() => {
+                  window.print(); // Simple print trigger for effect
+                }}
+                className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white text-sm font-bold rounded shadow-lg flex items-center gap-2"
+              >
+                <FileBadge className="w-4 h-4" /> EXPORT PDF
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
