@@ -12,10 +12,14 @@ from app.services.identity import get_permit_info
 
 router = APIRouter()
 
-async def process_telemetry_background(data: TelemetryData):
+from app.services.websocket import notify_alert, broadcast_telemetry
+
+router = APIRouter()
+
+async def process_risk_and_db(data: TelemetryData):
     """
-    Background task to process analytics, geofencing, and persistence.
-    Keeps the API response fast (Event-Driven pattern).
+    SLOW PATH: Background task for heavy analytics, geofencing checks, and persistence.
+    Alerts generated here are pushed via WS separately.
     """
     alerts_to_trigger = []
     
@@ -36,7 +40,7 @@ async def process_telemetry_background(data: TelemetryData):
             message=f"Alert: DID {data.did} has entered restricted zone: {breached_zone.name}. {permit_str}"
         ))
 
-    # 2. Check Anomalies
+    # 2. Check Anomalies (Requires DB History often)
     anomalies = detect_anomalies(data)
     for anomaly_type in anomalies:
         severity = "MEDIUM"
@@ -55,10 +59,8 @@ async def process_telemetry_background(data: TelemetryData):
         )
         alerts_to_trigger.append(new_alert)
 
-        # TRIGGER WEBSOCKET ALARM IF CRITICAL
         if severity == "CRITICAL" or anomaly_type == AlertType.SOS:
             await notify_alert(new_alert.model_dump())
-
 
     # 3. Handle SOS
     if data.is_panic:
@@ -73,14 +75,44 @@ async def process_telemetry_background(data: TelemetryData):
             message=f"Alert: DID {data.did} SOS Panic Button Triggered! {permit_str}"
         ))
 
-    # --- KALMAN FILTERING (Signal Smoothing) ---
-    # In a real serverless architecture, this state would be stored in Redis/ElastiCache.
-    # For this localized demo, we use the shared state module.
+    # 4. Save Telemetry to DynamoDB (Persistence)
+    try:
+        t_table = get_table('Prahari_Telemetry')
+        item = data.model_dump()
+        item['location'] = {k: Decimal(str(v)) for k, v in item['location'].items()}
+        item['timestamp'] = Decimal(str(item['timestamp'])) 
+        item['speed'] = Decimal(str(item['speed']))
+        item['heading'] = Decimal(str(item['heading']))
+        item['battery_level'] = Decimal(str(item['battery_level']))
+        t_table.put_item(Item=item)
+    except Exception as e:
+        print(f"DB Error (Telemetry): {e}")
+
+    # 5. Save Alerts
+    if alerts_to_trigger:
+        try:
+            a_table = get_table('Prahari_Alerts')
+            for alert in alerts_to_trigger:
+                a_item = alert.model_dump()
+                a_item['location'] = {k: Decimal(str(v)) for k, v in a_item['location'].items()}
+                a_item['timestamp'] = Decimal(str(a_item['timestamp']))
+                a_table.put_item(Item=a_item)
+                print(f"ALERT TRIGGERED: {alert.message}")
+        except Exception as e:
+            print(f"DB Error (Alerts): {e}")
+
+@router.post("/telemetry")
+async def ingest_telemetry(data: TelemetryData, background_tasks: BackgroundTasks):
+    """
+    FAST PATH: Production-grade ingestion.
+    1. Kalman Smoothing (CPU-bound, fast).
+    2. Update In-Memory Cache (Immediate Read).
+    3. Broadcast WebSocket (Real-time View).
+    4. Offload DB/Risk to Background Tasks.
+    """
     
-    # Initialize state for this device if new
+    # --- 1. KALMAN FILTERING (Signal Smoothing) ---
     if data.device_id not in KALMAN_STATES:
-        # State: [lat, lng, lat_v, lng_v]
-        # P: Covariance matrix (uncertainty)
         KALMAN_STATES[data.device_id] = {
             'x': [data.location.lat, data.location.lng, 0, 0], 
             'P': [[1,0,0,0], [0,1,0,0], [0,0,1000,0], [0,0,0,1000]],
@@ -89,82 +121,40 @@ async def process_telemetry_background(data: TelemetryData):
     
     kf = KALMAN_STATES[data.device_id]
     dt = data.timestamp - kf['last_ts']
-    if dt <= 0: dt = 0.01 # Avoid zero division or stale timestamps
+    if dt <= 0: dt = 0.01 
     
-    # 1. Predict (Process Model)
-    # New Position = Old Position + Velocity * dt
+    # Predict
     kf['x'][0] += kf['x'][2] * dt
     kf['x'][1] += kf['x'][3] * dt
-    # Covariance increases/dilutes over time (Entropy)
-    # Simple addition for demo purposes
     
-    # 2. Update (Measurement)
-    # Innovation (Observed - Predicted)
+    # Update
     z = [data.location.lat, data.location.lng]
     y = [z[0] - kf['x'][0], z[1] - kf['x'][1]]
-    
-    # Kalman Gain (Simplified for GPS: ~0.5 means trust sensor 50%, model 50%)
-    # Dynamic gain based on 'is_panic' or velocity could be cool.
-    # Let's use a static high-smoothing factor for a "Cinematic" track.
     K = 0.6 
     
-    # New Estimate = Predicted + Gain * Innovation
     kf['x'][0] += K * y[0]
     kf['x'][1] += K * y[1]
     
-    # Update Velocity estimates for next prediction
-    kf['x'][2] = (kf['x'][0] - (kf['x'][0] - K*y[0])) / dt # Rough velocity inference
+    # Velocity update
+    kf['x'][2] = (kf['x'][0] - (kf['x'][0] - K*y[0])) / dt
     kf['x'][3] = (kf['x'][1] - (kf['x'][1] - K*y[1])) / dt
 
     kf['last_ts'] = data.timestamp
     
-    # ... (After Kalman Logic) ...
-    # OVERWRITE Payload with Smoothed Data
-    # accurate for Geofencing/Display
-    original_data = data.model_copy()
+    # Overwrite data location with Smoothed Coordinates
     data.location.lat = kf['x'][0]
     data.location.lng = kf['x'][1]
     
-    # --- REAL-TIME CACHE UPDATE (Redis Pattern) ---
-    # Update the cache immediately so the Map sees it NOW.
-    
-    # Store with native types (FastAPI handles JSON serialization)
+    # --- 2. UPDATE CACHE (Fast Read) ---
     LATEST_POSITIONS[data.device_id] = data.model_dump()
     
-    # log difference for demo
-    # print(f"Raw: {original_data.location} -> Smoothed: {data.location}")
-
-    # 4. Save Telemetry to DynamoDB
-    t_table = get_table('Prahari_Telemetry')
-    # Convert floats to Decimal for DynamoDB
-    item = data.model_dump()
-    item['location'] = {k: Decimal(str(v)) for k, v in item['location'].items()}
-    item['timestamp'] = Decimal(str(item['timestamp'])) # Make sure timestamp is number
-    # float to decimal conversion for other fields
-    item['speed'] = Decimal(str(item['speed']))
-    item['heading'] = Decimal(str(item['heading']))
-    item['battery_level'] = Decimal(str(item['battery_level']))
+    # --- 3. BROADCAST (Real-Time) ---
+    await broadcast_telemetry(data.model_dump())
     
-    t_table.put_item(Item=item)
-
-    # 5. Save Alerts
-    if alerts_to_trigger:
-        a_table = get_table('Prahari_Alerts')
-        for alert in alerts_to_trigger:
-            a_item = alert.model_dump()
-            a_item['location'] = {k: Decimal(str(v)) for k, v in a_item['location'].items()}
-            a_item['timestamp'] = Decimal(str(a_item['timestamp']))
-            a_table.put_item(Item=a_item)
-            print(f"ALERT TRIGGERED: {alert.message}")
-
-@router.post("/telemetry")
-async def ingest_telemetry(data: TelemetryData, background_tasks: BackgroundTasks):
-    """
-    Ingest GPS telemetry from mobile client.
-    """
-    # Simply ack and push to background processing
-    background_tasks.add_task(process_telemetry_background, data)
-    return {"status": "received", "timestamp": data.timestamp}
+    # --- 4. OFFLOAD SLOW TASKS ---
+    background_tasks.add_task(process_risk_and_db, data)
+    
+    return {"status": "accepted", "timestamp": data.timestamp}
 
 @router.get("/alerts")
 async def get_all_alerts():
