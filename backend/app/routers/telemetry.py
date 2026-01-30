@@ -194,7 +194,7 @@ async def get_map_positions():
     t_table = get_table('Prahari_Telemetry')
     # This is a naive scan. In prod, we'd use a 'CurrentLocations' table.
     try:
-        response = t_table.scan(Limit=100) # Limit for safety
+        response = t_table.scan(Limit=2000) # Limit for safety
         items = response.get('Items', [])
         # Group by device_id and take latest
         # Or if we had a dedicated 'CurrentState' table.
