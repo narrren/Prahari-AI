@@ -9,71 +9,87 @@ from app.services.geofence import check_geofence_breach
 from app.services.websocket import notify_alert
 from app.core.config import settings
 
-# If no signal for X seconds, define as LOST.
-# Using settings threshold or a custom shorter one for demo
-LOITERING_THRESHOLD = 60 # 60 seconds for Dead Man Demo
-DEAD_MAN_THRESHOLD = settings.INACTIVITY_THRESHOLD_SECONDS # 30 mins default
+import time
+import asyncio
+import uuid
+from decimal import Decimal
+from app.core.shared_state import LATEST_POSITIONS
+from app.services.db import get_table
+from app.models import Alert, AlertType, GeoPoint
+from app.services.geofence import check_geofence_breach
+from app.services.websocket import notify_alert
+from app.core.config import settings
+
+# --- STEP 2: CLOUD-SIDE DEAD MAN'S LOGIC ---
+
+# 60s for Demo (Real world: 3600s / 1 hour)
+DEAD_MAN_TIMEOUT = 60 
+
+async def trigger_dead_man_alert(device_id, zone_name, elapsed_time, device_data):
+    """
+    Helper to generate and dispatch the CRITICAL ALERT.
+    """
+    print(f"DEAD MAN TRIGGER: {device_id} lost for {elapsed_time:.1f}s in {zone_name}")
+    
+    alert = Alert(
+        alert_id=str(uuid.uuid4()),
+        device_id=device_id,
+        did=device_data.get('did', 'unknown'),
+        type=AlertType.INACTIVITY, 
+        severity="CRITICAL",
+        timestamp=time.time(),
+        location=GeoPoint(**device_data['location']),
+        message=f"SIGNAL_LOST_IN_DANGER_ZONE: {zone_name}. Last signal {int(elapsed_time/60)} min ago."
+    )
+    
+    # 1. Notify Frontend (Socket)
+    await notify_alert(alert.model_dump())
+    
+    # 2. Persist to DB
+    try:
+        a_table = get_table('Prahari_Alerts')
+        a_item = alert.model_dump()
+        a_item['location'] = {k: Decimal(str(v)) for k, v in a_item['location'].items()}
+        a_item['timestamp'] = Decimal(str(a_item['timestamp']))
+        a_table.put_item(Item=a_item)
+    except Exception as e:
+        print(f"Failed to persist Dead Man Alert: {e}")
+
+async def dead_mans_switch_check(device_data):
+    """
+    The Core Logic as per Step 2 Requirement.
+    Checks if a tourist has 'gone dark' in a dangerous area.
+    """
+    tourist_id = device_data['device_id']
+    last_seen_timestamp = device_data['timestamp']
+    
+    # Get Current Zone Status
+    location = GeoPoint(**device_data['location'])
+    zone = check_geofence_breach(location)
+    current_zone_risk = zone.risk_level if zone else "SAFE"
+    
+    # Check Timeout
+    elapsed = time.time() - last_seen_timestamp
+    
+    # Logic: "if elapsed > timeout and current_zone == HighRisk"
+    if elapsed > DEAD_MAN_TIMEOUT and current_zone_risk == "HIGH":
+        await trigger_dead_man_alert(tourist_id, zone.name, elapsed, device_data)
 
 async def run_dead_man_switch_loop():
     """
-    Simulated Lambda running on a schedule (every 2 mins in prompt, every 30s here for demo).
+    Background Task (Lambda Pattern).
+    Polls every 60s.
     """
-    print("DEAD MAN SWITCH: Monitor Activated...")
+    print("DEAD MAN SWITCH: Cloud Monitor Activated...")
     while True:
         try:
-            current_time = time.time()
-            
-            # Iterate through all known live trackers
-            # We copy keys to avoid runtime error if dict changes size
+            # Snapshot of active devices
             active_devices = list(LATEST_POSITIONS.values())
             
             for device_data in active_devices:
-                device_id = device_data['device_id']
-                last_seen = device_data['timestamp']
-                
-                # Time Delta
-                delta = current_time - last_seen
-                
-                # Check 1: Is it stale?
-                if delta > DEAD_MAN_THRESHOLD:
-                    # Check 2: Is it in High Risk Zone?
-                    # We need to construct GeoPoint from dict
-                    location = GeoPoint(**device_data['location'])
-                    zone = check_geofence_breach(location)
-                    
-                    if zone and zone.risk_level == "HIGH":
-                        # CRITICAL: DEAD MAN SWITCH TRIGGERED
-                        # "Signal Lost in Restricted Zone"
-                        
-                        # Generate Alert
-                        print(f"DEAD MAN TRIGGER: {device_id} lost for {delta}s in {zone.name}")
-                        
-                        alert = Alert(
-                            alert_id=str(uuid.uuid4()),
-                            device_id=device_id,
-                            did=device_data.get('did', 'unknown'),
-                            type=AlertType.INACTIVITY, # Or create a new SIGNAL_LOST type
-                            severity="CRITICAL",
-                            timestamp=current_time,
-                            location=location,
-                            message=f"DEAD MAN SWITCH: Signal Lost in High Risk Zone ({zone.name}). Last seen {int(delta/60)} mins ago."
-                        )
-                        
-                        # Notify FE
-                        await notify_alert(alert.model_dump())
-                        
-                        # Save to DB
-                        a_table = get_table('Prahari_Alerts')
-                        a_item = alert.model_dump()
-                        a_item['location'] = {k: Decimal(str(v)) for k, v in a_item['location'].items()}
-                        a_item['timestamp'] = Decimal(str(a_item['timestamp']))
-                        a_table.put_item(Item=a_item)
-                        
-                        # Optional: Mark as "Processed" to avoid spamming alerts every loop?
-                        # For now, simplistic loop.
+                await dead_mans_switch_check(device_data)
 
         except Exception as e:
             print(f"DeadManMonitor Error: {e}")
             
-        # Run every 2 minutes (120s) as per prompt, or shorter for debugging
         await asyncio.sleep(60) 
