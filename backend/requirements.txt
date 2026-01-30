@@ -6,3 +6,5 @@ pydantic-settings
 web3
 python-dotenv
 requests
+shapely
+geopy
