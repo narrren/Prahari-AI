@@ -205,3 +205,25 @@ async def get_map_positions():
     except Exception as e:
         print(f"Error fetching positions: {e}")
         return []
+
+@router.get("/telemetry/history/{device_id}")
+async def get_device_history(device_id: str, hours: int = 4):
+    """
+    Fetch historical telemetry for 'Breadcrumbs' (last N hours).
+    Efficiently queries DynamoDB partition key.
+    """
+    import boto3 
+    from boto3.dynamodb.conditions import Key
+    
+    t_table = get_table('Prahari_Telemetry')
+    cutoff_time = Decimal(str(time.time() - (hours * 3600)))
+    
+    try:
+        response = t_table.query(
+            KeyConditionExpression=Key('device_id').eq(device_id) & Key('timestamp').gte(cutoff_time),
+            ScanIndexForward=True # Ascending (oldest first)
+        )
+        return response.get('Items', [])
+    except Exception as e:
+        print(f"Error fetching history for {device_id}: {e}")
+        return []
