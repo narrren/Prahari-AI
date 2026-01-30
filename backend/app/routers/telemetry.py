@@ -101,14 +101,20 @@ async def process_risk_and_db(data: TelemetryData):
         except Exception as e:
             print(f"DB Error (Alerts): {e}")
 
+from app.engine import SentinelAI
+from app.services.websocket import notify_alert, broadcast_telemetry
+
+# ... (Previous imports and functions)
+
 @router.post("/telemetry")
 async def ingest_telemetry(data: TelemetryData, background_tasks: BackgroundTasks):
     """
     FAST PATH: Production-grade ingestion.
-    1. Kalman Smoothing (CPU-bound, fast).
-    2. Update In-Memory Cache (Immediate Read).
-    3. Broadcast WebSocket (Real-time View).
-    4. Offload DB/Risk to Background Tasks.
+    1. Kalman Smoothing.
+    2. Cache Update.
+    3. AI Risk Calculation (Inline/Fast).
+    4. WS Broadcast (Smart Payload).
+    5. Persistence (Async).
     """
     
     # --- 1. KALMAN FILTERING (Signal Smoothing) ---
@@ -123,11 +129,10 @@ async def ingest_telemetry(data: TelemetryData, background_tasks: BackgroundTask
     dt = data.timestamp - kf['last_ts']
     if dt <= 0: dt = 0.01 
     
-    # Predict
+    # Predict & Update (Standard EKF Logic simplification)
     kf['x'][0] += kf['x'][2] * dt
     kf['x'][1] += kf['x'][3] * dt
     
-    # Update
     z = [data.location.lat, data.location.lng]
     y = [z[0] - kf['x'][0], z[1] - kf['x'][1]]
     K = 0.6 
@@ -135,7 +140,6 @@ async def ingest_telemetry(data: TelemetryData, background_tasks: BackgroundTask
     kf['x'][0] += K * y[0]
     kf['x'][1] += K * y[1]
     
-    # Velocity update
     kf['x'][2] = (kf['x'][0] - (kf['x'][0] - K*y[0])) / dt
     kf['x'][3] = (kf['x'][1] - (kf['x'][1] - K*y[1])) / dt
 
@@ -148,13 +152,19 @@ async def ingest_telemetry(data: TelemetryData, background_tasks: BackgroundTask
     # --- 2. UPDATE CACHE (Fast Read) ---
     LATEST_POSITIONS[data.device_id] = data.model_dump()
     
-    # --- 3. BROADCAST (Real-Time) ---
-    await broadcast_telemetry(data.model_dump())
+    # --- 3. AI RISK CALCULATION (Real-Time Brain) ---
+    # Now part of the Fast Path
+    risk_report = SentinelAI.calculate_risk(data.model_dump(), LATEST_POSITIONS)
     
-    # --- 4. OFFLOAD SLOW TASKS ---
+    # --- 4. BROADCAST (Real-Time + AI Insight) ---
+    payload = data.model_dump()
+    payload['risk'] = risk_report # Attach the AI score
+    await broadcast_telemetry(payload)
+    
+    # --- 5. OFFLOAD SLOW TASKS ---
     background_tasks.add_task(process_risk_and_db, data)
     
-    return {"status": "accepted", "timestamp": data.timestamp}
+    return {"status": "accepted", "timestamp": data.timestamp, "risk": risk_report}
 
 @router.get("/alerts")
 async def get_all_alerts():
