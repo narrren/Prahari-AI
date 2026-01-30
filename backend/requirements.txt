@@ -9,3 +9,5 @@ requests
 shapely
 geopy
 py-solc-x
+reportlab
+qrcode
