@@ -2,6 +2,10 @@ import json
 import requests
 import time
 import sys
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # URL
 API_URL = "http://localhost:8000/api/v1/telemetry"
@@ -47,7 +51,8 @@ def replay_trek():
             # Let's update timestamp to NOW to simulate live stream.
             point['timestamp'] = time.time() 
             
-            res = requests.post(API_URL, json=point, headers={"x-api-key": "prahari-sec-key-123"})
+            api_key = os.getenv("AUTH_API_KEY", "prahari-sec-key-123") # Fallback only for internal demo safety
+            res = requests.post(API_URL, json=point, headers={"x-api-key": api_key})
             if res.status_code == 200:
                 print(f"Sent: {point['location']} - Panic: {point.get('is_panic')}")
             else:
