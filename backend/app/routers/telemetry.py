@@ -80,7 +80,7 @@ async def process_telemetry_background(data: TelemetryData):
         # State: [lat, lng, lat_v, lng_v]
         # P: Covariance matrix (uncertainty)
         _kalman_states[data.device_id] = {
-            'x': [data.location['lat'], data.location['lng'], 0, 0], 
+            'x': [data.location.lat, data.location.lng, 0, 0], 
             'P': [[1,0,0,0], [0,1,0,0], [0,0,1000,0], [0,0,0,1000]],
             'last_ts': data.timestamp
         }
@@ -98,7 +98,7 @@ async def process_telemetry_background(data: TelemetryData):
     
     # 2. Update (Measurement)
     # Innovation (Observed - Predicted)
-    z = [data.location['lat'], data.location['lng']]
+    z = [data.location.lat, data.location.lng]
     y = [z[0] - kf['x'][0], z[1] - kf['x'][1]]
     
     # Kalman Gain (Simplified for GPS: ~0.5 means trust sensor 50%, model 50%)
@@ -116,11 +116,21 @@ async def process_telemetry_background(data: TelemetryData):
 
     kf['last_ts'] = data.timestamp
     
+    # ... (After Kalman Logic) ...
     # OVERWRITE Payload with Smoothed Data
     # accurate for Geofencing/Display
     original_data = data.model_copy()
-    data.location['lat'] = kf['x'][0]
-    data.location['lng'] = kf['x'][1]
+    data.location.lat = kf['x'][0]
+    data.location.lng = kf['x'][1]
+    
+    # --- REAL-TIME CACHE UPDATE (Redis Pattern) ---
+    # Update the cache immediately so the Map sees it NOW.
+    global _LATEST_POSITIONS
+    if '_LATEST_POSITIONS' not in globals():
+        _LATEST_POSITIONS = {}
+    
+    # Store with native types (FastAPI handles JSON serialization)
+    _LATEST_POSITIONS[data.device_id] = data.model_dump()
     
     # log difference for demo
     # print(f"Raw: {original_data.location} -> Smoothed: {data.location}")
@@ -176,35 +186,19 @@ async def get_alerts(device_id: str):
     """
     Get active alerts for a device.
     """
-    # In a real app, use GSI or separate query pattern
-    # For now, just a placeholder or scan (inefficient but works for 2 items)
-    # We didn't set up GSI in the simple script properly for device_id on Alerts table (wait, I did check GSI comments in setup_dynamodb.py)
-    # The setup_dynamodb.py had: key_schema=[{'AttributeName': 'alert_id', 'KeyType': 'HASH'}]
-    # It mentioned GSI device_id-index but didn't implement it in the `create_table` call for simplicity/errors.
-    # I'll just return empty for now or do a Scan if needed.
     return {"alerts": []}
 
 @router.get("/map/positions")
 async def get_map_positions():
     """
     Get latest known positions of all devices for the map.
+    Serves from In-Memory Cache (Redis equivalent) for real-time performance.
     """
-    # Scan telemetry table or query specific index
-    # For MVP, we scan the Telemetry table (expensive in prod, okay for demo)
-    t_table = get_table('Prahari_Telemetry')
-    # This is a naive scan. In prod, we'd use a 'CurrentLocations' table.
-    try:
-        response = t_table.scan(Limit=2000) # Limit for safety
-        items = response.get('Items', [])
-        # Group by device_id and take latest
-        # Or if we had a dedicated 'CurrentState' table.
-        # Let's just return what we find for now, or assume the scan returns recent items if table is small.
-        # But scan returns arbitrary order.
-        # We'll just return the raw items and let frontend filter for latest per device.
-        return items
-    except Exception as e:
-        print(f"Error fetching positions: {e}")
-        return []
+    global _LATEST_POSITIONS
+    if '_LATEST_POSITIONS' not in globals():
+        _LATEST_POSITIONS = {}
+    
+    return list(_LATEST_POSITIONS.values())
 
 @router.get("/telemetry/history/{device_id}")
 async def get_device_history(device_id: str, hours: int = 4):
