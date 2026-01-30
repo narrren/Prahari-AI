@@ -188,7 +188,49 @@ async def get_map_positions():
     """
     Get latest known positions of all devices for the map.
     Serves from In-Memory Cache (Redis equivalent) for real-time performance.
+    Hydrates from DynamoDB if cache is empty (server restart).
     """
+    # 1. Hydrate Cache if Empty (Persistence reliability)
+    if not LATEST_POSITIONS:
+        try:
+            print("CACHE HYDRATION: Fetching latest state from DynamoDB...")
+            t_table = get_table('Prahari_Telemetry')
+            response = t_table.scan(Limit=2000)
+            items = response.get('Items', [])
+            
+            for item in items:
+                try:
+                    dev_id = item['device_id']
+                    ts = float(item['timestamp'])
+                    
+                    # Convert DynamoDB Decimals to Native Types
+                    native_item = {
+                        "device_id": dev_id,
+                        "did": item.get('did', 'unknown'),
+                        "timestamp": ts,
+                        "location": {
+                            "lat": float(item['location']['lat']),
+                            "lng": float(item['location']['lng'])
+                        },
+                        "speed": float(item.get('speed', 0)),
+                        "heading": float(item.get('heading', 0)),
+                        "battery_level": float(item.get('battery_level', 100)),
+                        "is_panic": item.get('is_panic', False)
+                    }
+                    
+                    # Store only if newer than what we have (or if we have nothing)
+                    if dev_id not in LATEST_POSITIONS or ts > LATEST_POSITIONS[dev_id]['timestamp']:
+                        LATEST_POSITIONS[dev_id] = native_item
+                        
+                except Exception as inner_e:
+                    continue # Skip malformed items
+                    
+            print(f"CACHE HYDRATION: Restored {len(LATEST_POSITIONS)} active devices.")
+            
+        except Exception as e:
+            print(f"Cache Hydration Failed: {e}")
+            return []
+
     return list(LATEST_POSITIONS.values())
 
 @router.get("/telemetry/history/{device_id}")
