@@ -172,31 +172,38 @@ function App() {
                 </div>
               )}
 
-              {alerts.map((alert) => (
-                <div key={alert.alert_id} className={`p-4 rounded-lg border-l-4 shadow-md transition-all hover:bg-gray-800 ${alert.severity === 'CRITICAL' || alert.is_panic ? 'bg-red-900/20 border-red-500' :
-                  alert.type === 'GEOFENCE_BREACH' ? 'bg-orange-900/20 border-orange-500' : 'bg-blue-900/20 border-blue-500'
-                  }`}>
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-center space-x-2">
-                      <AlertTriangle className={`w-4 h-4 ${alert.severity === 'CRITICAL' ? 'text-red-500' : 'text-orange-400'}`} />
-                      <span className="font-bold text-sm">{alert.type}</span>
+              {/* Sort Alerts: Critical First, then Newest */}
+              {[...alerts]
+                .sort((a, b) => {
+                  if (a.severity === 'CRITICAL' && b.severity !== 'CRITICAL') return -1;
+                  if (b.severity === 'CRITICAL' && a.severity !== 'CRITICAL') return 1;
+                  return b.timestamp - a.timestamp;
+                })
+                .map((alert) => (
+                  <div key={alert.alert_id} className={`p-4 rounded-lg border-l-4 shadow-md transition-all hover:bg-gray-800 ${alert.severity === 'CRITICAL' || alert.is_panic ? 'bg-red-900/20 border-red-500' :
+                    alert.type === 'GEOFENCE_BREACH' ? 'bg-orange-900/20 border-orange-500' : 'bg-blue-900/20 border-blue-500'
+                    }`}>
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-center space-x-2">
+                        <AlertTriangle className={`w-4 h-4 ${alert.severity === 'CRITICAL' ? 'text-red-500' : 'text-orange-400'}`} />
+                        <span className="font-bold text-sm">{alert.type}</span>
+                      </div>
+                      <span className="text-xs text-gray-400">{new Date(alert.timestamp * 1000).toLocaleTimeString()}</span>
                     </div>
-                    <span className="text-xs text-gray-400">{new Date(alert.timestamp * 1000).toLocaleTimeString()}</span>
-                  </div>
-                  <p className="mt-2 text-sm text-gray-300 leading-relaxed">{alert.message}</p>
+                    <p className="mt-2 text-sm text-gray-300 leading-relaxed">{alert.message}</p>
 
-                  <div className="flex justify-between items-center mt-3">
-                    <div className="text-xs font-mono text-gray-500 bg-gray-900/50 p-1 rounded">ID: {alert.device_id}</div>
+                    <div className="flex justify-between items-center mt-3">
+                      <div className="text-xs font-mono text-gray-500 bg-gray-900/50 p-1 rounded">ID: {alert.device_id}</div>
 
-                    <button
-                      onClick={() => setSelectedIncident(alert)}
-                      className="text-[10px] font-bold bg-red-600/20 hover:bg-red-600 hover:text-white text-red-500 border border-red-600/50 px-2 py-1 rounded transition-colors uppercase tracking-wider flex items-center gap-1"
-                    >
-                      <FileBadge className="w-3 h-3" /> Generate E-FIR
-                    </button>
+                      <button
+                        onClick={() => setSelectedIncident(alert)}
+                        className="text-[10px] font-bold bg-red-600/20 hover:bg-red-600 hover:text-white text-red-500 border border-red-600/50 px-2 py-1 rounded transition-colors uppercase tracking-wider flex items-center gap-1"
+                      >
+                        <FileBadge className="w-3 h-3" /> Generate E-FIR
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </>
           ) : (
             <>

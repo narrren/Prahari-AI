@@ -5,7 +5,7 @@ from app.routers import telemetry
 from app.services.websocket import sio
 import socketio
 
-from app.services.dead_man_monitor import run_dead_man_switch_loop
+from app.scheduler import monitor_dead_mans_switch
 import asyncio
 
 # Initialize FastAPI regular app
@@ -17,7 +17,7 @@ fastapi_app = FastAPI(
 @fastapi_app.on_event("startup")
 async def startup_event():
     # Start the Dead Man Switch Monitor
-    asyncio.create_task(run_dead_man_switch_loop())
+    asyncio.create_task(monitor_dead_mans_switch())
 
 fastapi_app.add_middleware(
     CORSMiddleware,
