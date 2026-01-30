@@ -8,6 +8,7 @@ from decimal import Decimal
 import uuid
 import time
 from app.core.shared_state import LATEST_POSITIONS, KALMAN_STATES
+from app.services.identity import get_permit_info
 
 router = APIRouter()
 
@@ -17,6 +18,9 @@ async def process_telemetry_background(data: TelemetryData):
     Keeps the API response fast (Event-Driven pattern).
     """
     alerts_to_trigger = []
+    
+    # Identity Verification (Blockchain Bridge)
+    permit_str = get_permit_info(data.did)
 
     # 1. Check Geofence
     breached_zone = check_geofence_breach(data.location)
@@ -29,7 +33,7 @@ async def process_telemetry_background(data: TelemetryData):
             severity="HIGH",
             timestamp=time.time(),
             location=data.location,
-            message=f"Entered restricted zone: {breached_zone.name}"
+            message=f"Alert: DID {data.did} has entered restricted zone: {breached_zone.name}. {permit_str}"
         ))
 
     # 2. Check Anomalies
@@ -47,7 +51,7 @@ async def process_telemetry_background(data: TelemetryData):
             severity=severity,
             timestamp=time.time(),
             location=data.location,
-            message=f"Anomaly detected: {anomaly_type.value}"
+            message=f"Alert: DID {data.did} anomaly detected: {anomaly_type.value}. {permit_str}"
         )
         alerts_to_trigger.append(new_alert)
 
@@ -66,7 +70,7 @@ async def process_telemetry_background(data: TelemetryData):
             severity="CRITICAL",
             timestamp=time.time(),
             location=data.location,
-            message="SOS Panic Button Triggered!"
+            message=f"Alert: DID {data.did} SOS Panic Button Triggered! {permit_str}"
         ))
 
     # --- KALMAN FILTERING (Signal Smoothing) ---

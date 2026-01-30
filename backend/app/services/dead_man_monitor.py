@@ -19,6 +19,7 @@ from app.models import Alert, AlertType, GeoPoint
 from app.services.geofence import check_geofence_breach
 from app.services.websocket import notify_alert
 from app.core.config import settings
+from app.services.identity import get_permit_info
 
 # --- STEP 2: CLOUD-SIDE DEAD MAN'S LOGIC ---
 
@@ -31,15 +32,18 @@ async def trigger_dead_man_alert(device_id, zone_name, elapsed_time, device_data
     """
     print(f"DEAD MAN TRIGGER: {device_id} lost for {elapsed_time:.1f}s in {zone_name}")
     
+    did = device_data.get('did', 'unknown')
+    permit_str = get_permit_info(did)
+    
     alert = Alert(
         alert_id=str(uuid.uuid4()),
         device_id=device_id,
-        did=device_data.get('did', 'unknown'),
+        did=did,
         type=AlertType.INACTIVITY, 
         severity="CRITICAL",
         timestamp=time.time(),
         location=GeoPoint(**device_data['location']),
-        message=f"SIGNAL_LOST_IN_DANGER_ZONE: {zone_name}. Last signal {int(elapsed_time/60)} min ago."
+        message=f"Alert: DID {did} has gone silent in restricted zone: {zone_name}. {permit_str} Last signal {int(elapsed_time/60)} min ago."
     )
     
     # 1. Notify Frontend (Socket)
