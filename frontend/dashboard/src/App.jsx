@@ -95,6 +95,23 @@ function App() {
         }
       });
 
+      // --- NEW: Real-Time Telemetry Stream (Fast Path) ---
+      socket.on('telemetry_update', (data) => {
+        setTourists(prev => {
+          const index = prev.findIndex(t => t.device_id === data.device_id);
+          if (index > -1) {
+            const newArr = [...prev];
+            newArr[index] = data;
+            return newArr;
+          } else {
+            return [...prev, data];
+          }
+        });
+
+        // Update stats if needed (Live Active Count)
+        setStats(prev => ({ ...prev, active: prev.active }));
+      });
+
       return () => socket.disconnect();
     });
   }, []);
