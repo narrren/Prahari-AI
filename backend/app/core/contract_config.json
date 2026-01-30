@@ -1,0 +1,226 @@
+{
+    "contract_address": "0x06e1c7Fb81E79068CaD6e6F5883dC2f7ECC9B6a4",
+    "abi": [
+        {
+            "inputs": [],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "tourist",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "string",
+                    "name": "reason",
+                    "type": "string"
+                }
+            ],
+            "name": "EmergencyAlert",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "tourist",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint256",
+                    "name": "expiry",
+                    "type": "uint256"
+                }
+            ],
+            "name": "PermitIssued",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "tourist",
+                    "type": "address"
+                }
+            ],
+            "name": "PermitRevoked",
+            "type": "event"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_issuer",
+                    "type": "address"
+                }
+            ],
+            "name": "authorizeIssuer",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "authorizedIssuers",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "governmentAuthority",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_tourist",
+                    "type": "address"
+                }
+            ],
+            "name": "isPermitValid",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_tourist",
+                    "type": "address"
+                },
+                {
+                    "internalType": "bytes32",
+                    "name": "_idHash",
+                    "type": "bytes32"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "_duration",
+                    "type": "uint256"
+                }
+            ],
+            "name": "issuePermit",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "permits",
+            "outputs": [
+                {
+                    "internalType": "bytes32",
+                    "name": "identityHash",
+                    "type": "bytes32"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "issueDate",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "expiryDate",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "isActive",
+                    "type": "bool"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "emergencyFlag",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_tourist",
+                    "type": "address"
+                }
+            ],
+            "name": "revokePermit",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_tourist",
+                    "type": "address"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "_status",
+                    "type": "bool"
+                }
+            ],
+            "name": "setEmergencyFlag",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }
+    ],
+    "network_url": "http://127.0.0.1:8545",
+    "tourist_mapping": {
+        "did:eth:mock:T-SAFE": "0xaD632907e03E4F27d6B460503893a13B79a4d2c0",
+        "did:eth:mock:T-BREACH": "0x0B5D96a4bf9b5CD3Ec857de5d3aAb156BB0D4260",
+        "did:eth:mock:T-FALL": "0xC48dC36e7D4Bad38Ec62319Ed659fE69856648ca",
+        "did:eth:mock:T-LOST": "0x3afaf78Af83d84CB7C5a834F94455b9C60583F40",
+        "did:eth:mock:T-SOS": "0x09d593fD12Bc704B959F1549934E88901aA01B27"
+    }
+}

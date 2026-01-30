@@ -8,3 +8,4 @@ python-dotenv
 requests
 shapely
 geopy
+py-solc-x
