@@ -106,7 +106,24 @@ from app.services.websocket import notify_alert, broadcast_telemetry
 
 # ... (Previous imports and functions)
 
-@router.post("/telemetry")
+from fastapi import Depends, Security, HTTPException
+from fastapi.security.api_key import APIKeyHeader
+from app.core.config import settings
+
+api_key_header = APIKeyHeader(name="x-api-key", auto_error=False)
+
+async def verify_api_key(api_key: str = Security(api_key_header)):
+    """
+    Production Security: Enforce API Key on Critical Endpoints.
+    """
+    if api_key == settings.AUTH_API_KEY:
+        return api_key
+    else:
+        # Allow dev mode bypass if needed, or fail hard
+        raise HTTPException(status_code=403, detail="Could not validate credentials")
+
+
+@router.post("/telemetry", dependencies=[Depends(verify_api_key)])
 async def ingest_telemetry(data: TelemetryData, background_tasks: BackgroundTasks):
     """
     FAST PATH: Production-grade ingestion.

@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     # Thresholds
     GEOFENCE_ALERT_DISTANCE_M: float = 50.0  # meters
     INACTIVITY_THRESHOLD_SECONDS: int = 1800 # 30 mins
+    AUTH_API_KEY: str = "prahari-sec-key-123" # Simple Production Key
     
     class Config:
         env_file = ".env"

@@ -45,10 +45,10 @@ const MapComponent = ({ tourists, geofences }) => {
             </div>
 
             <MapContainer center={NETWORK_CENTER} zoom={15} scrollWheelZoom={true} className="h-full w-full">
-                {/* Standard OSM Skin */}
+                {/* DARK MODE SKIN (CartoDB Dark Matter) */}
                 <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                    url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
                 />
 
                 {/* Render GeoFences - Red Polygons */}

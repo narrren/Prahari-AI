@@ -47,7 +47,7 @@ def replay_trek():
             # Let's update timestamp to NOW to simulate live stream.
             point['timestamp'] = time.time() 
             
-            res = requests.post(API_URL, json=point)
+            res = requests.post(API_URL, json=point, headers={"x-api-key": "prahari-sec-key-123"})
             if res.status_code == 200:
                 print(f"Sent: {point['location']} - Panic: {point.get('is_panic')}")
             else:
