@@ -33,17 +33,25 @@ function App() {
         axios.get(`${API_BASE}/alerts`)
       ]);
 
-      const positions = posRes.data;
+      const positionsRaw = posRes.data;
       const activeAlerts = alertRes.data;
 
-      setTourists(positions);
+      // Filter: Keep only the LATEST position for each device to avoid "Snake Effect"
+      const latestPositions = Object.values(positionsRaw.reduce((acc, curr) => {
+        if (!acc[curr.device_id] || curr.timestamp > acc[curr.device_id].timestamp) {
+          acc[curr.device_id] = curr;
+        }
+        return acc;
+      }, {}));
+
+      setTourists(latestPositions);
       setAlerts(activeAlerts);
 
       // Calc Stats
-      const dangerCount = positions.filter(t => t.is_panic).length;
+      const dangerCount = latestPositions.filter(t => t.is_panic).length;
       setStats({
-        active: positions.length,
-        safe: positions.length - dangerCount,
+        active: latestPositions.length,
+        safe: latestPositions.length - dangerCount,
         danger: dangerCount
       });
 
