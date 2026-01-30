@@ -12,7 +12,13 @@ const MapComponent = ({ tourists, geofences }) => {
     const [selectedId, setSelectedId] = useState(null);
 
     const handleMarkerClick = async (deviceId) => {
-        if (selectedId === deviceId) return; // Don't refetch if same
+        // Toggle Logic: If already selected, deselect and clear path
+        if (selectedId === deviceId) {
+            setSelectedId(null);
+            setHistoryPath([]);
+            return;
+        }
+
         setSelectedId(deviceId);
         setHistoryPath([]); // Clear previous
 
@@ -107,8 +113,14 @@ const MapComponent = ({ tourists, geofences }) => {
                                 <div className="text-xs font-mono">
                                     Speed: {parseFloat(t.speed).toFixed(1)} m/s
                                 </div>
-                                <div className="mt-2 text-[10px] text-blue-600 font-bold border-t pt-1 cursor-pointer">
-                                    Click to toggle history
+                                <div
+                                    className="mt-2 text-[10px] text-blue-600 font-bold border-t pt-1 cursor-pointer hover:text-blue-800"
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // Prevent map click
+                                        handleMarkerClick(t.device_id);
+                                    }}
+                                >
+                                    {selectedId === t.device_id ? "Hide History" : "Click to view history"}
                                 </div>
                             </div>
                         </Popup>
