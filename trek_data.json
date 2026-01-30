@@ -1,1380 +1,3395 @@
 [
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769751823.442989,
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769785608.139745,
     "location": {
-      "lat": 27.586248687476353,
-      "lng": 91.85946489345943
-    },
-    "speed": 1.4295215489595017,
-    "heading": 188.24342726547488,
-    "battery_level": 95.0,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-BRAVO",
-    "did": "did:eth:mock:T-BRAVO",
-    "timestamp": 1769751823.4430597,
-    "location": {
-      "lat": 27.587112368447208,
-      "lng": 91.86036204225657
-    },
-    "speed": 1.4148009926269904,
-    "heading": 241.58683922177107,
-    "battery_level": 95.0,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-CHARLIE",
-    "did": "did:eth:mock:T-CHARLIE",
-    "timestamp": 1769751823.443085,
-    "location": {
-      "lat": 27.58720023644213,
-      "lng": 91.85849052656548
-    },
-    "speed": 1.6635474446466818,
-    "heading": 134.7498677689965,
-    "battery_level": 95.0,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-DELTA",
-    "did": "did:eth:mock:T-DELTA",
-    "timestamp": 1769751823.4431334,
-    "location": {
-      "lat": 27.585037024261784,
-      "lng": 91.8604014349639
-    },
-    "speed": 1.7468425580683387,
-    "heading": 302.50044384000745,
-    "battery_level": 95.0,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ECHO",
-    "did": "did:eth:mock:T-ECHO",
-    "timestamp": 1769751823.443159,
-    "location": {
-      "lat": 27.585099317061786,
-      "lng": 91.85825637033344
-    },
-    "speed": 1.7392545154654346,
-    "heading": 8.807643682627342,
-    "battery_level": 95.0,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769751883.442989,
-    "location": {
-      "lat": 27.586306586185884,
-      "lng": 91.85956523027443
-    },
-    "speed": 1.483041528316773,
-    "heading": 300.45580200113136,
-    "battery_level": 94.9,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-BRAVO",
-    "did": "did:eth:mock:T-BRAVO",
-    "timestamp": 1769751883.4430597,
-    "location": {
-      "lat": 27.587181785264445,
-      "lng": 91.86038228638722
-    },
-    "speed": 1.2461427965908671,
-    "heading": 124.78617095145826,
-    "battery_level": 94.9,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-CHARLIE",
-    "did": "did:eth:mock:T-CHARLIE",
-    "timestamp": 1769751883.443085,
-    "location": {
-      "lat": 27.587356029225024,
-      "lng": 91.85865658836725
-    },
-    "speed": 1.5197442603684683,
-    "heading": 333.16932495304644,
-    "battery_level": 94.9,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-DELTA",
-    "did": "did:eth:mock:T-DELTA",
-    "timestamp": 1769751883.4431334,
-    "location": {
-      "lat": 27.585168810125307,
-      "lng": 91.86023521016254
-    },
-    "speed": 1.7039326423546357,
-    "heading": 310.7040826654862,
-    "battery_level": 94.9,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ECHO",
-    "did": "did:eth:mock:T-ECHO",
-    "timestamp": 1769751883.443159,
-    "location": {
-      "lat": 27.585106434970502,
-      "lng": 91.85834207504996
-    },
-    "speed": 1.4134930260008194,
-    "heading": 325.9824061355169,
-    "battery_level": 94.9,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769751943.442989,
-    "location": {
-      "lat": 27.586376226149287,
-      "lng": 91.85963854944691
-    },
-    "speed": 1.7236213799370255,
-    "heading": 141.97462161693608,
-    "battery_level": 94.8,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-BRAVO",
-    "did": "did:eth:mock:T-BRAVO",
-    "timestamp": 1769751943.4430597,
-    "location": {
-      "lat": 27.587316925758618,
-      "lng": 91.86030480039297
-    },
-    "speed": 1.6221553214862066,
-    "heading": 152.96328853355143,
-    "battery_level": 94.8,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-CHARLIE",
-    "did": "did:eth:mock:T-CHARLIE",
-    "timestamp": 1769751943.443085,
-    "location": {
-      "lat": 27.587353329922575,
-      "lng": 91.85847387105706
-    },
-    "speed": 1.6536086542737702,
-    "heading": 170.57595274820704,
-    "battery_level": 94.8,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-DELTA",
-    "did": "did:eth:mock:T-DELTA",
-    "timestamp": 1769751943.4431334,
-    "location": {
-      "lat": 27.585271367732254,
-      "lng": 91.86027336912674
-    },
-    "speed": 1.7828813312660707,
-    "heading": 298.6013261160648,
-    "battery_level": 94.8,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ECHO",
-    "did": "did:eth:mock:T-ECHO",
-    "timestamp": 1769751943.443159,
-    "location": {
-      "lat": 27.585154134724505,
-      "lng": 91.85845798911902
-    },
-    "speed": 1.7658401352773396,
-    "heading": 322.1659637928754,
-    "battery_level": 94.8,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752003.442989,
-    "location": {
-      "lat": 27.586517153293226,
-      "lng": 91.85975625821514
-    },
-    "speed": 1.5643524569730938,
-    "heading": 315.7976876705225,
-    "battery_level": 94.7,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-BRAVO",
-    "did": "did:eth:mock:T-BRAVO",
-    "timestamp": 1769752003.4430597,
-    "location": {
-      "lat": 27.587289257877146,
-      "lng": 91.86044924927404
-    },
-    "speed": 1.3425467355695035,
-    "heading": 182.65252980863502,
-    "battery_level": 94.7,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-CHARLIE",
-    "did": "did:eth:mock:T-CHARLIE",
-    "timestamp": 1769752003.443085,
-    "location": {
-      "lat": 27.587380151947375,
-      "lng": 91.8582857038586
-    },
-    "speed": 1.3727501620501614,
-    "heading": 152.51933033491378,
-    "battery_level": 94.7,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-DELTA",
-    "did": "did:eth:mock:T-DELTA",
-    "timestamp": 1769752003.4431334,
-    "location": {
-      "lat": 27.585417620341843,
-      "lng": 91.86032558533945
-    },
-    "speed": 1.693981774510408,
-    "heading": 68.58603265931913,
-    "battery_level": 94.7,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ECHO",
-    "did": "did:eth:mock:T-ECHO",
-    "timestamp": 1769752003.443159,
-    "location": {
-      "lat": 27.58534244522964,
-      "lng": 91.85857126877372
-    },
-    "speed": 1.7474935444399566,
-    "heading": 76.8170386849198,
-    "battery_level": 94.7,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752063.442989,
-    "location": {
-      "lat": 27.58664355688456,
-      "lng": 91.85987136166557
-    },
-    "speed": 1.6053837087870744,
-    "heading": 69.82697601337661,
-    "battery_level": 94.6,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-BRAVO",
-    "did": "did:eth:mock:T-BRAVO",
-    "timestamp": 1769752063.4430597,
-    "location": {
-      "lat": 27.587365011262044,
-      "lng": 91.86046972201645
-    },
-    "speed": 1.6414897473417096,
-    "heading": 348.48763693783604,
-    "battery_level": 94.6,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-CHARLIE",
-    "did": "did:eth:mock:T-CHARLIE",
-    "timestamp": 1769752063.443085,
-    "location": {
-      "lat": 27.58728883945857,
-      "lng": 91.85828455268815
-    },
-    "speed": 1.4842265994774404,
-    "heading": 298.6731847480688,
-    "battery_level": 94.6,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-DELTA",
-    "did": "did:eth:mock:T-DELTA",
-    "timestamp": 1769752063.4431334,
-    "location": {
-      "lat": 27.585442923277206,
-      "lng": 91.86021231062092
-    },
-    "speed": 1.4201291583377504,
-    "heading": 223.67359688875143,
-    "battery_level": 94.6,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ECHO",
-    "did": "did:eth:mock:T-ECHO",
-    "timestamp": 1769752063.443159,
-    "location": {
-      "lat": 27.5852687536679,
-      "lng": 91.85862619981583
-    },
-    "speed": 1.748149580237195,
-    "heading": 326.64493122170495,
-    "battery_level": 94.6,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752123.442989,
-    "location": {
-      "lat": 27.58674321770141,
-      "lng": 91.85993383278175
-    },
-    "speed": 1.4567193385754305,
-    "heading": 89.67904051183402,
-    "battery_level": 94.5,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-BRAVO",
-    "did": "did:eth:mock:T-BRAVO",
-    "timestamp": 1769752123.4430597,
-    "location": {
-      "lat": 27.587327341198865,
-      "lng": 91.86034240492505
-    },
-    "speed": 1.786218494678101,
-    "heading": 191.02817254416124,
-    "battery_level": 94.5,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-CHARLIE",
-    "did": "did:eth:mock:T-CHARLIE",
-    "timestamp": 1769752123.443085,
-    "location": {
-      "lat": 27.587465687260483,
-      "lng": 91.8584744739779
-    },
-    "speed": 1.677580098470624,
-    "heading": 119.10787526772549,
-    "battery_level": 94.5,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-DELTA",
-    "did": "did:eth:mock:T-DELTA",
-    "timestamp": 1769752123.4431334,
-    "location": {
-      "lat": 27.585371438556386,
-      "lng": 91.8603684053971
-    },
-    "speed": 1.4801847053607966,
-    "heading": 65.97975092350444,
-    "battery_level": 94.5,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ECHO",
-    "did": "did:eth:mock:T-ECHO",
-    "timestamp": 1769752123.443159,
-    "location": {
-      "lat": 27.585361329682748,
-      "lng": 91.85861372331998
-    },
-    "speed": 1.3928088674216834,
-    "heading": 168.8289567817785,
-    "battery_level": 94.5,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752183.442989,
-    "location": {
-      "lat": 27.5868572660865,
-      "lng": 91.85999457184828
-    },
-    "speed": 1.3301906016829395,
-    "heading": 75.23407515726568,
-    "battery_level": 94.4,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-BRAVO",
-    "did": "did:eth:mock:T-BRAVO",
-    "timestamp": 1769752183.4430597,
-    "location": {
-      "lat": 27.587349748400936,
-      "lng": 91.86049272393014
-    },
-    "speed": 1.7867918572256318,
-    "heading": 143.59719664353247,
-    "battery_level": 94.4,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-CHARLIE",
-    "did": "did:eth:mock:T-CHARLIE",
-    "timestamp": 1769752183.443085,
-    "location": {
-      "lat": 27.587405400524418,
-      "lng": 91.85832853035144
-    },
-    "speed": 1.3226013110661043,
-    "heading": 353.5043338306254,
-    "battery_level": 94.4,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-DELTA",
-    "did": "did:eth:mock:T-DELTA",
-    "timestamp": 1769752183.4431334,
-    "location": {
-      "lat": 27.58541564185444,
-      "lng": 91.86040340186705
-    },
-    "speed": 1.4459102585199157,
-    "heading": 38.65198115264942,
-    "battery_level": 94.4,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ECHO",
-    "did": "did:eth:mock:T-ECHO",
-    "timestamp": 1769752183.443159,
-    "location": {
-      "lat": 27.585286429844174,
-      "lng": 91.85846052453213
-    },
-    "speed": 1.6523225651864357,
-    "heading": 117.11069284328669,
-    "battery_level": 94.4,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752243.442989,
-    "location": {
-      "lat": 27.58691093975407,
-      "lng": 91.86004547966952
-    },
-    "speed": 1.4195956592637904,
-    "heading": 154.5961278846656,
-    "battery_level": 94.3,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-BRAVO",
-    "did": "did:eth:mock:T-BRAVO",
-    "timestamp": 1769752243.4430597,
-    "location": {
-      "lat": 27.587525652185747,
-      "lng": 91.86056015454196
-    },
-    "speed": 1.412584825456542,
-    "heading": 55.218237421524314,
-    "battery_level": 94.3,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-CHARLIE",
-    "did": "did:eth:mock:T-CHARLIE",
-    "timestamp": 1769752243.443085,
-    "location": {
-      "lat": 27.58749449034716,
-      "lng": 91.85825556237118
-    },
-    "speed": 1.6605316402758963,
-    "heading": 142.36539235872527,
-    "battery_level": 94.3,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-DELTA",
-    "did": "did:eth:mock:T-DELTA",
-    "timestamp": 1769752243.4431334,
-    "location": {
-      "lat": 27.58534965335625,
-      "lng": 91.86055425197421
-    },
-    "speed": 1.5551549086952101,
-    "heading": 312.38483259358236,
-    "battery_level": 94.3,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ECHO",
-    "did": "did:eth:mock:T-ECHO",
-    "timestamp": 1769752243.443159,
-    "location": {
-      "lat": 27.585252397030263,
-      "lng": 91.85846502011603
-    },
-    "speed": 1.3094432124384408,
-    "heading": 83.28590373162679,
-    "battery_level": 94.3,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752303.442989,
-    "location": {
-      "lat": 27.58701660267631,
-      "lng": 91.86016972447426
-    },
-    "speed": 1.547628326778679,
-    "heading": 19.070294506844505,
-    "battery_level": 94.2,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-BRAVO",
-    "did": "did:eth:mock:T-BRAVO",
-    "timestamp": 1769752303.4430597,
-    "location": {
-      "lat": 27.58764917467476,
-      "lng": 91.8605858001685
-    },
-    "speed": 1.2757159912729048,
-    "heading": 351.4467964162762,
-    "battery_level": 94.2,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-CHARLIE",
-    "did": "did:eth:mock:T-CHARLIE",
-    "timestamp": 1769752303.443085,
-    "location": {
-      "lat": 27.58768697882119,
-      "lng": 91.85810739086526
-    },
-    "speed": 1.264278171434081,
-    "heading": 2.395005923731408,
-    "battery_level": 94.2,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-DELTA",
-    "did": "did:eth:mock:T-DELTA",
-    "timestamp": 1769752303.4431334,
-    "location": {
-      "lat": 27.58554279649746,
-      "lng": 91.86050242037082
-    },
-    "speed": 1.552945963099323,
-    "heading": 253.31473722358595,
-    "battery_level": 94.2,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ECHO",
-    "did": "did:eth:mock:T-ECHO",
-    "timestamp": 1769752303.443159,
-    "location": {
-      "lat": 27.58515269855373,
-      "lng": 91.85852618819003
-    },
-    "speed": 1.5774711298478667,
-    "heading": 236.9509136082082,
-    "battery_level": 94.2,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752363.442989,
-    "location": {
-      "lat": 27.587101266503026,
-      "lng": 91.8603081194945
-    },
-    "speed": 1.218276996642856,
-    "heading": 192.84559177518867,
-    "battery_level": 94.1,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-BRAVO",
-    "did": "did:eth:mock:T-BRAVO",
-    "timestamp": 1769752363.4430597,
-    "location": {
-      "lat": 27.587829732521325,
-      "lng": 91.86075809363899
-    },
-    "speed": 1.3105149019182383,
-    "heading": 260.01666246308366,
-    "battery_level": 94.1,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-CHARLIE",
-    "did": "did:eth:mock:T-CHARLIE",
-    "timestamp": 1769752363.443085,
-    "location": {
-      "lat": 27.587708044592564,
-      "lng": 91.85795619792165
-    },
-    "speed": 1.4475743305578477,
-    "heading": 101.36424818676481,
-    "battery_level": 94.1,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-DELTA",
-    "did": "did:eth:mock:T-DELTA",
-    "timestamp": 1769752363.4431334,
-    "location": {
-      "lat": 27.585679208454927,
-      "lng": 91.86046387407356
-    },
-    "speed": 1.5030868936562434,
-    "heading": 205.97324233328433,
-    "battery_level": 94.1,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ECHO",
-    "did": "did:eth:mock:T-ECHO",
-    "timestamp": 1769752363.443159,
-    "location": {
-      "lat": 27.585137713049743,
-      "lng": 91.85840708239591
-    },
-    "speed": 1.7588814594563908,
-    "heading": 30.066874083977083,
-    "battery_level": 94.1,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752423.442989,
-    "location": {
-      "lat": 27.5878,
-      "lng": 91.86179999999999
+      "lat": 27.586870308224952,
+      "lng": 91.86080680891705
     },
     "speed": 1.5,
-    "heading": 45.0,
-    "battery_level": 93.0,
+    "heading": 106.11575618678953,
+    "battery_level": 100.0,
     "is_panic": false
   },
   {
-    "device_id": "T-BRAVO",
-    "did": "did:eth:mock:T-BRAVO",
-    "timestamp": 1769752423.4430597,
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769785608.1399336,
     "location": {
-      "lat": 27.587773789053994,
-      "lng": 91.86064613613893
-    },
-    "speed": 1.5202380318494848,
-    "heading": 137.6104089683367,
-    "battery_level": 94.0,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-CHARLIE",
-    "did": "did:eth:mock:T-CHARLIE",
-    "timestamp": 1769752423.443085,
-    "location": {
-      "lat": 27.587815056043194,
-      "lng": 91.85798494766486
-    },
-    "speed": 1.5410974069048655,
-    "heading": 281.9136879303308,
-    "battery_level": 94.0,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-DELTA",
-    "did": "did:eth:mock:T-DELTA",
-    "timestamp": 1769752423.4431334,
-    "location": {
-      "lat": 27.585708034515235,
-      "lng": 91.86050855242969
-    },
-    "speed": 1.7429426001167865,
-    "heading": 0.7629244790569834,
-    "battery_level": 94.0,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ECHO",
-    "did": "did:eth:mock:T-ECHO",
-    "timestamp": 1769752423.443159,
-    "location": {
-      "lat": 27.585257244678562,
-      "lng": 91.8582604575042
-    },
-    "speed": 1.5669475795985937,
-    "heading": 84.37936775353097,
-    "battery_level": 94.0,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752483.442989,
-    "location": {
-      "lat": 27.587850000000003,
-      "lng": 91.86184999999999
+      "lat": 27.58478976208976,
+      "lng": 91.86023063872237
     },
     "speed": 1.5,
-    "heading": 45.0,
-    "battery_level": 93.0,
+    "heading": 128.5644055332021,
+    "battery_level": 100.0,
     "is_panic": false
   },
   {
-    "device_id": "T-BRAVO",
-    "did": "did:eth:mock:T-BRAVO",
-    "timestamp": 1769752483.4430597,
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769785608.140034,
     "location": {
-      "lat": 27.58786157861595,
-      "lng": 91.8606951556639
-    },
-    "speed": 1.5822539382653307,
-    "heading": 30.01690043100136,
-    "battery_level": 93.9,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-CHARLIE",
-    "did": "did:eth:mock:T-CHARLIE",
-    "timestamp": 1769752483.443085,
-    "location": {
-      "lat": 27.58778275772025,
-      "lng": 91.85786729006912
-    },
-    "speed": 1.6878419122727053,
-    "heading": 6.3691898077960385,
-    "battery_level": 93.9,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-DELTA",
-    "did": "did:eth:mock:T-DELTA",
-    "timestamp": 1769752483.4431334,
-    "location": {
-      "lat": 27.585746906442466,
-      "lng": 91.8604657990186
-    },
-    "speed": 1.5763709653137852,
-    "heading": 269.90317504527076,
-    "battery_level": 93.9,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ECHO",
-    "did": "did:eth:mock:T-ECHO",
-    "timestamp": 1769752483.443159,
-    "location": {
-      "lat": 27.5853481999545,
-      "lng": 91.85826046811404
-    },
-    "speed": 1.2123992011394649,
-    "heading": 340.86183755113655,
-    "battery_level": 93.9,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752543.442989,
-    "location": {
-      "lat": 27.5879,
-      "lng": 91.86189999999999
+      "lat": 27.585970595423372,
+      "lng": 91.8579231449573
     },
     "speed": 1.5,
-    "heading": 45.0,
-    "battery_level": 93.0,
+    "heading": 157.84760416181686,
+    "battery_level": 100.0,
     "is_panic": false
   },
   {
-    "device_id": "T-BRAVO",
-    "did": "did:eth:mock:T-BRAVO",
-    "timestamp": 1769752543.4430597,
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769785608.1401446,
     "location": {
-      "lat": 27.587851633653887,
-      "lng": 91.8607969820508
-    },
-    "speed": 1.4223415980094727,
-    "heading": 80.67294480615439,
-    "battery_level": 93.8,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-CHARLIE",
-    "did": "did:eth:mock:T-CHARLIE",
-    "timestamp": 1769752543.443085,
-    "location": {
-      "lat": 27.587891779896527,
-      "lng": 91.85770192892002
-    },
-    "speed": 1.3579245959393509,
-    "heading": 46.37915670215313,
-    "battery_level": 93.8,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-DELTA",
-    "did": "did:eth:mock:T-DELTA",
-    "timestamp": 1769752543.4431334,
-    "location": {
-      "lat": 27.58587092728837,
-      "lng": 91.86036446841567
-    },
-    "speed": 1.292792233873198,
-    "heading": 218.76880671070433,
-    "battery_level": 93.8,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ECHO",
-    "did": "did:eth:mock:T-ECHO",
-    "timestamp": 1769752543.443159,
-    "location": {
-      "lat": 27.5855009305677,
-      "lng": 91.85828893358364
-    },
-    "speed": 1.5686215567964932,
-    "heading": 75.84699627033783,
-    "battery_level": 93.8,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752603.442989,
-    "location": {
-      "lat": 27.587950000000003,
-      "lng": 91.86195
+      "lat": 27.587005958115096,
+      "lng": 91.86069105575116
     },
     "speed": 1.5,
-    "heading": 45.0,
-    "battery_level": 93.0,
+    "heading": 320.4872238363757,
+    "battery_level": 100.0,
     "is_panic": false
   },
   {
-    "device_id": "T-BRAVO",
-    "did": "did:eth:mock:T-BRAVO",
-    "timestamp": 1769752603.4430597,
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769785608.140203,
     "location": {
-      "lat": 27.587778935143906,
-      "lng": 91.86082513774339
+      "lat": 27.586161140178064,
+      "lng": 91.85817678541787
     },
-    "speed": 1.4804192822652054,
-    "heading": 45.96593184973974,
-    "battery_level": 93.7,
+    "speed": 1.6,
+    "heading": 359.2785265170485,
+    "battery_level": 100.0,
     "is_panic": false
   },
   {
-    "device_id": "T-CHARLIE",
-    "did": "did:eth:mock:T-CHARLIE",
-    "timestamp": 1769752603.443085,
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769785668.139745,
     "location": {
-      "lat": 27.58788117049675,
-      "lng": 91.85756741716345
-    },
-    "speed": 1.747218070051228,
-    "heading": 322.3538793048362,
-    "battery_level": 93.7,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-DELTA",
-    "did": "did:eth:mock:T-DELTA",
-    "timestamp": 1769752603.4431334,
-    "location": {
-      "lat": 27.586029524635908,
-      "lng": 91.86036752391166
-    },
-    "speed": 1.3548196383765632,
-    "heading": 322.5811310365352,
-    "battery_level": 93.7,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ECHO",
-    "did": "did:eth:mock:T-ECHO",
-    "timestamp": 1769752603.443159,
-    "location": {
-      "lat": 27.585558646934274,
-      "lng": 91.85841562913212
-    },
-    "speed": 1.5303926284508191,
-    "heading": 352.682338736131,
-    "battery_level": 93.7,
-    "is_panic": false
-  },
-  {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752663.442989,
-    "location": {
-      "lat": 27.588,
-      "lng": 91.862
+      "lat": 27.586909263729655,
+      "lng": 91.8607524164965
     },
     "speed": 1.5,
-    "heading": 45.0,
-    "battery_level": 93.0,
+    "heading": 292.2862739137291,
+    "battery_level": 99.8,
     "is_panic": false
   },
   {
-    "device_id": "T-BRAVO",
-    "did": "did:eth:mock:T-BRAVO",
-    "timestamp": 1769752663.4430597,
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769785668.1399336,
     "location": {
-      "lat": 27.587864931079647,
-      "lng": 91.8609836694179
+      "lat": 27.585110785880783,
+      "lng": 91.86040757485013
     },
-    "speed": 1.4947019228098877,
-    "heading": 225.63870018964644,
-    "battery_level": 93.6,
+    "speed": 1.5,
+    "heading": 172.1967167226194,
+    "battery_level": 99.8,
     "is_panic": false
   },
   {
-    "device_id": "T-CHARLIE",
-    "did": "did:eth:mock:T-CHARLIE",
-    "timestamp": 1769752663.443085,
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769785668.140034,
     "location": {
-      "lat": 27.587868541266733,
-      "lng": 91.85772178964633
+      "lat": 27.586070595423372,
+      "lng": 91.8580231449573
     },
-    "speed": 1.2101633004192631,
-    "heading": 157.8868757949696,
-    "battery_level": 93.6,
+    "speed": 1.5,
+    "heading": 48.4871308834714,
+    "battery_level": 99.8,
     "is_panic": false
   },
   {
-    "device_id": "T-DELTA",
-    "did": "did:eth:mock:T-DELTA",
-    "timestamp": 1769752663.4431334,
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769785668.1401446,
     "location": {
-      "lat": 27.586184657126807,
-      "lng": 91.86050945884001
+      "lat": 27.58705566020934,
+      "lng": 91.8607565029636
     },
-    "speed": 1.215926272303007,
-    "heading": 74.40143037623382,
-    "battery_level": 93.6,
+    "speed": 1.5,
+    "heading": 342.54655321779484,
+    "battery_level": 99.8,
     "is_panic": false
   },
   {
-    "device_id": "T-ECHO",
-    "did": "did:eth:mock:T-ECHO",
-    "timestamp": 1769752663.443159,
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769785668.140203,
     "location": {
-      "lat": 27.58551421071437,
-      "lng": 91.85827743985605
+      "lat": 27.586249685203608,
+      "lng": 91.85813472472792
     },
-    "speed": 1.213977240351713,
-    "heading": 172.97946525747827,
-    "battery_level": 93.6,
+    "speed": 1.6,
+    "heading": 80.71788729427699,
+    "battery_level": 99.8,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752723.442989,
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769785728.139745,
     "location": {
-      "lat": 27.58799182414654,
-      "lng": 91.86199537402926
+      "lat": 27.586823717443792,
+      "lng": 91.86065520953655
+    },
+    "speed": 1.5,
+    "heading": 153.2464839431017,
+    "battery_level": 99.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769785728.1399336,
+    "location": {
+      "lat": 27.585399707292705,
+      "lng": 91.86056681736511
+    },
+    "speed": 1.5,
+    "heading": 91.77040976190969,
+    "battery_level": 99.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769785728.140034,
+    "location": {
+      "lat": 27.586170595423372,
+      "lng": 91.8581231449573
+    },
+    "speed": 1.5,
+    "heading": 97.8229595632366,
+    "battery_level": 99.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769785728.1401446,
+    "location": {
+      "lat": 27.587102877198873,
+      "lng": 91.86081867781542
+    },
+    "speed": 1.5,
+    "heading": 107.79705501538861,
+    "battery_level": 99.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769785728.140203,
+    "location": {
+      "lat": 27.586349670485653,
+      "lng": 91.85809285305021
+    },
+    "speed": 1.6,
+    "heading": 25.431828305611237,
+    "battery_level": 99.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769785788.139745,
+    "location": {
+      "lat": 27.586820811396453,
+      "lng": 91.86056528047888
+    },
+    "speed": 1.5,
+    "heading": 85.33879545366949,
+    "battery_level": 99.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769785788.1399336,
+    "location": {
+      "lat": 27.585659736563436,
+      "lng": 91.8607101356286
+    },
+    "speed": 1.5,
+    "heading": 208.55108341905253,
+    "battery_level": 99.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769785788.140034,
+    "location": {
+      "lat": 27.586270595423372,
+      "lng": 91.85822314495731
+    },
+    "speed": 1.5,
+    "heading": 53.22772686809218,
+    "battery_level": 99.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769785788.1401446,
+    "location": {
+      "lat": 27.58714773333893,
+      "lng": 91.86087774392465
+    },
+    "speed": 1.5,
+    "heading": 339.7091261885363,
+    "battery_level": 99.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769785788.140203,
+    "location": {
+      "lat": 27.58637848317468,
+      "lng": 91.85819050192315
+    },
+    "speed": 1.6,
+    "heading": 209.31537409705226,
+    "battery_level": 99.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769785848.139745,
+    "location": {
+      "lat": 27.586844474430436,
+      "lng": 91.8605200695732
+    },
+    "speed": 1.5,
+    "heading": 181.35433431008394,
+    "battery_level": 99.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769785848.1399336,
+    "location": {
+      "lat": 27.58589376290709,
+      "lng": 91.86083912206573
+    },
+    "speed": 1.5,
+    "heading": 285.79391495372846,
+    "battery_level": 99.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769785848.140034,
+    "location": {
+      "lat": 27.58637059542337,
+      "lng": 91.85832314495731
+    },
+    "speed": 1.5,
+    "heading": 267.0746004822295,
+    "battery_level": 99.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769785848.1401446,
+    "location": {
+      "lat": 27.587190346671985,
+      "lng": 91.86093385672841
+    },
+    "speed": 1.5,
+    "heading": 129.7051161766822,
+    "battery_level": 99.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769785848.140203,
+    "location": {
+      "lat": 27.58642525286095,
+      "lng": 91.8581745143549
+    },
+    "speed": 1.6,
+    "heading": 219.5036911344073,
+    "battery_level": 99.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769785908.139745,
+    "location": {
+      "lat": 27.586834625373193,
+      "lng": 91.86044407815484
+    },
+    "speed": 1.5,
+    "heading": 232.63631531947902,
+    "battery_level": 99.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769785908.1399336,
+    "location": {
+      "lat": 27.58610438661638,
+      "lng": 91.86095520985916
+    },
+    "speed": 1.5,
+    "heading": 241.45404610138448,
+    "battery_level": 99.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769785908.140034,
+    "location": {
+      "lat": 27.58647059542337,
+      "lng": 91.85842314495731
+    },
+    "speed": 1.5,
+    "heading": 85.73393216658299,
+    "battery_level": 99.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769785908.1401446,
+    "location": {
+      "lat": 27.587230829338385,
+      "lng": 91.86098716389199
+    },
+    "speed": 1.5,
+    "heading": 297.9480157478925,
+    "battery_level": 99.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769785908.140203,
+    "location": {
+      "lat": 27.586355409429014,
+      "lng": 91.85816913318509
+    },
+    "speed": 1.6,
+    "heading": 175.3731902986425,
+    "battery_level": 99.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769785968.139745,
+    "location": {
+      "lat": 27.58688506546628,
+      "lng": 91.86047636737695
+    },
+    "speed": 1.5,
+    "heading": 246.87030018996973,
+    "battery_level": 98.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769785968.1399336,
+    "location": {
+      "lat": 27.586293947954744,
+      "lng": 91.86105968887324
+    },
+    "speed": 1.5,
+    "heading": 284.3981881846997,
+    "battery_level": 98.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769785968.140034,
+    "location": {
+      "lat": 27.58657059542337,
+      "lng": 91.85852314495732
+    },
+    "speed": 1.5,
+    "heading": 256.6550277550664,
+    "battery_level": 98.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769785968.1401446,
+    "location": {
+      "lat": 27.587269287871464,
+      "lng": 91.86103780569739
+    },
+    "speed": 1.5,
+    "heading": 316.1667896620554,
+    "battery_level": 98.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769785968.140203,
+    "location": {
+      "lat": 27.586412102505125,
+      "lng": 91.85822644673635
+    },
+    "speed": 1.6,
+    "heading": 87.03018564199394,
+    "battery_level": 98.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786028.139745,
+    "location": {
+      "lat": 27.586953187534988,
+      "lng": 91.86056403540358
+    },
+    "speed": 1.5,
+    "heading": 179.41154157802288,
+    "battery_level": 98.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786028.1399336,
+    "location": {
+      "lat": 27.58646455315927,
+      "lng": 91.86115371998592
+    },
+    "speed": 1.5,
+    "heading": 232.37119076742698,
+    "battery_level": 98.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786028.140034,
+    "location": {
+      "lat": 27.58667059542337,
+      "lng": 91.85862314495732
+    },
+    "speed": 1.5,
+    "heading": 186.17634367531474,
+    "battery_level": 98.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769786028.1401446,
+    "location": {
+      "lat": 27.58730582347789,
+      "lng": 91.86108591541252
+    },
+    "speed": 1.5,
+    "heading": 82.02177673910073,
+    "battery_level": 98.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786028.140203,
+    "location": {
+      "lat": 27.586317011807612,
+      "lng": 91.85832579116406
+    },
+    "speed": 1.6,
+    "heading": 258.05719072878736,
+    "battery_level": 98.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786088.139745,
+    "location": {
+      "lat": 27.587049011821783,
+      "lng": 91.86050985676249
+    },
+    "speed": 1.5,
+    "heading": 156.53887712954577,
+    "battery_level": 98.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786088.1399336,
+    "location": {
+      "lat": 27.586618097843342,
+      "lng": 91.86123834798732
+    },
+    "speed": 1.5,
+    "heading": 279.79576129402875,
+    "battery_level": 98.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786088.140034,
+    "location": {
+      "lat": 27.58677059542337,
+      "lng": 91.85872314495732
+    },
+    "speed": 1.5,
+    "heading": 274.86200353408753,
+    "battery_level": 98.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769786088.1401446,
+    "location": {
+      "lat": 27.587340532303998,
+      "lng": 91.8611316196419
+    },
+    "speed": 1.5,
+    "heading": 40.08787627951818,
+    "battery_level": 98.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786088.140203,
+    "location": {
+      "lat": 27.58627473682041,
+      "lng": 91.85840387879612
+    },
+    "speed": 1.6,
+    "heading": 119.3787005199983,
+    "battery_level": 98.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786148.139745,
+    "location": {
+      "lat": 27.58711634512136,
+      "lng": 91.86049488389303
+    },
+    "speed": 1.5,
+    "heading": 257.0265304642474,
+    "battery_level": 98.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786148.1399336,
+    "location": {
+      "lat": 27.586756288059007,
+      "lng": 91.86131451318859
+    },
+    "speed": 1.5,
+    "heading": 323.12526591386296,
+    "battery_level": 98.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786148.140034,
+    "location": {
+      "lat": 27.58687059542337,
+      "lng": 91.85882314495733
+    },
+    "speed": 1.5,
+    "heading": 337.7321330745293,
+    "battery_level": 98.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769786148.1401446,
+    "location": {
+      "lat": 27.5873735056888,
+      "lng": 91.8611750386598
+    },
+    "speed": 1.5,
+    "heading": 283.4705536163694,
+    "battery_level": 98.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786148.140203,
+    "location": {
+      "lat": 27.586234080547648,
+      "lng": 91.85840295802966
+    },
+    "speed": 1.6,
+    "heading": 263.6353944576501,
+    "battery_level": 98.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786208.139745,
+    "location": {
+      "lat": 27.587180336231064,
+      "lng": 91.86049856820216
+    },
+    "speed": 1.5,
+    "heading": 188.0214356811451,
+    "battery_level": 98.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786208.1399336,
+    "location": {
+      "lat": 27.58804903206147,
+      "lng": 91.86200483107264
+    },
+    "speed": 0.5,
+    "heading": 278.2710435584175,
+    "battery_level": 98.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786208.140034,
+    "location": {
+      "lat": 27.58697059542337,
+      "lng": 91.85892314495733
+    },
+    "speed": 1.5,
+    "heading": 319.81436861003584,
+    "battery_level": 98.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769786208.1401446,
+    "location": {
+      "lat": 27.58740483040436,
+      "lng": 91.8612162867268
+    },
+    "speed": 1.5,
+    "heading": 5.287947491655838,
+    "battery_level": 98.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786208.140203,
+    "location": {
+      "lat": 27.586137610478527,
+      "lng": 91.85836072966922
+    },
+    "speed": 1.6,
+    "heading": 136.9065564996177,
+    "battery_level": 98.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786268.139745,
+    "location": {
+      "lat": 27.587242530251448,
+      "lng": 91.86042721419648
+    },
+    "speed": 1.5,
+    "heading": 192.68482558344277,
+    "battery_level": 97.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786268.1399336,
+    "location": {
+      "lat": 27.587950942991345,
+      "lng": 91.86199088358737
+    },
+    "speed": 0.5,
+    "heading": 292.1323421560802,
+    "battery_level": 97.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786268.140034,
+    "location": {
+      "lat": 27.58707059542337,
+      "lng": 91.85902314495733
+    },
+    "speed": 1.5,
+    "heading": 189.53351246784945,
+    "battery_level": 97.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769786268.1401446,
+    "location": {
+      "lat": 27.587434588884143,
+      "lng": 91.86125547239047
+    },
+    "speed": 1.5,
+    "heading": 84.51508177178762,
+    "battery_level": 97.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786268.140203,
+    "location": {
+      "lat": 27.58620912133122,
+      "lng": 91.85839201797893
+    },
+    "speed": 1.6,
+    "heading": 259.97690174096005,
+    "battery_level": 97.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786328.139745,
+    "location": {
+      "lat": 27.587334230567137,
+      "lng": 91.86042734335766
+    },
+    "speed": 1.5,
+    "heading": 13.775997337218486,
+    "battery_level": 97.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786328.1399336,
+    "location": {
+      "lat": 27.58795671966002,
+      "lng": 91.8620332183656
+    },
+    "speed": 0.5,
+    "heading": 258.9667548487187,
+    "battery_level": 97.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786328.140034,
+    "location": {
+      "lat": 27.58717059542337,
+      "lng": 91.85912314495734
+    },
+    "speed": 1.5,
+    "heading": 326.1990830449415,
+    "battery_level": 97.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769786328.1401446,
+    "location": {
+      "lat": 27.587462859439935,
+      "lng": 91.86129269877094
+    },
+    "speed": 1.5,
+    "heading": 72.57477118799129,
+    "battery_level": 97.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786328.140203,
+    "location": {
+      "lat": 27.586139336756467,
+      "lng": 91.85847121437904
+    },
+    "speed": 1.6,
+    "heading": 265.50147134421974,
+    "battery_level": 97.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786388.139745,
+    "location": {
+      "lat": 27.587338582194405,
+      "lng": 91.86046401383817
+    },
+    "speed": 1.5,
+    "heading": 97.34251419420823,
+    "battery_level": 97.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786388.1399336,
+    "location": {
+      "lat": 27.587955951176937,
+      "lng": 91.86201379195018
+    },
+    "speed": 0.5,
+    "heading": 45.65354060902823,
+    "battery_level": 97.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786388.140034,
+    "location": {
+      "lat": 27.58727059542337,
+      "lng": 91.85922314495734
+    },
+    "speed": 1.5,
+    "heading": 207.08556160061153,
+    "battery_level": 97.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769786388.1401446,
+    "location": {
+      "lat": 27.58748971646794,
+      "lng": 91.86132806383239
+    },
+    "speed": 1.5,
+    "heading": 15.97355651699889,
+    "battery_level": 97.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786388.140203,
+    "location": {
+      "lat": 27.586121478517473,
+      "lng": 91.85851047530029
+    },
+    "speed": 1.6,
+    "heading": 52.24765863701396,
+    "battery_level": 97.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786448.139745,
+    "location": {
+      "lat": 27.58732895136882,
+      "lng": 91.86041876636918
+    },
+    "speed": 1.5,
+    "heading": 171.12803209542915,
+    "battery_level": 97.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786448.1399336,
+    "location": {
+      "lat": 27.58797681363887,
+      "lng": 91.86197036516155
+    },
+    "speed": 0.5,
+    "heading": 104.56046993764566,
+    "battery_level": 97.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786448.140034,
+    "location": {
+      "lat": 27.58737059542337,
+      "lng": 91.85932314495734
+    },
+    "speed": 1.5,
+    "heading": 82.53419048988219,
+    "battery_level": 97.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769786448.1401446,
+    "location": {
+      "lat": 27.58751523064454,
+      "lng": 91.86136166064077
+    },
+    "speed": 1.5,
+    "heading": 285.9666118822879,
+    "battery_level": 97.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786448.140203,
+    "location": {
+      "lat": 27.58616930663545,
+      "lng": 91.85851780328389
+    },
+    "speed": 1.6,
+    "heading": 113.70914067387731,
+    "battery_level": 97.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786508.139745,
+    "location": {
+      "lat": 27.587412789665283,
+      "lng": 91.8604517676108
+    },
+    "speed": 1.5,
+    "heading": 68.78434628192782,
+    "battery_level": 97.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786508.1399336,
+    "location": {
+      "lat": 27.587981748928733,
+      "lng": 91.86204491078867
+    },
+    "speed": 0.5,
+    "heading": 358.83681652396865,
+    "battery_level": 97.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786508.140034,
+    "location": {
+      "lat": 27.58737442236589,
+      "lng": 91.85932704669929
     },
     "speed": 0.0,
-    "heading": 0.0,
+    "heading": 178.63975666967625,
+    "battery_level": 97.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769786508.1401446,
+    "location": {
+      "lat": 27.587539469112315,
+      "lng": 91.86139357760872
+    },
+    "speed": 1.5,
+    "heading": 65.70877870462552,
+    "battery_level": 97.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786508.140203,
+    "location": {
+      "lat": 27.58607933600878,
+      "lng": 91.85851133467413
+    },
+    "speed": 1.6,
+    "heading": 162.86043430815178,
+    "battery_level": 97.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786568.139745,
+    "location": {
+      "lat": 27.587399890498194,
+      "lng": 91.86044704829003
+    },
+    "speed": 1.5,
+    "heading": 261.4313963736327,
+    "battery_level": 96.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786568.1399336,
+    "location": {
+      "lat": 27.58797277622889,
+      "lng": 91.86202421670478
+    },
+    "speed": 0.5,
+    "heading": 158.13148042991128,
+    "battery_level": 96.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786568.140034,
+    "location": {
+      "lat": 27.587372329634462,
+      "lng": 91.85932751802696
+    },
+    "speed": 0.0,
+    "heading": 13.107818081965465,
+    "battery_level": 96.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769786568.1401446,
+    "location": {
+      "lat": 27.587562495656698,
+      "lng": 91.86142389872829
+    },
+    "speed": 1.5,
+    "heading": 331.2656632836719,
+    "battery_level": 96.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786568.140203,
+    "location": {
+      "lat": 27.586084851809257,
+      "lng": 91.85855503362512
+    },
+    "speed": 1.6,
+    "heading": 221.49607255691132,
+    "battery_level": 96.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786628.139745,
+    "location": {
+      "lat": 27.58749624754274,
+      "lng": 91.86052417917965
+    },
+    "speed": 1.5,
+    "heading": 239.71508476276975,
+    "battery_level": 96.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786628.1399336,
+    "location": {
+      "lat": 27.588035324424034,
+      "lng": 91.86202712788685
+    },
+    "speed": 0.5,
+    "heading": 189.05154709587228,
+    "battery_level": 96.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786628.140034,
+    "location": {
+      "lat": 27.587375895983104,
+      "lng": 91.85932872208473
+    },
+    "speed": 0.0,
+    "heading": 64.43027146966342,
+    "battery_level": 96.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769786628.1401446,
+    "location": {
+      "lat": 27.587584370873863,
+      "lng": 91.86145270379187
+    },
+    "speed": 1.5,
+    "heading": 3.547513234033768,
+    "battery_level": 96.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786628.140203,
+    "location": {
+      "lat": 27.58615588185081,
+      "lng": 91.85850387959542
+    },
+    "speed": 1.6,
+    "heading": 95.8726884017943,
+    "battery_level": 96.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786688.139745,
+    "location": {
+      "lat": 27.587574578322997,
+      "lng": 91.86057121514715
+    },
+    "speed": 1.5,
+    "heading": 304.4390127144252,
+    "battery_level": 96.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786688.1399336,
+    "location": {
+      "lat": 27.587967815358876,
+      "lng": 91.8619678542485
+    },
+    "speed": 0.5,
+    "heading": 35.31636606187404,
+    "battery_level": 96.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786688.140034,
+    "location": {
+      "lat": 27.587377960640982,
+      "lng": 91.85932803928948
+    },
+    "speed": 0.0,
+    "heading": 322.92427603340775,
+    "battery_level": 96.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769786688.1401446,
+    "location": {
+      "lat": 27.58760515233017,
+      "lng": 91.86148006860228
+    },
+    "speed": 1.5,
+    "heading": 94.28927691984822,
+    "battery_level": 96.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786688.140203,
+    "location": {
+      "lat": 27.58620974641111,
+      "lng": 91.85847515335495
+    },
+    "speed": 1.6,
+    "heading": 116.23348777577385,
+    "battery_level": 96.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786748.139745,
+    "location": {
+      "lat": 27.587482688157866,
+      "lng": 91.86056541524464
+    },
+    "speed": 1.5,
+    "heading": 265.7141890067998,
+    "battery_level": 96.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786748.1399336,
+    "location": {
+      "lat": 27.58796333377722,
+      "lng": 91.8620389188001
+    },
+    "speed": 0.5,
+    "heading": 198.37379681816284,
+    "battery_level": 96.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786748.140034,
+    "location": {
+      "lat": 27.587378944355514,
+      "lng": 91.85932464649665
+    },
+    "speed": 0.0,
+    "heading": 336.5657190803886,
+    "battery_level": 96.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769786748.1401446,
+    "location": {
+      "lat": 27.587624894713663,
+      "lng": 91.86150606517216
+    },
+    "speed": 1.5,
+    "heading": 196.39196732655094,
+    "battery_level": 96.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786748.140203,
+    "location": {
+      "lat": 27.586126867603305,
+      "lng": 91.85851664331251
+    },
+    "speed": 1.6,
+    "heading": 49.024207347805785,
+    "battery_level": 96.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786808.139745,
+    "location": {
+      "lat": 27.58744713456268,
+      "lng": 91.86051317057128
+    },
+    "speed": 1.5,
+    "heading": 127.3041927659332,
+    "battery_level": 96.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786808.1399336,
+    "location": {
+      "lat": 27.587997536620726,
+      "lng": 91.86200395681817
+    },
+    "speed": 0.5,
+    "heading": 132.7921811934017,
+    "battery_level": 96.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786808.140034,
+    "location": {
+      "lat": 27.58737483039016,
+      "lng": 91.85932614099039
+    },
+    "speed": 0.0,
+    "heading": 13.509932539247913,
+    "battery_level": 96.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-LOST",
+    "did": "did:eth:mock:T-LOST",
+    "timestamp": 1769786808.1401446,
+    "location": {
+      "lat": 27.58764364997798,
+      "lng": 91.86153076191356
+    },
+    "speed": 1.5,
+    "heading": 8.14966108497603,
+    "battery_level": 96.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786808.140203,
+    "location": {
+      "lat": 27.58607356151059,
+      "lng": 91.85859069522797
+    },
+    "speed": 1.6,
+    "heading": 279.86496411380625,
+    "battery_level": 96.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786868.139745,
+    "location": {
+      "lat": 27.587500455046257,
+      "lng": 91.86050207730044
+    },
+    "speed": 1.5,
+    "heading": 239.02542541704767,
+    "battery_level": 95.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786868.1399336,
+    "location": {
+      "lat": 27.587982714565776,
+      "lng": 91.86200793501688
+    },
+    "speed": 0.5,
+    "heading": 259.11913515891735,
+    "battery_level": 95.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786868.140034,
+    "location": {
+      "lat": 27.58737877626259,
+      "lng": 91.85932996160037
+    },
+    "speed": 0.0,
+    "heading": 277.14891047008535,
+    "battery_level": 95.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786868.140203,
+    "location": {
+      "lat": 27.58604580429591,
+      "lng": 91.85862379031417
+    },
+    "speed": 1.6,
+    "heading": 346.3179366801709,
+    "battery_level": 95.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786928.139745,
+    "location": {
+      "lat": 27.58756573945433,
+      "lng": 91.86059524620767
+    },
+    "speed": 1.5,
+    "heading": 182.2068481142407,
+    "battery_level": 95.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786928.1399336,
+    "location": {
+      "lat": 27.587973165925902,
+      "lng": 91.86198259035595
+    },
+    "speed": 0.5,
+    "heading": 5.200321298403896,
+    "battery_level": 95.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786928.140034,
+    "location": {
+      "lat": 27.587374403422533,
+      "lng": 91.85933221355796
+    },
+    "speed": 0.0,
+    "heading": 68.07926698099055,
+    "battery_level": 95.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786928.140203,
+    "location": {
+      "lat": 27.5861017810079,
+      "lng": 91.85856487642467
+    },
+    "speed": 1.6,
+    "heading": 100.67898706993816,
+    "battery_level": 95.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769786988.139745,
+    "location": {
+      "lat": 27.587549387587792,
+      "lng": 91.86049668666352
+    },
+    "speed": 1.5,
+    "heading": 205.7397939320201,
+    "battery_level": 95.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769786988.1399336,
+    "location": {
+      "lat": 27.587998337833668,
+      "lng": 91.86197709265818
+    },
+    "speed": 0.5,
+    "heading": 275.6243163335274,
+    "battery_level": 95.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769786988.140034,
+    "location": {
+      "lat": 27.58737428640633,
+      "lng": 91.85933374444377
+    },
+    "speed": 0.0,
+    "heading": 1.9754267970213535,
+    "battery_level": 95.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769786988.140203,
+    "location": {
+      "lat": 27.586097151089227,
+      "lng": 91.85858907569836
+    },
+    "speed": 1.6,
+    "heading": 312.73293420565346,
+    "battery_level": 95.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769787048.139745,
+    "location": {
+      "lat": 27.58754961021357,
+      "lng": 91.86052084853047
+    },
+    "speed": 1.5,
+    "heading": 299.31502061827626,
+    "battery_level": 95.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769787048.1399336,
+    "location": {
+      "lat": 27.58799983386252,
+      "lng": 91.86202727157125
+    },
+    "speed": 0.5,
+    "heading": 231.6904298663943,
+    "battery_level": 95.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769787048.140034,
+    "location": {
+      "lat": 27.58737146857987,
+      "lng": 91.85932923532368
+    },
+    "speed": 0.0,
+    "heading": 268.96838331520775,
+    "battery_level": 95.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769787048.140203,
+    "location": {
+      "lat": 27.586168801488377,
+      "lng": 91.85850024202641
+    },
+    "speed": 1.6,
+    "heading": 306.4892584506142,
+    "battery_level": 95.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769787108.139745,
+    "location": {
+      "lat": 27.587586827819727,
+      "lng": 91.86045042184816
+    },
+    "speed": 1.5,
+    "heading": 75.6102109095715,
+    "battery_level": 95.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769787108.1399336,
+    "location": {
+      "lat": 27.587985108955156,
+      "lng": 91.86203728073586
+    },
+    "speed": 0.5,
+    "heading": 87.29436528250622,
+    "battery_level": 95.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769787108.140034,
+    "location": {
+      "lat": 27.58737112013259,
+      "lng": 91.85933339968349
+    },
+    "speed": 0.0,
+    "heading": 67.22076441882328,
+    "battery_level": 95.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769787108.140203,
+    "location": {
+      "lat": 27.586241815283753,
+      "lng": 91.85856945877588
+    },
+    "speed": 1.6,
+    "heading": 265.0188609705799,
+    "battery_level": 95.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769787168.139745,
+    "location": {
+      "lat": 27.587590511240812,
+      "lng": 91.8604973117413
+    },
+    "speed": 1.5,
+    "heading": 223.65824372874798,
+    "battery_level": 94.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769787168.1399336,
+    "location": {
+      "lat": 27.58803922848198,
+      "lng": 91.86198494084908
+    },
+    "speed": 0.5,
+    "heading": 104.96052781012197,
+    "battery_level": 94.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769787168.140034,
+    "location": {
+      "lat": 27.587367590819618,
+      "lng": 91.85933299102436
+    },
+    "speed": 0.0,
+    "heading": 306.3527556651824,
+    "battery_level": 94.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769787168.140203,
+    "location": {
+      "lat": 27.58627835223067,
+      "lng": 91.85848124761337
+    },
+    "speed": 1.6,
+    "heading": 101.81382355652795,
+    "battery_level": 94.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769787228.139745,
+    "location": {
+      "lat": 27.587502753490927,
+      "lng": 91.86048351063904
+    },
+    "speed": 1.5,
+    "heading": 349.7705419604177,
+    "battery_level": 94.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769787228.1399336,
+    "location": {
+      "lat": 27.587965207891667,
+      "lng": 91.86200608338292
+    },
+    "speed": 0.5,
+    "heading": 326.48147613883043,
+    "battery_level": 94.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769787228.140034,
+    "location": {
+      "lat": 27.587372395799708,
+      "lng": 91.85932922035053
+    },
+    "speed": 0.0,
+    "heading": 56.121699978827934,
+    "battery_level": 94.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769787228.140203,
+    "location": {
+      "lat": 27.58617886449583,
+      "lng": 91.85853094236947
+    },
+    "speed": 1.6,
+    "heading": 20.641221889676086,
+    "battery_level": 94.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769787288.139745,
+    "location": {
+      "lat": 27.58757281627145,
+      "lng": 91.86038913766173
+    },
+    "speed": 1.5,
+    "heading": 191.12801959713903,
+    "battery_level": 94.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769787288.1399336,
+    "location": {
+      "lat": 27.58801701052163,
+      "lng": 91.86199652924924
+    },
+    "speed": 0.5,
+    "heading": 190.49018697633508,
+    "battery_level": 94.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769787288.140034,
+    "location": {
+      "lat": 27.58737515796217,
+      "lng": 91.85933024630967
+    },
+    "speed": 0.0,
+    "heading": 236.8860659670562,
+    "battery_level": 94.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769787288.140203,
+    "location": {
+      "lat": 27.586259346274463,
+      "lng": 91.85861629376876
+    },
+    "speed": 1.6,
+    "heading": 83.68023716603462,
+    "battery_level": 94.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769787348.139745,
+    "location": {
+      "lat": 27.58747609860394,
+      "lng": 91.86041418057343
+    },
+    "speed": 1.5,
+    "heading": 239.7395848216701,
+    "battery_level": 94.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769787348.1399336,
+    "location": {
+      "lat": 27.587983899406,
+      "lng": 91.86196473577351
+    },
+    "speed": 0.5,
+    "heading": 183.33643967304465,
+    "battery_level": 94.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769787348.140034,
+    "location": {
+      "lat": 27.587378588887002,
+      "lng": 91.85932867300824
+    },
+    "speed": 0.0,
+    "heading": 15.23750721177668,
+    "battery_level": 94.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769787348.140203,
+    "location": {
+      "lat": 27.58623396742062,
+      "lng": 91.85852122202523
+    },
+    "speed": 1.6,
+    "heading": 180.37537083846587,
+    "battery_level": 94.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769787408.139745,
+    "location": {
+      "lat": 27.58755378454331,
+      "lng": 91.86042733966046
+    },
+    "speed": 1.5,
+    "heading": 79.04075799891594,
+    "battery_level": 94.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769787408.1399336,
+    "location": {
+      "lat": 27.587883899406002,
+      "lng": 91.86186473577351
+    },
+    "speed": 1.5,
+    "heading": 226.42593098034527,
+    "battery_level": 94.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769787408.140034,
+    "location": {
+      "lat": 27.587379589132528,
+      "lng": 91.85932855381657
+    },
+    "speed": 0.0,
+    "heading": 98.53468108526857,
+    "battery_level": 94.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769787408.140203,
+    "location": {
+      "lat": 27.586250470381852,
+      "lng": 91.85850956772902
+    },
+    "speed": 1.6,
+    "heading": 236.1568447323428,
+    "battery_level": 94.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769787468.139745,
+    "location": {
+      "lat": 27.587536911280246,
+      "lng": 91.86044021752625
+    },
+    "speed": 1.5,
+    "heading": 145.97295732069745,
+    "battery_level": 93.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769787468.1399336,
+    "location": {
+      "lat": 27.587783899406002,
+      "lng": 91.8617647357735
+    },
+    "speed": 1.5,
+    "heading": 259.51436914389234,
+    "battery_level": 93.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769787468.140034,
+    "location": {
+      "lat": 27.587380652992895,
+      "lng": 91.85932697391377
+    },
+    "speed": 0.0,
+    "heading": 34.68193307537679,
+    "battery_level": 93.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769787468.140203,
+    "location": {
+      "lat": 27.58618092024331,
+      "lng": 91.85846248669785
+    },
+    "speed": 1.6,
+    "heading": 272.651763829047,
+    "battery_level": 93.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769787528.139745,
+    "location": {
+      "lat": 27.58758558214232,
+      "lng": 91.86046189110422
+    },
+    "speed": 1.5,
+    "heading": 124.168875951901,
+    "battery_level": 93.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769787528.1399336,
+    "location": {
+      "lat": 27.587683899406002,
+      "lng": 91.8616647357735
+    },
+    "speed": 1.5,
+    "heading": 187.44271918633163,
+    "battery_level": 93.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769787528.140034,
+    "location": {
+      "lat": 27.58738483240329,
+      "lng": 91.85932623126912
+    },
+    "speed": 0.0,
+    "heading": 274.4813247792668,
+    "battery_level": 93.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769787528.140203,
+    "location": {
+      "lat": 27.586195970158638,
+      "lng": 91.85836410410113
+    },
+    "speed": 1.6,
+    "heading": 68.91355337559528,
+    "battery_level": 93.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769787588.139745,
+    "location": {
+      "lat": 27.587490552946537,
+      "lng": 91.860542169952
+    },
+    "speed": 1.5,
+    "heading": 320.77845451441755,
+    "battery_level": 93.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769787588.1399336,
+    "location": {
+      "lat": 27.587583899406003,
+      "lng": 91.8615647357735
+    },
+    "speed": 1.5,
+    "heading": 158.46802354186474,
+    "battery_level": 93.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769787588.140034,
+    "location": {
+      "lat": 27.587385744566415,
+      "lng": 91.85932257631802
+    },
+    "speed": 0.0,
+    "heading": 64.87045371530425,
+    "battery_level": 93.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769787588.140203,
+    "location": {
+      "lat": 27.58614406542288,
+      "lng": 91.85836449936869
+    },
+    "speed": 1.6,
+    "heading": 273.67304101266603,
+    "battery_level": 93.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769787648.139745,
+    "location": {
+      "lat": 27.587549595232815,
+      "lng": 91.8606085941031
+    },
+    "speed": 1.5,
+    "heading": 334.79849272025115,
+    "battery_level": 93.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769787648.1399336,
+    "location": {
+      "lat": 27.587483899406003,
+      "lng": 91.8614647357735
+    },
+    "speed": 1.5,
+    "heading": 344.3769317356016,
+    "battery_level": 93.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769787648.140034,
+    "location": {
+      "lat": 27.587389451816854,
+      "lng": 91.85931860891134
+    },
+    "speed": 0.0,
+    "heading": 213.5534968503922,
+    "battery_level": 93.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769787648.140203,
+    "location": {
+      "lat": 27.586177418816664,
+      "lng": 91.8582802195442
+    },
+    "speed": 1.6,
+    "heading": 343.58167360766663,
+    "battery_level": 93.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769787708.139745,
+    "location": {
+      "lat": 27.587506303874886,
+      "lng": 91.86055231591384
+    },
+    "speed": 1.5,
+    "heading": 288.12209802230166,
+    "battery_level": 93.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769787708.1399336,
+    "location": {
+      "lat": 27.587383899406003,
+      "lng": 91.86136473577349
+    },
+    "speed": 1.5,
+    "heading": 206.8318418499748,
+    "battery_level": 93.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769787708.140034,
+    "location": {
+      "lat": 27.587390324067627,
+      "lng": 91.85932215590121
+    },
+    "speed": 0.0,
+    "heading": 89.3581701111779,
+    "battery_level": 93.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769787708.140203,
+    "location": {
+      "lat": 27.586128162098046,
+      "lng": 91.85829432039124
+    },
+    "speed": 1.6,
+    "heading": 315.21641962767484,
+    "battery_level": 93.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769787768.139745,
+    "location": {
+      "lat": 27.587433797125797,
+      "lng": 91.86046884419193
+    },
+    "speed": 1.5,
+    "heading": 349.487421030453,
+    "battery_level": 92.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769787768.1399336,
+    "location": {
+      "lat": 27.587283899406003,
+      "lng": 91.86126473577349
+    },
+    "speed": 1.5,
+    "heading": 95.73584943002528,
+    "battery_level": 92.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769787768.140034,
+    "location": {
+      "lat": 27.58738578628028,
+      "lng": 91.85932293103248
+    },
+    "speed": 0.0,
+    "heading": 89.17718711978927,
+    "battery_level": 92.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769787768.140203,
+    "location": {
+      "lat": 27.586200047783834,
+      "lng": 91.85827269852636
+    },
+    "speed": 1.6,
+    "heading": 175.76290158122117,
+    "battery_level": 92.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769787828.139745,
+    "location": {
+      "lat": 27.587464313797913,
+      "lng": 91.86051071789494
+    },
+    "speed": 1.5,
+    "heading": 163.77902987684485,
+    "battery_level": 92.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769787828.1399336,
+    "location": {
+      "lat": 27.587183899406003,
+      "lng": 91.86116473577349
+    },
+    "speed": 1.5,
+    "heading": 80.41582148007588,
+    "battery_level": 92.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769787828.140034,
+    "location": {
+      "lat": 27.587385186755196,
+      "lng": 91.85931905105753
+    },
+    "speed": 0.0,
+    "heading": 234.1237401918101,
+    "battery_level": 92.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769787828.140203,
+    "location": {
+      "lat": 27.58623632048751,
+      "lng": 91.85817639709607
+    },
+    "speed": 1.6,
+    "heading": 208.72822191542608,
+    "battery_level": 92.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769787888.139745,
+    "location": {
+      "lat": 27.587418886057,
+      "lng": 91.86045606482892
+    },
+    "speed": 1.5,
+    "heading": 349.51596875725517,
+    "battery_level": 92.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769787888.1399336,
+    "location": {
+      "lat": 27.587083899406004,
+      "lng": 91.86106473577348
+    },
+    "speed": 1.5,
+    "heading": 309.78745880268303,
+    "battery_level": 92.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769787888.140034,
+    "location": {
+      "lat": 27.587384627902708,
+      "lng": 91.85931822142332
+    },
+    "speed": 0.0,
+    "heading": 60.32395171276618,
+    "battery_level": 92.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769787888.140203,
+    "location": {
+      "lat": 27.586304076266583,
+      "lng": 91.85811049486261
+    },
+    "speed": 1.6,
+    "heading": 162.6567932735358,
+    "battery_level": 92.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769787948.139745,
+    "location": {
+      "lat": 27.587332331123545,
+      "lng": 91.86049828178807
+    },
+    "speed": 1.5,
+    "heading": 282.13669395055945,
+    "battery_level": 92.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769787948.1399336,
+    "location": {
+      "lat": 27.586983899406004,
+      "lng": 91.86096473577348
+    },
+    "speed": 1.5,
+    "heading": 353.0580506659422,
+    "battery_level": 92.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769787948.140034,
+    "location": {
+      "lat": 27.587382071746433,
+      "lng": 91.85932050549954
+    },
+    "speed": 0.0,
+    "heading": 42.322130698866694,
+    "battery_level": 92.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769787948.140203,
+    "location": {
+      "lat": 27.586329805193156,
+      "lng": 91.85806033466977
+    },
+    "speed": 1.6,
+    "heading": 12.73845715577795,
+    "battery_level": 92.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788008.139745,
+    "location": {
+      "lat": 27.58733261423806,
+      "lng": 91.86043136556076
+    },
+    "speed": 1.5,
+    "heading": 344.3991708429113,
+    "battery_level": 92.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788008.1399336,
+    "location": {
+      "lat": 27.586883899406004,
+      "lng": 91.86086473577348
+    },
+    "speed": 1.5,
+    "heading": 111.25130759796843,
+    "battery_level": 92.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788008.140034,
+    "location": {
+      "lat": 27.587386490164928,
+      "lng": 91.85932073523456
+    },
+    "speed": 0.0,
+    "heading": 37.23904434557289,
+    "battery_level": 92.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788008.140203,
+    "location": {
+      "lat": 27.586283118438544,
+      "lng": 91.85798484436967
+    },
+    "speed": 0.0,
+    "heading": 141.06980829711128,
+    "battery_level": 92.0,
+    "is_panic": true
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788068.139745,
+    "location": {
+      "lat": 27.58741502259365,
+      "lng": 91.86033637763374
+    },
+    "speed": 1.5,
+    "heading": 74.45968770789914,
+    "battery_level": 91.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788068.1399336,
+    "location": {
+      "lat": 27.586783899406004,
+      "lng": 91.86076473577347
+    },
+    "speed": 1.5,
+    "heading": 208.66528138570163,
+    "battery_level": 91.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788068.140034,
+    "location": {
+      "lat": 27.587386364540855,
+      "lng": 91.85931744764837
+    },
+    "speed": 0.0,
+    "heading": 59.47635911348774,
+    "battery_level": 91.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788068.140203,
+    "location": {
+      "lat": 27.586302034784353,
+      "lng": 91.85792705103245
+    },
+    "speed": 0.0,
+    "heading": 48.61025381403478,
+    "battery_level": 91.8,
+    "is_panic": true
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788128.139745,
+    "location": {
+      "lat": 27.587430461281645,
+      "lng": 91.86034450585502
+    },
+    "speed": 1.5,
+    "heading": 70.22018300548372,
+    "battery_level": 91.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788128.1399336,
+    "location": {
+      "lat": 27.586683899406005,
+      "lng": 91.86066473577347
+    },
+    "speed": 1.5,
+    "heading": 269.26388184229563,
+    "battery_level": 91.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788128.140034,
+    "location": {
+      "lat": 27.587388769314792,
+      "lng": 91.85931307327968
+    },
+    "speed": 0.0,
+    "heading": 236.49032787298793,
+    "battery_level": 91.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788128.140203,
+    "location": {
+      "lat": 27.586241709955583,
+      "lng": 91.85794393759159
+    },
+    "speed": 0.0,
+    "heading": 106.47686103884145,
+    "battery_level": 91.6,
+    "is_panic": true
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788188.139745,
+    "location": {
+      "lat": 27.587403503733203,
+      "lng": 91.86025584137728
+    },
+    "speed": 1.5,
+    "heading": 260.2859563444661,
+    "battery_level": 91.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788188.1399336,
+    "location": {
+      "lat": 27.586583899406005,
+      "lng": 91.86056473577347
+    },
+    "speed": 1.5,
+    "heading": 87.64068385980947,
+    "battery_level": 91.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788188.140034,
+    "location": {
+      "lat": 27.58738478684286,
+      "lng": 91.85931517892477
+    },
+    "speed": 0.0,
+    "heading": 357.30587263779466,
+    "battery_level": 91.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788188.140203,
+    "location": {
+      "lat": 27.58627527155953,
+      "lng": 91.85790036769276
+    },
+    "speed": 0.0,
+    "heading": 189.36279655404135,
+    "battery_level": 91.4,
+    "is_panic": true
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788248.139745,
+    "location": {
+      "lat": 27.58732829812918,
+      "lng": 91.86025073059683
+    },
+    "speed": 1.5,
+    "heading": 347.67639687248175,
+    "battery_level": 91.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788248.1399336,
+    "location": {
+      "lat": 27.586483899406005,
+      "lng": 91.86046473577346
+    },
+    "speed": 1.5,
+    "heading": 169.38811150961743,
+    "battery_level": 91.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788248.140034,
+    "location": {
+      "lat": 27.58738954724254,
+      "lng": 91.85931153329601
+    },
+    "speed": 0.0,
+    "heading": 199.62068744757235,
+    "battery_level": 91.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788248.140203,
+    "location": {
+      "lat": 27.58621551422318,
+      "lng": 91.85785299358993
+    },
+    "speed": 0.0,
+    "heading": 328.0847414204558,
+    "battery_level": 91.2,
+    "is_panic": true
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788308.139745,
+    "location": {
+      "lat": 27.587286765114115,
+      "lng": 91.8602242804794
+    },
+    "speed": 1.5,
+    "heading": 18.48492956085392,
+    "battery_level": 91.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788308.1399336,
+    "location": {
+      "lat": 27.586383899406005,
+      "lng": 91.86036473577346
+    },
+    "speed": 1.5,
+    "heading": 295.37652097944795,
+    "battery_level": 91.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788308.140034,
+    "location": {
+      "lat": 27.587393153443262,
+      "lng": 91.85930999201103
+    },
+    "speed": 0.0,
+    "heading": 155.8852518163111,
+    "battery_level": 91.0,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788308.140203,
+    "location": {
+      "lat": 27.586307738346775,
+      "lng": 91.85779533833393
+    },
+    "speed": 0.0,
+    "heading": 261.3232153434429,
+    "battery_level": 91.0,
+    "is_panic": true
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788368.139745,
+    "location": {
+      "lat": 27.587303336282773,
+      "lng": 91.86017850021712
+    },
+    "speed": 1.5,
+    "heading": 245.7591726489997,
+    "battery_level": 90.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788368.1399336,
+    "location": {
+      "lat": 27.586283899406006,
+      "lng": 91.86026473577346
+    },
+    "speed": 1.5,
+    "heading": 162.84782378607582,
+    "battery_level": 90.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788368.140034,
+    "location": {
+      "lat": 27.587393761722065,
+      "lng": 91.859306624626
+    },
+    "speed": 0.0,
+    "heading": 142.66900144986116,
+    "battery_level": 90.8,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788368.140203,
+    "location": {
+      "lat": 27.586313040748504,
+      "lng": 91.8577970896695
+    },
+    "speed": 0.0,
+    "heading": 95.21848352942187,
+    "battery_level": 90.8,
+    "is_panic": true
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788428.139745,
+    "location": {
+      "lat": 27.587333986247685,
+      "lng": 91.86013467130984
+    },
+    "speed": 1.5,
+    "heading": 195.15767379571213,
+    "battery_level": 90.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788428.1399336,
+    "location": {
+      "lat": 27.586183899406006,
+      "lng": 91.86016473577345
+    },
+    "speed": 1.5,
+    "heading": 358.72453593381795,
+    "battery_level": 90.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788428.140034,
+    "location": {
+      "lat": 27.58739354160304,
+      "lng": 91.85930398801258
+    },
+    "speed": 0.0,
+    "heading": 258.10546901436567,
+    "battery_level": 90.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788428.140203,
+    "location": {
+      "lat": 27.586275683345402,
+      "lng": 91.85789115891649
+    },
+    "speed": 0.0,
+    "heading": 93.57162443382622,
+    "battery_level": 90.6,
+    "is_panic": true
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788488.139745,
+    "location": {
+      "lat": 27.587246830792036,
+      "lng": 91.86010192137603
+    },
+    "speed": 1.5,
+    "heading": 169.38694012469335,
+    "battery_level": 90.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788488.1399336,
+    "location": {
+      "lat": 27.586083899406006,
+      "lng": 91.86006473577345
+    },
+    "speed": 1.5,
+    "heading": 17.360803498459628,
+    "battery_level": 90.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788488.140034,
+    "location": {
+      "lat": 27.587388819350252,
+      "lng": 91.85929995171122
+    },
+    "speed": 0.0,
+    "heading": 289.7299570883371,
+    "battery_level": 90.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788488.140203,
+    "location": {
+      "lat": 27.586305895495656,
+      "lng": 91.85784720075766
+    },
+    "speed": 0.0,
+    "heading": 165.44027488503335,
+    "battery_level": 90.4,
+    "is_panic": true
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788548.139745,
+    "location": {
+      "lat": 27.587177234337968,
+      "lng": 91.86016486835331
+    },
+    "speed": 1.5,
+    "heading": 148.2127752984133,
+    "battery_level": 90.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788548.1399336,
+    "location": {
+      "lat": 27.585983899406006,
+      "lng": 91.85996473577345
+    },
+    "speed": 1.5,
+    "heading": 164.65550777871076,
+    "battery_level": 90.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788548.140034,
+    "location": {
+      "lat": 27.58739253707792,
+      "lng": 91.85930126003538
+    },
+    "speed": 0.0,
+    "heading": 340.0438184282064,
+    "battery_level": 90.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788548.140203,
+    "location": {
+      "lat": 27.586220624998838,
+      "lng": 91.85792286682802
+    },
+    "speed": 0.0,
+    "heading": 116.53560791883673,
+    "battery_level": 90.2,
+    "is_panic": true
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788608.139745,
+    "location": {
+      "lat": 27.58714796069847,
+      "lng": 91.86022492289817
+    },
+    "speed": 1.5,
+    "heading": 11.629449439210013,
     "battery_level": 90.0,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752783.442989,
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788608.1399336,
     "location": {
-      "lat": 27.5879962424544,
-      "lng": 91.86200778994676
+      "lat": 27.585883899406006,
+      "lng": 91.85986473577344
     },
-    "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 89.95,
+    "speed": 1.5,
+    "heading": 183.74953461169076,
+    "battery_level": 90.0,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752843.442989,
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788608.140034,
     "location": {
-      "lat": 27.588006816882295,
-      "lng": 91.86200934811791
+      "lat": 27.587387665943524,
+      "lng": 91.85930526702751
     },
     "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 89.9,
+    "heading": 276.21358073414285,
+    "battery_level": 90.0,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752903.442989,
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788608.140203,
     "location": {
-      "lat": 27.587993165182752,
-      "lng": 91.86200774948703
+      "lat": 27.586167802277373,
+      "lng": 91.85800757604831
     },
     "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 89.85,
-    "is_panic": false
+    "heading": 45.38884229054166,
+    "battery_level": 90.0,
+    "is_panic": true
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769752963.442989,
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788668.139745,
     "location": {
-      "lat": 27.587998086575343,
-      "lng": 91.86200779760094
+      "lat": 27.587144792451994,
+      "lng": 91.86012877408722
     },
-    "speed": 0.0,
-    "heading": 0.0,
+    "speed": 1.5,
+    "heading": 319.4491355366318,
     "battery_level": 89.8,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753023.442989,
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788668.1399336,
     "location": {
-      "lat": 27.5880034192069,
-      "lng": 91.8620009189843
+      "lat": 27.585783899406007,
+      "lng": 91.85976473577344
     },
-    "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 89.75,
+    "speed": 1.5,
+    "heading": 154.81185104640488,
+    "battery_level": 89.8,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753083.442989,
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788668.140034,
     "location": {
-      "lat": 27.588007419398334,
-      "lng": 91.86200042845054
+      "lat": 27.58739064225693,
+      "lng": 91.8593026305366
     },
     "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 89.7,
+    "heading": 289.3567194659044,
+    "battery_level": 89.8,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753143.442989,
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788668.140203,
     "location": {
-      "lat": 27.58799119167813,
-      "lng": 91.86200382541575
+      "lat": 27.5861785536508,
+      "lng": 91.85792582606805
     },
     "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 89.65,
-    "is_panic": false
+    "heading": 138.60843114674776,
+    "battery_level": 89.8,
+    "is_panic": true
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753203.442989,
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788728.139745,
     "location": {
-      "lat": 27.58799868360072,
-      "lng": 91.86199497442175
+      "lat": 27.58717499192802,
+      "lng": 91.86021267312378
     },
-    "speed": 0.0,
-    "heading": 0.0,
+    "speed": 1.5,
+    "heading": 312.6394668713634,
     "battery_level": 89.6,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753263.442989,
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788728.1399336,
     "location": {
-      "lat": 27.588001824077303,
-      "lng": 91.86199071027676
+      "lat": 27.585683899406007,
+      "lng": 91.85966473577344
     },
-    "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 89.55,
+    "speed": 1.5,
+    "heading": 55.935416043863974,
+    "battery_level": 89.6,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753323.442989,
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788728.140034,
     "location": {
-      "lat": 27.587997741847143,
-      "lng": 91.86200392916047
+      "lat": 27.58738778228951,
+      "lng": 91.85930624278272
     },
     "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 89.5,
+    "heading": 117.8133944754379,
+    "battery_level": 89.6,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753383.442989,
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788728.140203,
     "location": {
-      "lat": 27.58799221700581,
-      "lng": 91.8619919753275
+      "lat": 27.586125764995412,
+      "lng": 91.8580129563719
     },
     "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 89.45,
-    "is_panic": false
+    "heading": 60.86738866550601,
+    "battery_level": 89.6,
+    "is_panic": true
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753443.442989,
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788788.139745,
     "location": {
-      "lat": 27.58800337747852,
-      "lng": 91.86199694823192
+      "lat": 27.58716161292973,
+      "lng": 91.86030671542333
     },
-    "speed": 0.0,
-    "heading": 0.0,
+    "speed": 1.5,
+    "heading": 310.71389615634524,
     "battery_level": 89.4,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753503.442989,
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788788.1399336,
     "location": {
-      "lat": 27.587997916703404,
-      "lng": 91.86200621229183
+      "lat": 27.585583899406007,
+      "lng": 91.85956473577343
     },
-    "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 89.35,
+    "speed": 1.5,
+    "heading": 43.51849687130906,
+    "battery_level": 89.4,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753563.442989,
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788788.140034,
     "location": {
-      "lat": 27.58800131568639,
-      "lng": 91.86200932267447
+      "lat": 27.587391044046722,
+      "lng": 91.85931086374289
     },
     "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 89.3,
+    "heading": 341.1703928784495,
+    "battery_level": 89.4,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753623.442989,
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788788.140203,
     "location": {
-      "lat": 27.5880085140317,
-      "lng": 91.86199432357446
+      "lat": 27.586167777333163,
+      "lng": 91.85806289845453
     },
     "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 89.25,
-    "is_panic": false
+    "heading": 210.27293575996632,
+    "battery_level": 89.4,
+    "is_panic": true
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753683.442989,
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788848.139745,
     "location": {
-      "lat": 27.58799924571157,
-      "lng": 91.8620069213562
+      "lat": 27.587204008835837,
+      "lng": 91.86040332134249
     },
-    "speed": 0.0,
-    "heading": 0.0,
+    "speed": 1.5,
+    "heading": 104.93509381191288,
     "battery_level": 89.2,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753743.442989,
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788848.1399336,
     "location": {
-      "lat": 27.588000335587203,
-      "lng": 91.86200131257709
+      "lat": 27.585483899406007,
+      "lng": 91.85946473577343
     },
-    "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 89.15,
+    "speed": 1.5,
+    "heading": 283.6481148397746,
+    "battery_level": 89.2,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753803.442989,
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788848.140034,
     "location": {
-      "lat": 27.58800935703637,
-      "lng": 91.86200855628765
+      "lat": 27.58738716212246,
+      "lng": 91.85930758561176
     },
     "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 89.1,
+    "heading": 268.93273197626894,
+    "battery_level": 89.2,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753863.442989,
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788848.140203,
     "location": {
-      "lat": 27.588005575829996,
-      "lng": 91.8619954891683
+      "lat": 27.586229201572667,
+      "lng": 91.85814704340537
     },
     "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 89.05,
-    "is_panic": false
+    "heading": 167.1342940116547,
+    "battery_level": 89.2,
+    "is_panic": true
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753923.442989,
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788908.139745,
     "location": {
-      "lat": 27.587993144876894,
-      "lng": 91.86199843276597
+      "lat": 27.587139961262825,
+      "lng": 91.86032683964221
     },
-    "speed": 0.0,
-    "heading": 0.0,
+    "speed": 1.5,
+    "heading": 293.66386163170955,
     "battery_level": 89.0,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769753983.442989,
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788908.1399336,
     "location": {
-      "lat": 27.58800579827633,
-      "lng": 91.86200578895397
+      "lat": 27.585383899406008,
+      "lng": 91.85936473577343
     },
-    "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 88.95,
+    "speed": 1.5,
+    "heading": 44.60580433627563,
+    "battery_level": 89.0,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769754043.442989,
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788908.140034,
     "location": {
-      "lat": 27.58799619421971,
-      "lng": 91.86200134902042
+      "lat": 27.587390014199933,
+      "lng": 91.85931185924822
     },
     "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 88.9,
+    "heading": 337.85126417075196,
+    "battery_level": 89.0,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769754103.442989,
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788908.140203,
     "location": {
-      "lat": 27.588005129222978,
-      "lng": 91.86200350055928
+      "lat": 27.586141921190627,
+      "lng": 91.85818038959881
     },
     "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 88.85,
-    "is_panic": false
+    "heading": 117.9700772275214,
+    "battery_level": 89.0,
+    "is_panic": true
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769754163.442989,
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769788968.139745,
     "location": {
-      "lat": 27.587998389600045,
-      "lng": 91.86200141979475
+      "lat": 27.587094422292758,
+      "lng": 91.86036397976346
     },
-    "speed": 0.0,
-    "heading": 0.0,
+    "speed": 1.5,
+    "heading": 197.33624442815423,
     "battery_level": 88.8,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769754223.442989,
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769788968.1399336,
     "location": {
-      "lat": 27.58799404765876,
-      "lng": 91.86199654826409
+      "lat": 27.585283899406008,
+      "lng": 91.85926473577342
     },
-    "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 88.75,
+    "speed": 1.5,
+    "heading": 84.75036169570157,
+    "battery_level": 88.8,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769754283.442989,
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769788968.140034,
     "location": {
-      "lat": 27.588004057782726,
-      "lng": 91.86199171392836
+      "lat": 27.587394462491705,
+      "lng": 91.85930747316894
     },
     "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 88.7,
+    "heading": 2.7433799669730696,
+    "battery_level": 88.8,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769754343.442989,
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769788968.140203,
     "location": {
-      "lat": 27.588004244896172,
-      "lng": 91.86199584134931
+      "lat": 27.586217919931602,
+      "lng": 91.8582659686374
     },
     "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 88.65,
-    "is_panic": false
+    "heading": 348.0246924014145,
+    "battery_level": 88.8,
+    "is_panic": true
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769754403.442989,
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769789028.139745,
     "location": {
-      "lat": 27.588005741988468,
-      "lng": 91.86199730176496
+      "lat": 27.587042862098297,
+      "lng": 91.86030212212829
     },
-    "speed": 0.0,
-    "heading": 0.0,
+    "speed": 1.5,
+    "heading": 204.94159987957678,
     "battery_level": 88.6,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769754463.442989,
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769789028.1399336,
     "location": {
-      "lat": 27.58800412703343,
-      "lng": 91.86200821153248
+      "lat": 27.585183899406008,
+      "lng": 91.85916473577342
     },
-    "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 88.55,
+    "speed": 1.5,
+    "heading": 149.90784758603112,
+    "battery_level": 88.6,
     "is_panic": false
   },
   {
-    "device_id": "T-ALPHA",
-    "did": "did:eth:mock:T-ALPHA",
-    "timestamp": 1769754473.442989,
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769789028.140034,
     "location": {
-      "lat": 27.588,
-      "lng": 91.862
+      "lat": 27.58739682062318,
+      "lng": 91.85930321954217
     },
     "speed": 0.0,
-    "heading": 0.0,
-    "battery_level": 88.0,
+    "heading": 134.83478307075043,
+    "battery_level": 88.6,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769789028.140203,
+    "location": {
+      "lat": 27.5861179463845,
+      "lng": 91.85836278718419
+    },
+    "speed": 0.0,
+    "heading": 180.76533880834836,
+    "battery_level": 88.6,
+    "is_panic": true
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769789088.139745,
+    "location": {
+      "lat": 27.587038967904906,
+      "lng": 91.86037674012314
+    },
+    "speed": 1.5,
+    "heading": 334.05626700850814,
+    "battery_level": 88.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769789088.1399336,
+    "location": {
+      "lat": 27.58508389940601,
+      "lng": 91.85906473577342
+    },
+    "speed": 1.5,
+    "heading": 351.5920501756597,
+    "battery_level": 88.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769789088.140034,
+    "location": {
+      "lat": 27.58739728983893,
+      "lng": 91.85930576688138
+    },
+    "speed": 0.0,
+    "heading": 304.64958592433493,
+    "battery_level": 88.4,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769789088.140203,
+    "location": {
+      "lat": 27.586136320853914,
+      "lng": 91.85829363259604
+    },
+    "speed": 0.0,
+    "heading": 284.4561203901738,
+    "battery_level": 88.4,
+    "is_panic": true
+  },
+  {
+    "device_id": "T-SAFE",
+    "did": "did:eth:mock:T-SAFE",
+    "timestamp": 1769789148.139745,
+    "location": {
+      "lat": 27.587065759740902,
+      "lng": 91.8604059309893
+    },
+    "speed": 1.5,
+    "heading": 93.85409282145946,
+    "battery_level": 88.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-BREACH",
+    "did": "did:eth:mock:T-BREACH",
+    "timestamp": 1769789148.1399336,
+    "location": {
+      "lat": 27.58498389940601,
+      "lng": 91.85896473577341
+    },
+    "speed": 1.5,
+    "heading": 198.390856223163,
+    "battery_level": 88.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-FALL",
+    "did": "did:eth:mock:T-FALL",
+    "timestamp": 1769789148.140034,
+    "location": {
+      "lat": 27.587395031630574,
+      "lng": 91.85930813002224
+    },
+    "speed": 0.0,
+    "heading": 213.38156814639802,
+    "battery_level": 88.2,
+    "is_panic": false
+  },
+  {
+    "device_id": "T-SOS",
+    "did": "did:eth:mock:T-SOS",
+    "timestamp": 1769789148.140203,
+    "location": {
+      "lat": 27.586190504412283,
+      "lng": 91.85838202813228
+    },
+    "speed": 0.0,
+    "heading": 315.6677175359859,
+    "battery_level": 88.2,
     "is_panic": true
   }
 ]
