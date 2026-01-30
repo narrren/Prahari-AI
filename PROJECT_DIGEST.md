@@ -1,7 +1,7 @@
 # PRAHARI-AI: Technical Digest & Architectural Reference
 
-**Version:** 1.0.0  
-**Status:** Alpha / Prototype (LocalStack + Ganache)  
+**Version:** 2.0.0 "Pinnacle"  
+**Status:** Beta / Feature Complete (Live Simulation)  
 **Context:** MoDoNER Pinnacle Project (Smart Tourist Safety System)
 
 ---
@@ -18,67 +18,70 @@ The system follows a modern **Event-Driven, Serverless-First** architecture, cur
 
 ### **2.1. Infrastructure Layer (Dockerized)**
 *   **AWS Cloud Simulator (LocalStack)**:
-    *   **DynamoDB**: Stores hot state (current location) and cold storage (historical paths).
-    *   **IoT Core (Simulated)**: Ingests high-frequency GPS telemetry via MQTT/HTTP.
+    *   **DynamoDB**: Stores hot state (current location) and historical path data.
+    *   **IoT Core (Simulated)**: Ingests high-frequency GPS telemetry via HTTP/MQTT.
 *   **Blockchain Network (Ganache)**:
     *   Runs a local Ethereum testnet (Chain ID: 1337).
-    *   Hosts the `TouristPermitRegistry` smart contract.
+    *   Hosts the **TouristPermitRegistry** smart contract (Single Source of Truth).
 
-### **2.2. Backend Services (Python/FastAPI)**
-*   **API Gateway**: REST API managing frontend communication.
-*   **Anomaly Engine**: Processing pipeline that analyzes incoming telemetry against safety rules.
-*   **Database Service**: Abstraction layer connecting to LocalStack DynamoDB.
+### **2.2. Backend Intelligence (Python/FastAPI)**
+*   **Sentinel Engine ("The Brain")**:
+    *   **Weighted Risk Scorer**: Calculates cumulative risk (0-100) based on Spatial (Polygon Zones), Temporal (Night), and Behavioral (Inactivity) factors.
+    *   **Dead Man Monitor**: Independent background service scanning for "Signal Loss" in High-Risk Zones.
+*   **Identity Bridge**: Connects backend alerts to Blockchain Permit status (`web3.py`).
 
 ### **2.3. Frontend Applications**
-*   **Command Centre (React + Vite)**: A high-fidelity dashboard for Police/Tourism authorities.
-*   **Field Unit (React Native Skeleton)**: Mobile app logic for tourists (GPS tracking & SOS).
+*   **Sentinel Dashboard (React + Vite)**: A high-fidelity Control Room interface.
+    *   **WebSockets**: Delivers sub-second alerts with audio feedback.
+    *   **Live Map**: Leaflet.js with Custom GeoJSON Layers (Red Zones).
+    *   **Digital E-FIR**: Generates PDF reports with Blockchain Proofs.
 
 ---
 
-## 3. Module Breakdown
+## 3. Module Breakdown (Implemented Status)
 
-### **Module 1: Decentralized Identity (SSI) & Permitting**
-*   **Objective**: Replace physical paper permits with Verifiable Credentials (VCs).
-*   **Components**:
-    *   `TouristPermitRegistry.sol`: Solidity smart contract for issuing/revoking permits.
-    *   **Issuer Portal**: React UI (`PermitIssuer.jsx`) allowing authorities to mint permits to a tourist's DID (Wallet Address).
-    *   **Verification**: "Verify without Reveal" logic using cryptographic hashes.
+### **Module 1: The Immutable Identity (Blockchain Core)**
+*   **Status: LIVE**
+*   **Smart Contract**: `TouristPermitRegistry.sol` (Deployed).
+    *   **Features**: Time-locked permits, Identity Hashing (SHA-256), Emergency Flagging.
+    *   **Privacy**: Only hashes are stored on-chain. PII remains off-chain.
+*   **Bridge**: `identity.py` service resolves DIDs to real-time Blockchain Permit status.
 
-### **Module 2: Real-Time Geo-Fencing & Tracking**
-*   **Data Flow**: Mobile App -> AWS IoT Core -> Lambda -> DynamoDB -> Dashboard.
-*   **Geofences**: Defined polygons (e.g., "zone_id: ZONE_001") representing restricted or high-risk areas.
-*   **Alert Generation**:
-    *   **Entry/Exit Events**: Immediate alerts when a tourist crosses a geofence boundary.
+### **Module 2: High-Fidelity Telemetry & Kalman Filtering**
+*   **Status: LIVE**
+*   **Ingestion**: `telemetry.py` processes raw GPS data.
+*   **Smoothing**: Implemented **Kalman Filters** (4-state) to reduce GPS jitter and predict velocity.
+*   **Persistence**: In-Memory Cache with DynamoDB Hydration ensures no data loss on restarts.
 
-### **Module 3: AI Anomaly Detection Engine**
-*   **Logic**: A heuristic-based Python service (`anomaly_detection.py`) that monitors tourist behavior.
-*   **Detection Rules**:
-    1.  **Inactivity**: Stationary for > 30 minutes in a remote zone.
-    2.  **Route Deviation**: Straying > 500m from the assigned trekking path.
-    3.  **Velocity Anomaly**: Sudden deceleration (simulating a fall or accident).
-    4.  **SOS**: Panic button triggers high-priority "CRITICAL" alerts.
+### **Module 3: The "Brain" (Weighted AI Risk Engine)**
+*   **Status: LIVE**
+*   **Logic**: `anomaly_detection.py` implements a weighted formula:
+    > **Risk Score = (Spatial * 0.5) + (Env * 0.2) + (Behavior * 0.3)**
+*   **Factors**:
+    1.  **Spatial**: Ray-Casting Algorithm checks for Polygon Geofence breaches (`Tawang Red Zone`).
+    2.  **Temporal**: Higher risk weighting during night hours (18:00 - 05:00).
+    3.  **Behavioral**: Velocity drop (<0.1m/s) triggers "Stagnation" warnings.
 
-### **Module 4: Sentinel Command Dashboard**
-*   **UI/UX**: Dark-mode, "Glassmorphism" design tailored for a high-tech control room.
-*   **Features**:
-    *   **Live Map**: Leaflet.js-based visualization of all active tourists.
-    *   **Incident Feed**: Real-time sidebar processing alert priority (Red = Critical, Orange = Warning).
-    *   **Dual-View**: Toggles between "Live Monitor" and "Permit Issuer" modes.
+### **Module 4: "Dead Man's Switch" (Fail-Safe)**
+*   **Status: LIVE**
+*   **Component**: `dead_man_monitor.py` (Background Task).
+*   **Logic**:
+    *   Polls active trackers every 60s.
+    *   **Trigger**: IF `TimeSinceLastPing > Threshold` AND `Zone == HighRisk` -> **CRITICAL ALERT**.
+    *   **Output**: "Signal Lost in Danger Zone" alert sent to Dashboard.
 
-### **Module 5: Mobile App (Field Unit)**
-*   **Tech**: React Native / Expo.
-*   **Capabilities**:
-    *   **Background GPS**: Polls location every 5 seconds (simulated).
-    *   **Panic Button**: "Hold-to-trigger" interface with haptic feedback.
-    *   **Offline Logic**: Queues telemetry when network connectivity is lost.
+### **Module 5: Sentinel Dashboard & E-FIR**
+*   **Status: LIVE**
+*   **Visuals**: Real-time "Dot" tracking with breadcrumb history trails.
+*   **Alerts**: Instant WebSocket notifications with "Siren" audio.
+*   **Exports**: One-click "Generate E-FIR" modal displaying the TX Hash and Permit ID.
 
 ---
 
-## 4. Key Security Features (CISSP Standards)
-1.  **Zero-Trust Model**: Authorities verify *permits*, not *people*. Personal data is not stored in the central DB, only hashes.
-2.  **Immutable Logs**: Every permit issuance or revocation is a transaction on the Blockchain, creating a tamper-proof audit trail.
-3.  **Encrypted Telemetry**: Location data in transit is encrypted (TLS 1.2+ standard).
-4.  **Role-Based Access**: The Smart Contract creates an `onlyAuthority` modifier, preventing unauthorized nodes from minting permits.
+## 4. Key Security Features (Pinnacle Standards)
+1.  **Zero-Trust Identity**: Dashboards verify tourists via Blockchain (`get_permit_info`) without querying a centralized admin DB.
+2.  **Tamper-Proof Logging**: Critical Incidents are linked to immutable Blockchain Transactions (TXIDs).
+3.  **Fail-Safe Design**: The "Dead Man Switch" ensures safety even if the *device* fails or is destroyed.
 
 ---
 
@@ -87,73 +90,42 @@ The system follows a modern **Event-Driven, Serverless-First** architecture, cur
 ### **Prerequisites**
 *   Docker & Docker Compose
 *   Node.js 18+ & Python 3.9+
+*   Ganache (CLI or GUI)
 
 ### **Start Infrastructure**
 ```bash
 docker-compose up -d
-# (Starts LocalStack on ports 4566, Ganache on 8545)
+# (Starts LocalStack on 4566, Ganache on 8545)
 ```
 
-### **Initialize Systems**
+### **Initialize Systems (Automated)**
 ```bash
-# 1. Setup DB Schema
+# 1. Deploy Smart Contract & Issue Mock Permits
+python scripts/deploy_contract.py
+
+# 2. Setup DB Schema
 python backend/database/setup_dynamodb.py
 
-# 2. Run Simulation (Optional)
+# 3. Start Backend
+uvicorn backend.app.main:app --reload
+```
+
+### **Run Demo Simulation**
+```bash
+# Generates & Replays 5 Scenarios (Safe, Breach, Fall, Lost, SOS)
 python scripts/generate_trek_data.py
 python scripts/replay_trek.py
 ```
 
-### **Run Applications**
-```bash
-# Backend
-uvicorn backend.app.main:app --reload
-
-# Frontend
-cd frontend/dashboard
-npm run dev
-```
-
 ---
 
-## 6. Future Roadmap
-*   **Integration**: Connect the `blockchain.js` service to a live testnet (Polygon Amoy).
-*   **AI Models**: Replace heuristics with an LSTM (Long Short-Term Memory) neural network for predictive path analysis.
-*   **Mobile**: Build full APK/IPA with offline map caching (Mapbox).
+## 6. Advanced Architectural Defenses (Viva Preparation)
 
----
+### **7.1. "Why Blockchain for Identity?"**
+**Answer:** "Prahari uses Blockchain as a **Trust Anchor**. Remote check-posts often have poor connectivity to a central database. A decentralized ledger allows local nodes to verify signatures (hashes) offline or async, and ensures that a corrupt official cannot retroactively delete a permit record."
 
-## 7. Advanced Architectural Defenses (Viva Preparation)
+### **7.2. "How does the AI handle false positives?"**
+**Answer:** "We use a **Weighted Risk Score** (0-100) rather than binary triggers. A user stepping 1 meter inside a geofence (Risk 50) is a 'Warning'. A user stopping inside a Red Zone at night (Risk 80+) is an 'Emergency'. This gradation reduces operator fatigue."
 
-### **7.1. The "ZKP" Verbal Defense (Identity Privacy)**
-**Question:** "How are you implementing Zero-Knowledge Proofs (ZKP) on this local setup?"
-**Answer:** "For this prototype, we implement a **Hash-based Commitment Scheme**.
-*   **Mechanism:** The tourist's private data (Name, Passport ID) is hashed with a cryptographic salt (nonce) off-chain.
-*   **Ledger Storage:** Only the `Hash(Data + Nonce)` is stored in the Smart Contract.
-*   **Verification:** During a check, the app reveals the *Data* and *Nonce* to the verifier locally. The verifier re-hashes and compares it to the Blockchain record.
-*   **Result:** The Blockchain acts as a 'Trust Anchor' without ever storing the actual PII, satisfying GDPR/Data Privacy rules."
-
-### **7.2. "Intelligent" Anomaly Detection (Beyond Heuristics)**
-Instead of simple `if-then` rules, the backend calculates a **Dynamic Safety Score** (0.0 - 1.0) for every telemetry ping.
-*   **Model:** Simulates a Random Forest Classifier.
-*   **Features:** `[Time_of_Day, Weather_Condition, Terrain_Grade, Historical_Pace]`
-*   **Logic:**
-    *   *Scenario A:* Deviation of 200m at Noon (Sunny) = **Risk Score 0.2** (Low/Log Only).
-    *   *Scenario B:* Deviation of 200m at 7:00 PM (Night) = **Risk Score 0.8** (Critical Alert).
-
-### **7.3. "Dead Man's Switch" (Dark Zone Safety)**
-To handle the North East's "Dark Zones" (No Connectivity):
-*   **Logic:** The Cloud monitors the *absence* of signals.
-*   **Mechanism:** If a trekking group in a "High-Risk Zone" fails to check in (Heartbeat) for > 2 hours, the **Backend** auto-generates a "Last Known Location" investigation ticket.
-*   **Philosophy:** Shifts safety responsibility from the (potentially broken/dead) device to the Cloud Sentinel.
-
-### **7.4. Interactive SOC Elements (Dashboard)**
-*   **Heatmaps:** Visualizes tourist density patterns to prevent overcrowding in fragile ecological zones (Carrying Capacity Management).
-*   **Breadcrumbs:** Clicking a DID pulls historical path data from the `TimeStream` store to reconstruct the incident timeline.
-
-### **7.5. Scalability & Threat Model**
-*   **Scalability:** AWS IoT Core handles millions of concurrent MQTT connections. Stateless Lambda architecture ensures processing latency stays <500ms even under load.
-*   **Threat Model (GPS Spoofing):**
-    *   **Attack:** Malicious actor faking location.
-    *   **Defense:** App cross-references GPS with Cellular Tower Triangulation ID. If variance > 1km, flag as `INTEGRITY_VIOLATION`.
-
+### **7.3. "What if the Tracker stops working?"**
+**Answer:** "That is exactly why we built the **Dead Man's Switch**. Prahari inverts the monitoring logic: instead of waiting for an SOS signal (which requires a working device), the Cloud monitors for the *absence* of a signal ('Heartbeat Loss') in high-risk zones, triggering an automatic rescue protocol."
