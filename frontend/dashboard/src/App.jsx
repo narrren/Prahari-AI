@@ -52,6 +52,45 @@ function App() {
     }
   };
 
+  // WebSocket Connection for Real-Time Alerts
+  useEffect(() => {
+    import('socket.io-client').then(({ io }) => {
+      const socket = io('http://localhost:8000');
+
+      socket.on('connect', () => {
+        console.log("Sentinel Uplink Established: WS Connected");
+      });
+
+      socket.on('new_alert', (alert) => {
+        console.log("CRITICAL ALERT RECEIVED:", alert);
+
+        // 1. Play Audio Alarm (Synthesized Beep for Demo)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.type = 'square';
+        oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // A4
+        oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.5);
+
+        // 2. Update State Instantly
+        setAlerts(prev => [alert, ...prev]);
+
+        // 3. Update Stats
+        if (alert.severity === 'CRITICAL') {
+          setStats(prev => ({ ...prev, danger: prev.danger + 1, safe: prev.safe - 1 }));
+        }
+      });
+
+      return () => socket.disconnect();
+    });
+  }, []);
+
   useEffect(() => {
     if (view === 'monitor') {
       fetchData();

@@ -3,13 +3,14 @@ from app.models import TelemetryData, Alert, AlertType, SafetyStatus
 from app.services.db import get_table
 from app.services.geofence import check_geofence_breach
 from app.services.anomaly_detection import detect_anomalies
+from app.services.websocket import notify_alert
 from decimal import Decimal
 import uuid
 import time
 
 router = APIRouter()
 
-def process_telemetry_background(data: TelemetryData):
+async def process_telemetry_background(data: TelemetryData):
     """
     Background task to process analytics, geofencing, and persistence.
     Keeps the API response fast (Event-Driven pattern).
@@ -33,16 +34,26 @@ def process_telemetry_background(data: TelemetryData):
     # 2. Check Anomalies
     anomalies = detect_anomalies(data)
     for anomaly_type in anomalies:
-        alerts_to_trigger.append(Alert(
+        severity = "MEDIUM"
+        if anomaly_type == AlertType.SOS: severity = "CRITICAL"
+        if anomaly_type == AlertType.Unconscious: severity = "CRITICAL"
+        
+        new_alert = Alert(
             alert_id=str(uuid.uuid4()),
             device_id=data.device_id,
             did=data.did,
             type=anomaly_type,
-            severity="MEDIUM",
+            severity=severity,
             timestamp=time.time(),
             location=data.location,
             message=f"Anomaly detected: {anomaly_type.value}"
-        ))
+        )
+        alerts_to_trigger.append(new_alert)
+
+        # TRIGGER WEBSOCKET ALARM IF CRITICAL
+        if severity == "CRITICAL" or anomaly_type == AlertType.SOS:
+            await notify_alert(new_alert.model_dump())
+
 
     # 3. Handle SOS
     if data.is_panic:

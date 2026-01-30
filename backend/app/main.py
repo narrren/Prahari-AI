@@ -2,13 +2,16 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.routers import telemetry
+from app.services.websocket import sio
+import socketio
 
-app = FastAPI(
+# Initialize FastAPI regular app
+fastapi_app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
 
-app.add_middleware(
+fastapi_app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], # In prod, specify domain
     allow_credentials=True,
@@ -16,11 +19,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(telemetry.router, prefix=settings.API_V1_STR, tags=["telemetry"])
+fastapi_app.include_router(telemetry.router, prefix=settings.API_V1_STR, tags=["telemetry"])
 
-@app.get("/")
+@fastapi_app.get("/")
 def root():
-    return {"message": "Prahari-AI Sentinel System Online", "status": "active"}
+    return {"message": "Prahari-AI Sentinel Backend Online"}
+
+# Wrap with Socket.IO
+# checking if this works with the "app:app" string in uvicorn
+app = socketio.ASGIApp(sio, other_asgi_app=fastapi_app)
 
 if __name__ == "__main__":
     import uvicorn
