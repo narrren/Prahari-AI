@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Shield, AlertTriangle, Users, Activity, FileBadge, Map as MapIcon, Globe } from 'lucide-react';
 import MapComponent from './components/Map';
 import PermitIssuer from './components/PermitIssuer';
+import { downloadEFIR } from './utils/api';
 
 // Constants
 const API_BASE = "http://localhost:8000/api/v1";
@@ -339,9 +340,7 @@ function App() {
                 Close Viewer
               </button>
               <button
-                onClick={() => {
-                  window.print(); // Simple print trigger for effect
-                }}
+                onClick={() => downloadEFIR(selectedIncident.device_id)}
                 className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white text-sm font-bold rounded shadow-lg flex items-center gap-2"
               >
                 <FileBadge className="w-4 h-4" /> EXPORT PDF
