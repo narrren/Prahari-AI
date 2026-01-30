@@ -7,6 +7,7 @@ from app.services.websocket import notify_alert
 from decimal import Decimal
 import uuid
 import time
+from app.core.shared_state import LATEST_POSITIONS, KALMAN_STATES
 
 router = APIRouter()
 
@@ -70,22 +71,19 @@ async def process_telemetry_background(data: TelemetryData):
 
     # --- KALMAN FILTERING (Signal Smoothing) ---
     # In a real serverless architecture, this state would be stored in Redis/ElastiCache.
-    # For this localized demo, we use an in-memory dictionary.
-    global _kalman_states
-    if '_kalman_states' not in globals():
-        _kalman_states = {}
+    # For this localized demo, we use the shared state module.
     
     # Initialize state for this device if new
-    if data.device_id not in _kalman_states:
+    if data.device_id not in KALMAN_STATES:
         # State: [lat, lng, lat_v, lng_v]
         # P: Covariance matrix (uncertainty)
-        _kalman_states[data.device_id] = {
+        KALMAN_STATES[data.device_id] = {
             'x': [data.location.lat, data.location.lng, 0, 0], 
             'P': [[1,0,0,0], [0,1,0,0], [0,0,1000,0], [0,0,0,1000]],
             'last_ts': data.timestamp
         }
     
-    kf = _kalman_states[data.device_id]
+    kf = KALMAN_STATES[data.device_id]
     dt = data.timestamp - kf['last_ts']
     if dt <= 0: dt = 0.01 # Avoid zero division or stale timestamps
     
@@ -125,12 +123,9 @@ async def process_telemetry_background(data: TelemetryData):
     
     # --- REAL-TIME CACHE UPDATE (Redis Pattern) ---
     # Update the cache immediately so the Map sees it NOW.
-    global _LATEST_POSITIONS
-    if '_LATEST_POSITIONS' not in globals():
-        _LATEST_POSITIONS = {}
     
     # Store with native types (FastAPI handles JSON serialization)
-    _LATEST_POSITIONS[data.device_id] = data.model_dump()
+    LATEST_POSITIONS[data.device_id] = data.model_dump()
     
     # log difference for demo
     # print(f"Raw: {original_data.location} -> Smoothed: {data.location}")
@@ -194,11 +189,7 @@ async def get_map_positions():
     Get latest known positions of all devices for the map.
     Serves from In-Memory Cache (Redis equivalent) for real-time performance.
     """
-    global _LATEST_POSITIONS
-    if '_LATEST_POSITIONS' not in globals():
-        _LATEST_POSITIONS = {}
-    
-    return list(_LATEST_POSITIONS.values())
+    return list(LATEST_POSITIONS.values())
 
 @router.get("/telemetry/history/{device_id}")
 async def get_device_history(device_id: str, hours: int = 4):
