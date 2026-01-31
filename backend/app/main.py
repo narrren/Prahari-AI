@@ -38,46 +38,61 @@ def root():
     return {"message": "Prahari-AI Sentinel Backend Online"}
 
 # ... existing code ...
-from fastapi import Response, Header, HTTPException
+from fastapi import Response, Header, HTTPException, Body
 from app.reports import generate_efir_pdf
 from app.core.shared_state import LATEST_POSITIONS
 from app.services.identity import get_permit_info, log_audit_event
 import time
 import hashlib
 
+# --- OPERATIONAL CONTROL PLANE (RBAC) ---
+ROLE_OPERATOR = "MISSION_OPERATOR"       # Read-Only, Acknowledge
+ROLE_SUPERVISOR = "DISTRICT_SUPERVISOR"  # Generate FIR, Override
+ROLE_ADMIN = "SYSTEM_ADMIN"              # Config, Tuning
+ROLE_AUDITOR = "AUDIT_AUTHORITY"         # Read-Only Audit
+
+def log_governance_action(actor: str, role: str, action: str, justification: str, target: str):
+    """
+    Simulates a tamper-proof write to a specialized Audit Server.
+    In production, this would sign the log with a private key.
+    """
+    print(f"\n[GOVERNANCE AUDIT] ------------------------------------------------")
+    print(f"ACTORID   : {actor}")
+    print(f"ROLE      : {role}")
+    print(f"ACTION    : {action}")
+    print(f"TARGET    : {target}")
+    print(f"REASON    : {justification}")
+    print(f"TIMESTAMP : {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}")
+    print(f"------------------------------------------------------------------\n")
+
 @fastapi_app.get("/api/v1/generate-efir/{device_id}")
 async def generate_efir(
     device_id: str,
-    x_admin_role: str = Header("RESPONDER", alias="X-Role"),
-    x_admin_id: str = Header("admin-001", alias="X-Admin-ID")
+    x_actor_id: str = Header("officer-001", alias="X-Actor-ID"),
+    x_role: str = Header(ROLE_SUPERVISOR, alias="X-Role"),
+    x_justification: str = Header(..., alias="X-Justification") # Require justification
 ):
     # 0. RBAC Governance Check
-    if x_admin_role not in ["RESPONDER", "SUPER_ADMIN"]:
-        raise HTTPException(status_code=403, detail="Access Denied: Viewers cannot generate legal documents.")
+    if x_role not in [ROLE_SUPERVISOR, ROLE_ADMIN]:
+        log_governance_action(x_actor_id, x_role, "GENERATE_EFIR_ATTEMPT", x_justification, device_id)
+        raise HTTPException(status_code=403, detail=f"Access Denied: Role '{x_role}' is not authorized to generate legal documents.")
 
     # 1. Fetch data from active trackers
     tracker_state = LATEST_POSITIONS.get(device_id)
     if not tracker_state:
         # Fallback check if it's an alert? For now just fail.
-        # Or mock it for demo if ID matches?
         return {"error": "Device not found in active tracking cache"}
     
     # 2. Enrich Data
     # Parse Permit ID from string "Verified Permit: #1234..."
-    # A bit hacky but works for demo
     did = tracker_state.get('did', 'unknown')
     permit_str = get_permit_info(did) 
-    # extract #XXXX
     import re
     match = re.search(r"Permit: (#\w+)", permit_str)
     permit_id = match.group(1) if match else "PENDING"
     
     # Mocking TXID (In real app, we would look up the TX history block)
-    # We define a stable fake hash for the demo
     tx_hash = "0x" + hashlib.sha256(f"{did}{time.time()}".encode()).hexdigest()
-    
-    # Risk Score should be in state if SentinelAI ran
-    # If missing (first ping), default to 0
     
     incident_data = {
         **tracker_state,
@@ -91,17 +106,39 @@ async def generate_efir(
     pdf_buffer = generate_efir_pdf(incident_data)
     pdf_content = pdf_buffer.getvalue()
     
-    # 4. Audit Log (Blockchain)
-    # Hash the document to prove it hasn't been tampered with since generation
+    # 4. Audit Log (Blockchain + Internal Governance Log)
     doc_hash = "0x" + hashlib.sha256(pdf_content).hexdigest()
     
-    # Write to Smart Contract
-    audit_tx = log_audit_event(x_admin_id, did, "GENERATED_EFIR", doc_hash)
-    print(f"GOVERNANCE AUDIT: Action recorded on blockchain. TXID: {audit_tx}")
+    # Internal Log
+    log_governance_action(x_actor_id, x_role, "GENERATE_EFIR", x_justification, device_id)
+
+    # Blockchain Log
+    audit_tx = log_audit_event(x_actor_id, did, "GENERATED_EFIR", doc_hash)
+    print(f"BLOCKCHAIN CONFIRMATION: TXID: {audit_tx}")
     
     # 5. Return as a downloadable stream
     headers = {'Content-Disposition': f'attachment; filename="EFIR_{device_id}.pdf"'}
     return Response(content=pdf_content, media_type="application/pdf", headers=headers)
+
+@fastapi_app.post("/api/v1/alert/override/{alert_id}")
+async def override_alert(
+    alert_id: str,
+    x_actor_id: str = Header("officer-001", alias="X-Actor-ID"),
+    x_role: str = Header(ROLE_SUPERVISOR, alias="X-Role"),
+    x_justification: str = Header(..., alias="X-Justification")
+):
+    """
+    Endpoint for Supervisors to suppress false alarms or extensive drills.
+    """
+    # RBAC Check
+    if x_role not in [ROLE_SUPERVISOR, ROLE_ADMIN]:
+         log_governance_action(x_actor_id, x_role, "OVERRIDE_ATTEMPT", x_justification, alert_id)
+         raise HTTPException(status_code=403, detail="Access Denied: Only Supervisors can override operational alerts.")
+
+    # Log the action
+    log_governance_action(x_actor_id, x_role, "ALERT_OVERRIDE", x_justification, alert_id)
+    
+    return {"status": "success", "message": f"Alert {alert_id} overridden by {x_actor_id}", "audit_logged": True}
 
 # Wrap with Socket.IO
 # checking if this works with the "app:app" string in uvicorn

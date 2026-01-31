@@ -36,7 +36,34 @@ This version bridges the gap between a prototype and a real-world Ops Center.
 
 ---
 
-## 3. System Architecture
+## 3. Operational Control Plane (Governance)
+**Why it matters**: Production systems fail operationally, not algorithmically. This layer defines "Who can do what" and ensures non-repudiation for sensitive actions (FIRs, Overrides).
+
+### A. Role-Based Access Control (RBAC) structure
+We have explicitly modeled 4 levels of hierarchy in the backend:
+1.  **Mission Operator** (`ROLE_OPERATOR`):
+    *   *Scope*: Read-Only Live Monitoring, Acknowledge Alerts.
+    *   *Restrictions*: Cannot change configs or generate legal docs.
+2.  **District Supervisor** (`ROLE_SUPERVISOR`):
+    *   *Scope*: **Generate E-FIRs**, Escalate Incidents, Override False Alarms.
+    *   *Requirement*: Must provide `justification` string for every override.
+3.  **System Admin** (`ROLE_ADMIN`):
+    *   *Scope*: Create Geofences, Tune Risk Thresholds, Manage Users.
+4.  **Audit Authority** (`ROLE_AUDITOR`):
+    *   *Scope*: Read-Only access to Historical Logs and Blockchain Ledger.
+
+### B. Audit Protocol
+Every privileged action (e.g., generating an E-FIR) requires a signed payload containing:
+*   `actor_id` (The officer's ID)
+*   `role` (Claimed privilege level)
+*   `justification` (Reason for action, e.g., "Visual Confirmation of Distress")
+*   `timestamp` (UTC)
+
+> **"All privileged actions are signed, logged, and non-repudiable."**
+
+---
+
+## 4. System Architecture
 The system follows a "fast-path / slow-path" Clean Architecture.
 
 ### A. The Backbone (Backend)
