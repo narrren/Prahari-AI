@@ -16,7 +16,11 @@ fastapi_app = FastAPI(
 
 @fastapi_app.on_event("startup")
 async def startup_event():
-    # Start the Dead Man Switch Monitor
+    # 1. Hydrate Cache (Fix Task A)
+    from app.core.shared_state import hydrate_cache
+    hydrate_cache()
+    
+    # 2. Start the Dead Man Switch Monitor / Snapshot Scheduler
     asyncio.create_task(monitor_dead_mans_switch())
 
 fastapi_app.add_middleware(

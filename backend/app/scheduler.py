@@ -59,4 +59,14 @@ async def monitor_dead_mans_switch():
         except Exception as e:
             print(f"Scheduler Error: {e}")
             
+        # --- TASK B: DR SNAPSHOT (Every 5 mins) ---
+        # We run this loop every 60s. So every 5th run = 5 mins.
+        # Ideally use a separate async task but this is simple enough for V3.0
+        if int(time.time()) % 300 < 65:  # Window to run every ~5 mins
+             from app.snapshots import create_snapshot
+             try:
+                 create_snapshot()
+             except:
+                 pass
+
         await asyncio.sleep(60)
