@@ -90,4 +90,17 @@ contract TouristPermitRegistry {
         permits[_tourist].isActive = false;
         emit PermitRevoked(_tourist);
     }
+
+    // --- AUDIT LOGGING (GOVERNANCE) ---
+    event AuditLog(address indexed admin, address indexed tourist, string action, string docHash, uint256 timestamp);
+
+    /**
+     * @dev Immutable Audit Trail for Administrative Actions (E-FIR generation, Rescue Dispatch).
+     * @param _tourist The subject of the incident.
+     * @param _action Description of action (e.g. "GENERATED_EFIR").
+     * @param _docHash Hash of the generated document for integrity check.
+     */
+    function logIncidentAction(address _tourist, string memory _action, string memory _docHash) external onlyAuthority {
+        emit AuditLog(msg.sender, _tourist, _action, _docHash, block.timestamp);
+    }
 }

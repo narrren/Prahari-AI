@@ -34,13 +34,23 @@ def root():
     return {"message": "Prahari-AI Sentinel Backend Online"}
 
 # ... existing code ...
-from fastapi import Response
+from fastapi import Response, Header, HTTPException
 from app.reports import generate_efir_pdf
 from app.core.shared_state import LATEST_POSITIONS
-from app.services.identity import get_permit_info
+from app.services.identity import get_permit_info, log_audit_event
+import time
+import hashlib
 
 @fastapi_app.get("/api/v1/generate-efir/{device_id}")
-async def generate_efir(device_id: str):
+async def generate_efir(
+    device_id: str,
+    x_admin_role: str = Header("RESPONDER", alias="X-Role"),
+    x_admin_id: str = Header("admin-001", alias="X-Admin-ID")
+):
+    # 0. RBAC Governance Check
+    if x_admin_role not in ["RESPONDER", "SUPER_ADMIN"]:
+        raise HTTPException(status_code=403, detail="Access Denied: Viewers cannot generate legal documents.")
+
     # 1. Fetch data from active trackers
     tracker_state = LATEST_POSITIONS.get(device_id)
     if not tracker_state:
@@ -60,7 +70,6 @@ async def generate_efir(device_id: str):
     
     # Mocking TXID (In real app, we would look up the TX history block)
     # We define a stable fake hash for the demo
-    import hashlib
     tx_hash = "0x" + hashlib.sha256(f"{did}{time.time()}".encode()).hexdigest()
     
     # Risk Score should be in state if SentinelAI ran
@@ -76,10 +85,19 @@ async def generate_efir(device_id: str):
     
     # 3. Generate PDF
     pdf_buffer = generate_efir_pdf(incident_data)
+    pdf_content = pdf_buffer.getvalue()
     
-    # 4. Return as a downloadable stream
+    # 4. Audit Log (Blockchain)
+    # Hash the document to prove it hasn't been tampered with since generation
+    doc_hash = "0x" + hashlib.sha256(pdf_content).hexdigest()
+    
+    # Write to Smart Contract
+    audit_tx = log_audit_event(x_admin_id, did, "GENERATED_EFIR", doc_hash)
+    print(f"GOVERNANCE AUDIT: Action recorded on blockchain. TXID: {audit_tx}")
+    
+    # 5. Return as a downloadable stream
     headers = {'Content-Disposition': f'attachment; filename="EFIR_{device_id}.pdf"'}
-    return Response(content=pdf_buffer.read(), media_type="application/pdf", headers=headers)
+    return Response(content=pdf_content, media_type="application/pdf", headers=headers)
 
 # Wrap with Socket.IO
 # checking if this works with the "app:app" string in uvicorn

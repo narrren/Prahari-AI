@@ -1,10 +1,47 @@
 {
-    "contract_address": "0x06e1c7Fb81E79068CaD6e6F5883dC2f7ECC9B6a4",
+    "contract_address": "0x0197532a80dc119ad2FEcB58CA03eAaB6Ae10ACC",
     "abi": [
         {
             "inputs": [],
             "stateMutability": "nonpayable",
             "type": "constructor"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "admin",
+                    "type": "address"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "tourist",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "string",
+                    "name": "action",
+                    "type": "string"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "string",
+                    "name": "docHash",
+                    "type": "string"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint256",
+                    "name": "timestamp",
+                    "type": "uint256"
+                }
+            ],
+            "name": "AuditLog",
+            "type": "event"
         },
         {
             "anonymous": false,
@@ -140,6 +177,29 @@
                 }
             ],
             "name": "issuePermit",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_tourist",
+                    "type": "address"
+                },
+                {
+                    "internalType": "string",
+                    "name": "_action",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "_docHash",
+                    "type": "string"
+                }
+            ],
+            "name": "logIncidentAction",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"

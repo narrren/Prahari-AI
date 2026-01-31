@@ -60,3 +60,36 @@ def get_permit_info(did: str) -> str:
     except Exception as e:
         print(f"Blockchain Call Failed: {e}")
         return "[Connection Error] Status: Unknown."
+
+def log_audit_event(admin_id: str, tourist_did: str, action: str, doc_hash: str) -> str:
+    """
+    Writes an immutable Audit Log to the Blockchain.
+    Returns the Transaction Hash (TXID).
+    """
+    if not contract or not w3:
+        return "0xMOCK_TXID_BLOCKCHAIN_OFFLINE"
+
+    try:
+        # Resolve DID
+        tourist_addr = tourist_mapping.get(tourist_did)
+        if not tourist_addr:
+             # Use a dummy address if DID is unknown, just to log *something*
+             tourist_addr = "0x0000000000000000000000000000000000000000"
+
+        # Authority Account (Deployer)
+        authority_acc = w3.eth.accounts[0] 
+        
+        # Send Transaction
+        tx_hash = contract.functions.logIncidentAction(
+            tourist_addr, 
+            f"ADMIN:{admin_id} ACTION:{action}", 
+            doc_hash
+        ).transact({'from': authority_acc})
+        
+        # We don't wait for receipt here to keep API fast, 
+        # but in strict systems we might.
+        return w3.to_hex(tx_hash)
+        
+    except Exception as e:
+        print(f"Audit Log Failed: {e}")
+        return "0xFAIL"
