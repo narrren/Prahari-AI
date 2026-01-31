@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { MapContainer, TileLayer, CircleMarker, Popup, Circle, Polyline } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Circle, Polyline } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 // Tawang Coords
@@ -36,7 +38,6 @@ const MapComponent = ({ tourists, geofences }) => {
         });
 
         if (hasCritical && activeLayer === 'osm') {
-            // Only auto-switch if currently on basic map
             setActiveLayer('satellite');
             console.log("Auto-Switching to Satellite Mode due to detected Risk");
         }
@@ -62,6 +63,30 @@ const MapComponent = ({ tourists, geofences }) => {
         } catch (err) {
             console.error("Failed to fetch breadcrumbs", err);
         }
+    };
+
+    // Helper to generate Custom Dot Icons (replaces CircleMarker)
+    const getCustomIcon = (t) => {
+        const isPanic = t.is_panic;
+        const isSelected = selectedId === t.device_id;
+        const color = isPanic ? '#ef4444' : '#3b82f6';
+
+        return L.divIcon({
+            className: 'custom-marker',
+            html: `<div style="
+                background-color: ${color};
+                width: ${isSelected ? '16px' : '12px'};
+                height: ${isSelected ? '16px' : '12px'};
+                border-radius: 50%;
+                border: 2px solid white;
+                box-shadow: 0 0 10px ${color};
+                transition: all 0.2s ease;
+                ${isPanic ? 'animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;' : ''}
+            "></div>`,
+            iconSize: [12, 12],
+            iconAnchor: [6, 6],
+            popupAnchor: [0, -10]
+        });
     };
 
     return (
@@ -127,70 +152,65 @@ const MapComponent = ({ tourists, geofences }) => {
                     </Circle>
                 ))}
 
-                {/* Active Breadcrumb Trail */}
+                {/* Active Breadcrumb Trail (Top Layer) */}
                 {historyPath.length > 0 && (
                     <Polyline
                         positions={historyPath}
-                        pathOptions={{ color: '#0ea5e9', weight: 3, opacity: 0.6, dashArray: '5, 10' }}
+                        pathOptions={{ color: '#0ea5e9', weight: 4, opacity: 0.8, dashArray: '0' }}
                     />
                 )}
 
-                {/* Render Tourists */}
-                {tourists.map((t) => (
-                    <CircleMarker
-                        key={t.device_id}
-                        center={[t.location?.lat || 0, t.location?.lng || 0]}
-                        pathOptions={{
-                            color: t.is_panic ? '#ef4444' : (selectedId === t.device_id ? '#ffffff' : '#3b82f6'),
-                            fillColor: t.is_panic ? '#ef4444' : '#3b82f6',
-                            fillOpacity: selectedId === t.device_id ? 1 : 0.8,
-                            weight: selectedId === t.device_id ? 3 : 2,
-                            opacity: 1
-                        }}
-                        radius={selectedId === t.device_id ? 8 : 6}
-                        eventHandlers={{
-                            click: () => handleMarkerClick(t.device_id)
-                        }}
-                    >
-                        <Popup closeButton={false} className="bg-transparent border-none shadow-none">
-                            <div className="bg-gray-950 text-white p-3 min-w-[200px] border border-gray-700 rounded-lg shadow-2xl backdrop-blur-md">
-                                <div className="flex justify-between items-center border-b border-gray-700 pb-2 mb-2">
-                                    <span className="font-mono text-xs text-blue-400 font-bold tracking-wider">{t.device_id}</span>
-                                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${t.is_panic ? 'bg-red-900/50 text-red-200 border border-red-500 animate-pulse' : 'bg-green-900/50 text-green-200 border border-green-500'}`}>
-                                        {t.is_panic ? "SOS ACTIVE" : "SAFE"}
-                                    </span>
-                                </div>
+                {/* Render Tourists with Clusters */}
+                <MarkerClusterGroup chunkedLoading>
+                    {tourists.map((t) => (
+                        <Marker
+                            key={t.device_id}
+                            position={[t.location?.lat || 0, t.location?.lng || 0]}
+                            icon={getCustomIcon(t)}
+                            eventHandlers={{
+                                click: () => handleMarkerClick(t.device_id)
+                            }}
+                        >
+                            <Popup closeButton={false} className="bg-transparent border-none shadow-none">
+                                <div className="bg-gray-950 text-white p-3 min-w-[200px] border border-gray-700 rounded-lg shadow-2xl backdrop-blur-md">
+                                    <div className="flex justify-between items-center border-b border-gray-700 pb-2 mb-2">
+                                        <span className="font-mono text-xs text-blue-400 font-bold tracking-wider">{t.device_id}</span>
+                                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${t.is_panic ? 'bg-red-900/50 text-red-200 border border-red-500 animate-pulse' : 'bg-green-900/50 text-green-200 border border-green-500'}`}>
+                                            {t.is_panic ? "SOS ACTIVE" : "SAFE"}
+                                        </span>
+                                    </div>
 
-                                <div className="space-y-1.5 text-xs font-mono text-gray-400">
-                                    <div className="flex justify-between">
-                                        <span>SPEED:</span>
-                                        <span className="text-white">{parseFloat(t.speed).toFixed(1)} m/s</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span>BATTERY:</span>
-                                        <span className={t.battery_level < 20 ? "text-red-400" : "text-green-400"}>{Math.round(t.battery_level || 100)}%</span>
-                                    </div>
-                                    {t.risk && (
-                                        <div className="flex justify-between pt-1">
-                                            <span>RISK SCORE:</span>
-                                            <span className={(t.risk.score || 0) > 50 ? "text-red-400 font-bold" : "text-blue-300"}>{(t.risk.score || 0).toFixed(0)}/100</span>
+                                    <div className="space-y-1.5 text-xs font-mono text-gray-400">
+                                        <div className="flex justify-between">
+                                            <span>SPEED:</span>
+                                            <span className="text-white">{parseFloat(t.speed).toFixed(1)} m/s</span>
                                         </div>
-                                    )}
-                                </div>
+                                        <div className="flex justify-between">
+                                            <span>BATTERY:</span>
+                                            <span className={t.battery_level < 20 ? "text-red-400" : "text-green-400"}>{Math.round(t.battery_level || 100)}%</span>
+                                        </div>
+                                        {t.risk && (
+                                            <div className="flex justify-between pt-1">
+                                                <span>RISK SCORE:</span>
+                                                <span className={(t.risk.score || 0) > 50 ? "text-red-400 font-bold" : "text-blue-300"}>{(t.risk.score || 0).toFixed(0)}/100</span>
+                                            </div>
+                                        )}
+                                    </div>
 
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleMarkerClick(t.device_id);
-                                    }}
-                                    className={`mt-3 w-full text-[10px] font-bold py-1.5 rounded border transition-all ${selectedId === t.device_id ? 'bg-blue-600 border-blue-500 text-white shadow-[0_0_10px_rgba(37,99,235,0.5)]' : 'bg-gray-800 border-gray-600 hover:bg-gray-700 text-gray-300'}`}
-                                >
-                                    {selectedId === t.device_id ? "HIDE TRAJECTORY" : "SHOW TRAJECTORY"}
-                                </button>
-                            </div>
-                        </Popup>
-                    </CircleMarker>
-                ))}
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleMarkerClick(t.device_id);
+                                        }}
+                                        className={`mt-3 w-full text-[10px] font-bold py-1.5 rounded border transition-all ${selectedId === t.device_id ? 'bg-blue-600 border-blue-500 text-white shadow-[0_0_10px_rgba(37,99,235,0.5)]' : 'bg-gray-800 border-gray-600 hover:bg-gray-700 text-gray-300'}`}
+                                    >
+                                        {selectedId === t.device_id ? "HIDE TRAJECTORY" : "SHOW TRAJECTORY"}
+                                    </button>
+                                </div>
+                            </Popup>
+                        </Marker>
+                    ))}
+                </MarkerClusterGroup>
             </MapContainer>
         </div>
     );
