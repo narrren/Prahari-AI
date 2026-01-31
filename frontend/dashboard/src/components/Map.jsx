@@ -10,9 +10,39 @@ const API_BASE = "http://localhost:8000/api/v1";
 const MapComponent = ({ tourists, geofences }) => {
     const [historyPath, setHistoryPath] = useState([]);
     const [selectedId, setSelectedId] = useState(null);
+    const [activeLayer, setActiveLayer] = useState('osm'); // 'osm' | 'satellite' | 'terrain'
+
+    // TILE SOURCES
+    const TILES = {
+        osm: {
+            url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            attr: '&copy; OpenStreetMap contributors'
+        },
+        satellite: {
+            url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+            attr: '&copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        },
+        terrain: {
+            url: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+            attr: 'Map data: &copy; OpenStreetMap contributors, SRTM | Map style: &copy; OpenTopoMap (CC-BY-SA)'
+        }
+    };
+
+    // Auto-Switch Logic: If High Risk detected, switch to Satellite for situational awareness
+    React.useEffect(() => {
+        const hasCritical = tourists.some(t => {
+            const score = t.risk?.score || t.risk_score || 0;
+            return score > 50 || t.is_panic;
+        });
+
+        if (hasCritical && activeLayer === 'osm') {
+            // Only auto-switch if currently on basic map
+            setActiveLayer('satellite');
+            console.log("Auto-Switching to Satellite Mode due to detected Risk");
+        }
+    }, [tourists]);
 
     const handleMarkerClick = async (deviceId) => {
-        // Toggle Logic: If already selected, deselect and clear path
         if (selectedId === deviceId) {
             setSelectedId(null);
             setHistoryPath([]);
@@ -20,11 +50,10 @@ const MapComponent = ({ tourists, geofences }) => {
         }
 
         setSelectedId(deviceId);
-        setHistoryPath([]); // Clear previous
+        setHistoryPath([]);
 
         try {
             const res = await axios.get(`${API_BASE}/telemetry/history/${deviceId}?hours=4`);
-            // Format: [{location: {lat, lng}}, ...]
             const path = res.data
                 .sort((a, b) => a.timestamp - b.timestamp)
                 .map(pt => [pt.location.lat, pt.location.lng]);
@@ -38,17 +67,40 @@ const MapComponent = ({ tourists, geofences }) => {
     return (
         <div className="h-full w-full rounded-xl overflow-hidden shadow-2xl border border-gray-700 relative">
             {/* Visual Sentinel Overlay */}
-            <div className="absolute top-4 right-4 z-[9999] pointer-events-none">
-                <div className="text-[10px] text-gray-500 font-mono bg-black/50 px-2 py-1 rounded border border-gray-800">
+            <div className="absolute top-4 right-4 z-[9999] pointer-events-none flex flex-col gap-2 items-end">
+                <div className="text-[10px] text-gray-500 font-mono bg-black/50 px-2 py-1 rounded border border-gray-800 backdrop-blur-sm">
                     SATELLITE LINK: ACTIVE <span className="animate-pulse text-green-500">●</span>
                 </div>
             </div>
 
+            {/* Map Layer Controls (Custom UI) */}
+            <div className="absolute top-4 left-14 z-[1000] flex bg-white/10 backdrop-blur-md rounded-lg overflow-hidden border border-white/20 shadow-lg">
+                <button
+                    onClick={() => setActiveLayer('osm')}
+                    className={`px-3 py-1 text-xs font-bold transition-colors ${activeLayer === 'osm' ? 'bg-blue-600 text-white' : 'text-white hover:bg-white/10'}`}
+                >
+                    MAP
+                </button>
+                <button
+                    onClick={() => setActiveLayer('satellite')}
+                    className={`px-3 py-1 text-xs font-bold transition-colors ${activeLayer === 'satellite' ? 'bg-blue-600 text-white' : 'text-white hover:bg-white/10'}`}
+                >
+                    SAT
+                </button>
+                <button
+                    onClick={() => setActiveLayer('terrain')}
+                    className={`px-3 py-1 text-xs font-bold transition-colors ${activeLayer === 'terrain' ? 'bg-blue-600 text-white' : 'text-white hover:bg-white/10'}`}
+                >
+                    TER
+                </button>
+            </div>
+
             <MapContainer center={NETWORK_CENTER} zoom={15} scrollWheelZoom={true} className="h-full w-full">
-                {/* Standard OSM Skin */}
+                {/* Dynamic Base Layer */}
                 <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    key={activeLayer} // Force re-render on change
+                    attribution={TILES[activeLayer].attr}
+                    url={TILES[activeLayer].url}
                 />
 
                 {/* Render GeoFences - Red Polygons */}
@@ -87,7 +139,7 @@ const MapComponent = ({ tourists, geofences }) => {
                 {tourists.map((t) => (
                     <CircleMarker
                         key={t.device_id}
-                        center={[t.location.lat, t.location.lng]}
+                        center={[t.location?.lat || 0, t.location?.lng || 0]}
                         pathOptions={{
                             color: t.is_panic ? '#ff0000' : (selectedId === t.device_id ? '#ffffff' : '#3b82f6'),
                             fillColor: t.is_panic ? '#ff0000' : '#60a5fa',
