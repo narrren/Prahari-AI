@@ -11,8 +11,20 @@ LATEST_POSITIONS = {}
 KALMAN_STATES = {}
 
 # Active Alerts Cache (Stateful Lifecycle)
+# Active Alerts Cache (Stateful Lifecycle)
 # Format: { "device_id_TYPE": { ...AlertData... } }
 LATEST_ALERTS = {}
+
+# System Health Metrics (Observability)
+SYSTEM_METRICS = {
+    "ingestion_count": 0,    # Total packets since boot
+    "ingestion_rate": 0.0,   # Packets/sec
+    "start_time": 0.0,       # Initialized at boot
+    "active_users": 0,       
+    "alerts_active": 0,
+    "last_db_latency": 0.0,
+    "kalman_failures": 0
+}
 
 def hydrate_cache():
     """
