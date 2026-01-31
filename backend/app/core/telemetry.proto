@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package telemetry;
+
+message GeoPoint {
+  double lat = 1;
+  double lng = 2;
+}
+
+message TelemetryPacket {
+  string device_id = 1;
+  string did = 2;
+  double timestamp = 3;
+  GeoPoint location = 4;
+  float speed = 5;
+  float heading = 6;
+  float battery_level = 7;
+  bool is_panic = 8;
+}

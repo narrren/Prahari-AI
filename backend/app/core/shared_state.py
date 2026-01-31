@@ -1,4 +1,6 @@
 
+from app.models import SystemMode
+
 # Shared In-Memory State for Prahari-AI Backend
 # This acts as a localized Redis replacement for the demo.
 
@@ -15,6 +17,12 @@ KALMAN_STATES = {}
 # Format: { "device_id_TYPE": { ...AlertData... } }
 LATEST_ALERTS = {}
 
+# Governance & Accountability Logs (V3.2)
+DECISION_HISTORY = [] # List[DecisionRecord]
+
+# Global System State (V3.2 Resilience)
+SYSTEM_MODE = SystemMode.NORMAL
+
 # System Health Metrics (Observability)
 SYSTEM_METRICS = {
     "ingestion_count": 0,    # Total packets since boot
@@ -23,7 +31,8 @@ SYSTEM_METRICS = {
     "active_users": 0,       
     "alerts_active": 0,
     "last_db_latency": 0.0,
-    "kalman_failures": 0
+    "kalman_failures": 0,
+    "mode": "NORMAL" # V3.2
 }
 
 def hydrate_cache():

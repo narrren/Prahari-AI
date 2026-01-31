@@ -61,6 +61,39 @@ def generate_efir_pdf(incident_data):
     
     story.append(Paragraph("<b>Scan for Real-time Verification:</b>", styles['Normal']))
     story.append(Image(qr_img_buffer, width=100, height=100))
+    story.append(Spacer(1, 20))
+
+    # 4. INCIDENT CHRONOLOGY (LEGAL TIMELINE)
+    story.append(Paragraph("<b>4. INCIDENT CHRONOLOGY (LEGAL TIMELINE)</b>", styles['Heading3']))
+    story.append(Spacer(1, 6))
+    
+    import time # Ensure import inside or top, here relying on top scope if possible or re-import
+    
+    t_data = [["Time (UTC)", "Event", "Actor", "Details"]]
+    timeline = incident_data.get('timeline', [])
+    
+    for item in timeline:
+        ts_str = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(item.get('time', 0)))
+        t_data.append([
+            ts_str,
+            item.get('event', '-'),
+            item.get('actor', '-'),
+            Paragraph(item.get('details', '-'), styles['Normal']) # Wrap text
+        ])
+    
+    if len(timeline) == 0:
+        t_data.append(["-", "NO EVENTS RECORDED", "-", "-"])
+        
+    tl_table = Table(t_data, colWidths=[100, 120, 100, 160])
+    tl_table.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
+        ('TEXTCOLOR', (0,0), (-1,0), colors.black),
+        ('ALIGN', (0,0), (-1,-1), 'LEFT'),
+        ('GRID', (0,0), (-1,-1), 0.5, colors.grey),
+        ('FONTSIZE', (0,0), (-1,-1), 8),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+    ]))
+    story.append(tl_table)
 
     # 5. Footer & Legal Disclaimer
     story.append(Spacer(1, 40))

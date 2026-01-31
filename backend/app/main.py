@@ -58,10 +58,7 @@ async def get_system_health():
         }
     }
 
-# ... (Previous code)
-@fastapi_app.post("/api/v1/alert/override/{alert_id}")
-async def override_alert(
-# ...
+fastapi_app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], # In prod, specify domain
     allow_credentials=True,
@@ -132,12 +129,17 @@ async def generate_efir(
     # Mocking TXID (In real app, we would look up the TX history block)
     tx_hash = "0x" + hashlib.sha256(f"{did}{time.time()}".encode()).hexdigest()
     
+    # 2b. Reconstruct Timeline (Legal Narrative)
+    from app.services.timeline import generate_chronology
+    timeline_events = generate_chronology(device_id, tracker_state)
+    
     incident_data = {
         **tracker_state,
         "permit_id": permit_id,
         "blockchain_txid": tx_hash,
         "risk_score": tracker_state.get('risk', {}).get('score', 0),
-        "factors": tracker_state.get('risk', {}).get('factors', ["Manual Request"])
+        "factors": tracker_state.get('risk', {}).get('factors', ["Manual Request"]),
+        "timeline": timeline_events # <--- Added for E-FIR V2
     }
     
     # 3. Generate PDF
@@ -177,6 +179,88 @@ async def override_alert(
     log_governance_action(x_actor_id, x_role, "ALERT_OVERRIDE", x_justification, alert_id)
     
     return {"status": "success", "message": f"Alert {alert_id} overridden by {x_actor_id}", "audit_logged": True}
+
+# --- V3.2 COMMAND ENDPOINTS ---
+from app.models import DecisionRecord, IncidentHandoff, SystemMode
+from app.core.shared_state import DECISION_HISTORY, SYSTEM_MODE, LATEST_ALERTS
+import app.core.shared_state as shared_state # To modify global
+
+@fastapi_app.post("/api/v1/decision/log")
+async def log_decision(
+    record: DecisionRecord,
+    x_actor_id: str = Header("officer-001", alias="X-Actor-ID")
+):
+    """
+    Provenance Engine: Logs a human decision for accountability.
+    """
+    record.operator_action = f"{record.operator_action} (by {x_actor_id})"
+    DECISION_HISTORY.append(record)
+    return {"status": "logged", "provenance_id": record.decision_id}
+
+@fastapi_app.post("/api/v1/incident/claim/{alert_id}")
+async def claim_incident(
+    alert_id: str,
+    x_actor_id: str = Header("officer-001", alias="X-Actor-ID")
+):
+    """
+    ICS Protocol: Assigns Exclusive Incident Commander.
+    """
+    # Find alert in cache (Key might be device_id_TYPE, so we search values)
+    target_key = None
+    target_alert = None
+    
+    for key, alert in LATEST_ALERTS.items():
+        if alert['alert_id'] == alert_id:
+            target_key = key
+            target_alert = alert
+            break
+            
+    if not target_key:
+         raise HTTPException(status_code=404, detail="Active Alert not found")
+
+    # Log Handoff
+    handoff = IncidentHandoff(
+        from_actor=target_alert.get('owner_id', 'SYSTEM'),
+        to_actor=x_actor_id,
+        timestamp=time.time(),
+        reason="Manual Claim of Command"
+    )
+    
+    # Update State
+    LATEST_ALERTS[target_key]['owner_id'] = x_actor_id
+    LATEST_ALERTS[target_key]['handoff_log'].append(handoff)
+    
+    return {"status": "assigned", "commander": x_actor_id, "alert_id": alert_id}
+
+@fastapi_app.post("/api/v1/system/mode")
+async def set_system_mode(
+    mode: SystemMode = Body(..., embed=True),
+    x_actor_id: str = Header("admin", alias="X-Actor-ID"),
+    x_role: str = Header(ROLE_ADMIN, alias="X-Role")
+):
+    """
+    Emergency Kill Switch / Degradation Control.
+    """
+    if x_role != ROLE_ADMIN:
+        raise HTTPException(status_code=403, detail="Only Admins can change System DEFCON modes.")
+        
+    shared_state.SYSTEM_MODE = mode
+    SYSTEM_METRICS['mode'] = mode
+    
+    log_governance_action(x_actor_id, x_role, "CHANGE_SYSTEM_MODE", f"Switched to {mode}", "GLOBAL_SYSTEM")
+    return {"status": "updated", "current_mode": mode}
+
+@fastapi_app.get("/api/v1/system/policy")
+async def get_privacy_policy():
+    """
+    Data Lifecycle Transparency.
+    """
+    return {
+        "telemetry_retention_days": 30,
+        "incident_archive_years": 7,
+        "analytics_anonymization": "AUTOMATIC",
+        "gdpr_compliance": "PARTIAL (Sovereign Exemption)"
+    }
 
 # Wrap with Socket.IO
 # checking if this works with the "app:app" string in uvicorn

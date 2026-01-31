@@ -1,5 +1,5 @@
-from fastapi import APIRouter, BackgroundTasks, HTTPException, Header
-from app.models import TelemetryData, Alert, AlertType, SafetyStatus
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Header, Request, Depends
+from app.models import TelemetryData, Alert, AlertType, SafetyStatus, GeoPoint
 from app.services.db import get_table
 from app.services.geofence import check_geofence_breach
 from app.services.anomaly_detection import detect_anomalies
@@ -7,15 +7,102 @@ from app.services.websocket import notify_alert, broadcast_telemetry
 from decimal import Decimal
 import uuid
 import time
-from app.core.shared_state import LATEST_POSITIONS, KALMAN_STATES, LATEST_ALERTS
+from app.core.shared_state import LATEST_POSITIONS, KALMAN_STATES, LATEST_ALERTS, SYSTEM_METRICS
 from app.services.identity import get_permit_info
 
 from app.engine import SentinelAI
-from fastapi import Depends, Security
+from fastapi import Security
 from fastapi.security.api_key import APIKeyHeader
 from app.core.config import settings
+from app.core import telemetry_pb2 # Generated Protobuf
+from collections import defaultdict
 
 router = APIRouter()
+
+# --- RATE LIMITER (Leaky Bucket) ---
+class RateLimiter:
+    def __init__(self, rate=100, per=1.0):
+        self.rate = rate
+        self.per = per
+        self.allowance = defaultdict(lambda: rate)
+        self.last_check = defaultdict(lambda: time.time())
+
+    def check(self, ip: str) -> bool:
+        current = time.time()
+        time_passed = current - self.last_check[ip]
+        self.last_check[ip] = current
+        self.allowance[ip] += time_passed * (self.rate / self.per)
+        
+        if self.allowance[ip] > self.rate:
+            self.allowance[ip] = self.rate
+            
+        if self.allowance[ip] < 1.0:
+            return False # Reject
+        
+        self.allowance[ip] -= 1.0
+        return True
+
+limiter = RateLimiter(rate=50, per=1.0) # 50 req/sec per IP
+
+def check_rate_limit(request: Request):
+    ip = request.client.host if request.client else "unknown"
+    if not limiter.check(ip):
+        raise HTTPException(status_code=429, detail="Rate Limit Exceeded (Anti-DDoS Protection)")
+
+# --- SHARED CORE LOGIC ---
+async def process_telemetry_core(data: TelemetryData, background_tasks: BackgroundTasks):
+    """
+    Common Pipeline for JSON and Protobuf Ingestion.
+    """
+    # 0. Metrics
+    SYSTEM_METRICS['ingestion_count'] += 1
+
+    # 1. KALMAN FILTERING (Signal Smoothing)
+    if data.device_id not in KALMAN_STATES:
+        KALMAN_STATES[data.device_id] = {
+            'x': [data.location.lat, data.location.lng, 0, 0], 
+            'P': [[1,0,0,0], [0,1,0,0], [0,0,1000,0], [0,0,0,1000]],
+            'last_ts': data.timestamp
+        }
+    
+    kf = KALMAN_STATES[data.device_id]
+    dt = data.timestamp - kf['last_ts']
+    if dt <= 0: dt = 0.01 
+    
+    kf['x'][0] += kf['x'][2] * dt
+    kf['x'][1] += kf['x'][3] * dt
+    
+    z = [data.location.lat, data.location.lng]
+    y = [z[0] - kf['x'][0], z[1] - kf['x'][1]]
+    K = 0.6 
+    
+    kf['x'][0] += K * y[0]
+    kf['x'][1] += K * y[1]
+    
+    kf['x'][2] = (kf['x'][0] - (kf['x'][0] - K*y[0])) / dt
+    kf['x'][3] = (kf['x'][1] - (kf['x'][1] - K*y[1])) / dt
+
+    kf['last_ts'] = data.timestamp
+    
+    # Overwrite with Smoothed Coordinates
+    data.location.lat = kf['x'][0]
+    data.location.lng = kf['x'][1]
+    
+    # 2. UPDATE CACHE
+    LATEST_POSITIONS[data.device_id] = data.model_dump()
+    
+    # 3. AI RISK CALCULATION
+    risk_report = SentinelAI.calculate_risk(data.model_dump(), LATEST_POSITIONS)
+    
+    # 4. BROADCAST
+    payload = data.model_dump()
+    payload['risk'] = risk_report
+    await broadcast_telemetry(payload)
+    
+    # 5. OFFLOAD SLOW TASKS
+    background_tasks.add_task(process_risk_and_db, data)
+    
+    return risk_report
 
 # --- ALERT LIFECYCLE HELPERS ---
 def upsert_alert(device_id: str, alert_type: AlertType, severity: str, msg: str, location: dict):
@@ -140,65 +227,41 @@ async def verify_api_key(api_key: str = Security(api_key_header)):
         raise HTTPException(status_code=403, detail="Could not validate credentials")
 
 
-@router.post("/telemetry", dependencies=[Depends(verify_api_key)])
+@router.post("/telemetry", dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
 async def ingest_telemetry(data: TelemetryData, background_tasks: BackgroundTasks):
     """
-    FAST PATH: Production-grade ingestion.
-    1. Kalman Smoothing.
-    2. Cache Update.
-    3. AI Risk Calculation (Inline/Fast).
-    4. WS Broadcast (Smart Payload).
-    5. Persistence (Async).
+    FAST PATH (JSON): Production-grade ingestion.
     """
-    
-    # --- 1. KALMAN FILTERING (Signal Smoothing) ---
-    if data.device_id not in KALMAN_STATES:
-        KALMAN_STATES[data.device_id] = {
-            'x': [data.location.lat, data.location.lng, 0, 0], 
-            'P': [[1,0,0,0], [0,1,0,0], [0,0,1000,0], [0,0,0,1000]],
-            'last_ts': data.timestamp
-        }
-    
-    kf = KALMAN_STATES[data.device_id]
-    dt = data.timestamp - kf['last_ts']
-    if dt <= 0: dt = 0.01 
-    
-    # Predict & Update (Standard EKF Logic simplification)
-    kf['x'][0] += kf['x'][2] * dt
-    kf['x'][1] += kf['x'][3] * dt
-    
-    z = [data.location.lat, data.location.lng]
-    y = [z[0] - kf['x'][0], z[1] - kf['x'][1]]
-    K = 0.6 
-    
-    kf['x'][0] += K * y[0]
-    kf['x'][1] += K * y[1]
-    
-    kf['x'][2] = (kf['x'][0] - (kf['x'][0] - K*y[0])) / dt
-    kf['x'][3] = (kf['x'][1] - (kf['x'][1] - K*y[1])) / dt
-
-    kf['last_ts'] = data.timestamp
-    
-    # Overwrite data location with Smoothed Coordinates
-    data.location.lat = kf['x'][0]
-    data.location.lng = kf['x'][1]
-    
-    # --- 2. UPDATE CACHE (Fast Read) ---
-    LATEST_POSITIONS[data.device_id] = data.model_dump()
-    
-    # --- 3. AI RISK CALCULATION (Real-Time Brain) ---
-    # Now part of the Fast Path
-    risk_report = SentinelAI.calculate_risk(data.model_dump(), LATEST_POSITIONS)
-    
-    # --- 4. BROADCAST (Real-Time + AI Insight) ---
-    payload = data.model_dump()
-    payload['risk'] = risk_report # Attach the AI score
-    await broadcast_telemetry(payload)
-    
-    # --- 5. OFFLOAD SLOW TASKS ---
-    background_tasks.add_task(process_risk_and_db, data)
-    
+    risk_report = await process_telemetry_core(data, background_tasks)
     return {"status": "accepted", "timestamp": data.timestamp, "risk": risk_report}
+
+@router.post("/telemetry/proto", dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
+async def ingest_telemetry_proto(request: Request, background_tasks: BackgroundTasks):
+    """
+    HIGH DENSITY PATH (Protobuf): 60% Bandwidth Saving.
+    """
+    try:
+        body = await request.body()
+        packet = telemetry_pb2.TelemetryPacket()
+        packet.ParseFromString(body)
+        
+        # Convert Proto -> Pydantic
+        data = TelemetryData(
+            device_id=packet.device_id,
+            did=packet.did,
+            timestamp=packet.timestamp,
+            location=GeoPoint(lat=packet.location.lat, lng=packet.location.lng),
+            speed=packet.speed,
+            heading=packet.heading,
+            battery_level=packet.battery_level,
+            is_panic=packet.is_panic
+        )
+        
+        await process_telemetry_core(data, background_tasks)
+        return {"status": "accepted", "method": "PROTOBUF"}
+        
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid Protobuf: {str(e)}")
 
 @router.get("/alerts")
 async def get_all_alerts():
