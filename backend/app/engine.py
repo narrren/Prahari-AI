@@ -67,6 +67,30 @@ class SentinelAI:
             if score > 0:
                 score = score * 1.2 # 20% risk multiplier at night
                 factors.append("NIGHT_MULTIPLIER")
+                
+        # D. Weather Context (Context-Aware AI Upgrade)
+        # In Tawang/Zero, weather is a major killer.
+        weather_condition = SentinelAI.get_weather_condition(lat, lng)
+        if weather_condition in ['Thunderstorm', 'Heavy Snow', 'Blizzard']:
+            score += 30
+            factors.append(f"SEVERE_WEATHER_WARNING: {weather_condition}")
+        elif weather_condition in ['Rain', 'Fog']:
+            score += 10
+            factors.append(f"WEATHER_ADVISORY: {weather_condition}")
+
+    @staticmethod
+    def get_weather_condition(lat, lng):
+        """
+        Mocks a call to OpenWeatherMap API for demonstration.
+        In production, this would use 'requests.get(api_url)'.
+        For the demo, we simulate bad weather in specific 'micro-climates' (zones).
+        """
+        import random
+        # Simulate a localized storm near the Red Zone coordinates
+        if 27.585 < lat < 27.590 and 91.855 < lng < 91.865:
+            return random.choice(['Thunderstorm', 'Heavy Snow', 'Blizzard'])
+        
+        return "Clear Sky"
             
         # D. SOS Override
         if current.get('is_panic', False):
