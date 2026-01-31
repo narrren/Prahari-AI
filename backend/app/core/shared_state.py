@@ -10,6 +10,10 @@ LATEST_POSITIONS = {}
 # Kalman Filter states
 KALMAN_STATES = {}
 
+# Active Alerts Cache (Stateful Lifecycle)
+# Format: { "device_id_TYPE": { ...AlertData... } }
+LATEST_ALERTS = {}
+
 def hydrate_cache():
     """
     On cold boot, fetch the latest known state of all trackers from DynamoDB.

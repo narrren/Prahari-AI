@@ -1,25 +1,31 @@
-import React, { useEffect, useRef } from 'react';
-import { AlertTriangle, ShieldAlert, FileText, Activity } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { AlertTriangle, ShieldAlert, FileText, Activity, CheckCircle, Clock } from 'lucide-react';
 import { downloadEFIR } from '../utils/api';
 
+// Mock Config for Demo (In real app, get from Context/Auth)
+const CURRENT_ROLE = 'DISTRICT_SUPERVISOR';
+const API_BASE = "http://localhost:8000/api/v1";
+
 const AlertSidebar = ({ alerts }) => {
-    // We receive the FULL alert list from App.jsx parent state.
-    // This ensures consistency between Map and Sidebar.
+    // We maintain a local version of alerts to allow optimistic UI updates
+    // But mostly rely on the parent 'alerts' prop which comes from polling/socket
 
-    // Audio Effect using ref to avoid re-creation
-    const audioRef = useRef(new Audio('https://od.lk/s/OTFfMjk5ODk5NDdf/siren_alert.mp3')); // Hosted siren or use local if available
-
-    useEffect(() => {
-        // Check if the latest alert is critical and new (simple check: implies top of list is new)
-        if (alerts.length > 0) {
-            const topAlert = alerts[0];
-            // Simple logic: if it's very recent (< 5 seconds ago), play sound.
-            // Or rely on the socket callback in parent to handle sound?
-            // User requested "Part 2" has logic here.
-            // But App.jsx ALREADY has the audio logic in the socket listener.
-            // So we'll skip duplicating the audio here to avoid double-playing.
+    const handleAction = async (action, alertId) => {
+        try {
+            const endpoint = action === 'ACK' ? 'acknowledge' : 'resolve';
+            await axios.patch(`${API_BASE}/alerts/${alertId}/${endpoint}`, {}, {
+                headers: {
+                    'X-Actor-ID': 'demo-user',
+                    'X-Role': CURRENT_ROLE
+                }
+            });
+            console.log(`Alert ${alertId} ${action}ed`);
+            // Optimistic update could go here, but next poll will catch it
+        } catch (err) {
+            console.error(`Failed to ${action} alert`, err);
         }
-    }, [alerts]);
+    };
 
     return (
         <aside className="w-96 bg-prahari-card border-r border-gray-700 flex flex-col z-20 shadow-xl h-full">
@@ -28,10 +34,13 @@ const AlertSidebar = ({ alerts }) => {
                     <Activity size={18} className="text-red-500 animate-pulse" />
                     LIVE INCIDENTS
                 </h2>
-                <span className="text-xs bg-red-900 text-red-200 px-2 py-1 rounded animate-pulse">LIVE</span>
+                <div className="flex gap-2">
+                    <span className="text-[10px] bg-blue-900 text-blue-200 px-2 py-0.5 rounded border border-blue-700">OPS: ON</span>
+                    <span className="text-[10px] bg-red-900 text-red-200 px-2 py-0.5 rounded border border-red-700 animate-pulse">LIVE</span>
+                </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-gray-900">
+            <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-gray-950">
                 {alerts.length === 0 && (
                     <div className="flex flex-col items-center justify-center h-40 text-slate-500">
                         <Activity className="w-8 h-8 mb-2 opacity-20" />
@@ -39,48 +48,82 @@ const AlertSidebar = ({ alerts }) => {
                     </div>
                 )}
 
-                {alerts.map((alert) => (
-                    <div
-                        key={alert.alert_id || alert.id}
-                        className={`p-3 rounded-lg border-l-4 shadow-lg transition-all transform hover:scale-[1.02] cursor-pointer ${alert.severity === 'CRITICAL' || alert.is_panic
-                                ? 'bg-red-950/40 border-red-500 text-red-100'
-                                : alert.type === 'GEOFENCE_BREACH'
-                                    ? 'bg-orange-950/40 border-orange-500 text-orange-100'
-                                    : 'bg-blue-950/40 border-blue-500 text-blue-100'
-                            }`}
-                    >
-                        <div className="flex justify-between items-start mb-1">
-                            <span className="text-xs font-mono opacity-70">
-                                {new Date((alert.timestamp || Date.now()) * 1000).toLocaleTimeString()}
-                            </span>
-                            {alert.severity === 'CRITICAL' || alert.is_panic ?
-                                <ShieldAlert size={16} className="text-red-500" /> :
-                                <AlertTriangle size={16} className="text-amber-500" />}
-                        </div>
+                {alerts.map((alert) => {
+                    const status = alert.status || 'DETECTED'; // Default to DETECTED if missing
+                    const isCritical = alert.severity === 'CRITICAL' || alert.is_panic;
 
-                        <div className="font-bold text-sm mb-1">
-                            <span className="text-xs opacity-50 block uppercase tracking-wider">Subject ID</span>
-                            {alert.device_id}
-                        </div>
-                        <div className="text-xs mb-2 p-1 bg-black/20 rounded">
-                            {alert.message}
-                        </div>
+                    return (
+                        <div
+                            key={alert.alert_id || alert.id}
+                            className={`relative p-3 rounded-lg border-l-4 shadow-lg transition-all ${status === 'RESOLVED'
+                                    ? 'opacity-50 border-gray-500 bg-gray-800'
+                                    : isCritical
+                                        ? 'bg-red-950/40 border-red-500 text-red-100'
+                                        : 'bg-blue-950/40 border-blue-500 text-blue-100'
+                                }`}
+                        >
+                            {/* SLA Timer Bar (Visual) */}
+                            {status === 'DETECTED' && (
+                                <div className="absolute top-0 left-0 right-0 h-1bg-gray-800">
+                                    <div className="h-1 bg-gradient-to-r from-red-500 to-yellow-500 w-[80%] animate-[width_2m_linear]"></div>
+                                </div>
+                            )}
 
-                        <div className="flex items-center justify-between mt-3 pt-2 border-t border-white/10">
-                            <div className="text-xs font-bold text-gray-400">STATUS: {alert.severity || "WARNING"}</div>
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    downloadEFIR(alert.device_id);
-                                }}
-                                className="flex items-center gap-1 bg-white text-black text-[10px] font-bold px-3 py-1.5 rounded hover:bg-blue-100 transition-colors shadow-sm"
-                            >
-                                <FileText size={10} />
-                                GEN E-FIR
-                            </button>
+                            <div className="flex justify-between items-start mb-2">
+                                <span className="text-[10px] font-mono opacity-70 flex items-center gap-1">
+                                    <Clock size={10} />
+                                    {new Date((alert.timestamp || Date.now()) * 1000).toLocaleTimeString()}
+                                </span>
+                                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded uppercase ${status === 'DETECTED' ? 'bg-red-600 text-white animate-pulse' :
+                                        status === 'ACKNOWLEDGED' ? 'bg-yellow-600 text-black' :
+                                            'bg-green-600 text-white'
+                                    }`}>
+                                    {status}
+                                </span>
+                            </div>
+
+                            <div className="font-bold text-sm mb-1 flex justify-between">
+                                <span>{alert.device_id}</span>
+                                {isCritical && <ShieldAlert size={16} className="text-red-500" />}
+                            </div>
+
+                            <div className="text-xs mb-3 p-2 bg-black/30 rounded border border-white/5 font-mono">
+                                {alert.message}
+                            </div>
+
+                            {/* CONTROL PLANE ACTIONS */}
+                            <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-white/10">
+                                {status === 'DETECTED' ? (
+                                    <button
+                                        onClick={() => handleAction('ACK', alert.alert_id)}
+                                        className="col-span-2 bg-yellow-600 hover:bg-yellow-500 text-black text-xs font-bold py-1.5 rounded flex items-center justify-center gap-2"
+                                    >
+                                        <CheckCircle size={12} /> ACKNOWLEDGE
+                                    </button>
+                                ) : status === 'ACKNOWLEDGED' ? (
+                                    <>
+                                        <button
+                                            onClick={() => handleAction('RESOLVE', alert.alert_id)}
+                                            className="bg-green-700 hover:bg-green-600 text-white text-[10px] font-bold py-1.5 rounded"
+                                        >
+                                            RESOLVE
+                                        </button>
+                                        <button
+                                            onClick={() => downloadEFIR(alert.device_id)}
+                                            className="bg-red-700 hover:bg-red-600 text-white text-[10px] font-bold py-1.5 rounded flex items-center justify-center gap-1"
+                                        >
+                                            <FileText size={10} /> GEN E-FIR
+                                        </button>
+                                    </>
+                                ) : (
+                                    <div className="col-span-2 text-center text-[10px] text-gray-500 font-mono">
+                                        CASE CLOSED (Archived)
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </aside>
     );
