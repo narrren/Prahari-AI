@@ -260,7 +260,6 @@ async def get_device_history(device_id: str, hours: int = 4):
     Fetch historical telemetry for 'Breadcrumbs' (last N hours).
     Efficiently queries DynamoDB partition key.
     """
-    import boto3 
     from boto3.dynamodb.conditions import Key
     
     t_table = get_table('Prahari_Telemetry')
@@ -271,7 +270,27 @@ async def get_device_history(device_id: str, hours: int = 4):
             KeyConditionExpression=Key('device_id').eq(device_id) & Key('timestamp').gte(cutoff_time),
             ScanIndexForward=True # Ascending (oldest first)
         )
-        return response.get('Items', [])
+        items = response.get('Items', [])
+        
+        # Serialization Fix: Convert Decimals to Float/Int
+        cleaned_items = []
+        for item in items:
+            cleaned = {
+                "device_id": item['device_id'],
+                "timestamp": float(item['timestamp']),
+                "location": {
+                    "lat": float(item['location']['lat']),
+                    "lng": float(item['location']['lng'])
+                },
+                "speed": float(item.get('speed', 0)),
+                "heading": float(item.get('heading', 0)),
+                "battery_level": float(item.get('battery_level', 0)),
+                "is_panic": item.get('is_panic', False)
+            }
+            cleaned_items.append(cleaned)
+            
+        return cleaned_items
+        
     except Exception as e:
         print(f"Error fetching history for {device_id}: {e}")
         return []
