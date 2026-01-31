@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { MapContainer, TileLayer, Marker, Popup, Circle, Polyline } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Circle, Polyline, CircleMarker } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import TacticalOverlay from './TacticalOverlay';
 
 // Tawang Coords
 const NETWORK_CENTER = [27.5861, 91.8594];
 const API_BASE = "http://localhost:8000/api/v1";
 
 const MapComponent = ({ tourists, geofences }) => {
-    const [historyPath, setHistoryPath] = useState([]);
     const [selectedId, setSelectedId] = useState(null);
     const [activeLayer, setActiveLayer] = useState('osm'); // 'osm' | 'satellite' | 'terrain'
+
+    // Tactical VCR State
+    const [tacticalPath, setTacticalPath] = useState([]);
+    const [tacticalIndex, setTacticalIndex] = useState(0);
 
     // TILE SOURCES
     const TILES = {
@@ -43,26 +47,18 @@ const MapComponent = ({ tourists, geofences }) => {
         }
     }, [tourists]);
 
-    const handleMarkerClick = async (deviceId) => {
+    const handleMarkerClick = (deviceId) => {
         if (selectedId === deviceId) {
             setSelectedId(null);
-            setHistoryPath([]);
-            return;
+            setTacticalPath([]); // Clear VCR
+        } else {
+            setSelectedId(deviceId);
         }
+    };
 
-        setSelectedId(deviceId);
-        setHistoryPath([]);
-
-        try {
-            const res = await axios.get(`${API_BASE}/telemetry/history/${deviceId}?hours=4`);
-            const path = res.data
-                .sort((a, b) => a.timestamp - b.timestamp)
-                .map(pt => [pt.location.lat, pt.location.lng]);
-
-            setHistoryPath(path);
-        } catch (err) {
-            console.error("Failed to fetch breadcrumbs", err);
-        }
+    const handlePlaybackUpdate = (path, idx) => {
+        setTacticalPath(path);
+        setTacticalIndex(idx);
     };
 
     // Helper to generate Custom Dot Icons (replaces CircleMarker)
@@ -120,6 +116,15 @@ const MapComponent = ({ tourists, geofences }) => {
                 </button>
             </div>
 
+            {/* TACTICAL VCR OVERLAY */}
+            {selectedId && (
+                <TacticalOverlay
+                    deviceId={selectedId}
+                    onClose={() => setSelectedId(null)}
+                    onPlaybackUpdate={handlePlaybackUpdate}
+                />
+            )}
+
             <MapContainer center={NETWORK_CENTER} zoom={15} scrollWheelZoom={true} className="h-full w-full">
                 {/* Dynamic Base Layer */}
                 <TileLayer
@@ -152,12 +157,26 @@ const MapComponent = ({ tourists, geofences }) => {
                     </Circle>
                 ))}
 
-                {/* Active Breadcrumb Trail (Top Layer) */}
-                {historyPath.length > 0 && (
-                    <Polyline
-                        positions={historyPath}
-                        pathOptions={{ color: '#0ea5e9', weight: 4, opacity: 0.8, dashArray: '0' }}
-                    />
+                {/* TACTICAL TRAJECTORY (VCR) */}
+                {tacticalPath.length > 0 && (
+                    <>
+                        <Polyline
+                            positions={tacticalPath.map(p => [p.location.lat, p.location.lng])}
+                            pathOptions={{ color: '#64748b', weight: 2, dashArray: '5,5', opacity: 0.6 }}
+                        />
+                        {/* The Ghost VCR Head */}
+                        {tacticalPath[tacticalIndex] && (
+                            <CircleMarker
+                                center={[tacticalPath[tacticalIndex].location.lat, tacticalPath[tacticalIndex].location.lng]}
+                                radius={6}
+                                pathOptions={{
+                                    color: '#facc15',
+                                    fillColor: '#facc15',
+                                    fillOpacity: 1
+                                }}
+                            />
+                        )}
+                    </>
                 )}
 
                 {/* Render Tourists with Clusters */}
@@ -202,9 +221,9 @@ const MapComponent = ({ tourists, geofences }) => {
                                             e.stopPropagation();
                                             handleMarkerClick(t.device_id);
                                         }}
-                                        className={`mt-3 w-full text-[10px] font-bold py-1.5 rounded border transition-all ${selectedId === t.device_id ? 'bg-blue-600 border-blue-500 text-white shadow-[0_0_10px_rgba(37,99,235,0.5)]' : 'bg-gray-800 border-gray-600 hover:bg-gray-700 text-gray-300'}`}
+                                        className={`mt-3 w-full text-[10px] font-bold py-1.5 rounded border transition-all ${selectedId === t.device_id ? 'bg-yellow-600 border-yellow-500 text-black shadow-[0_0_10px_rgba(234,179,8,0.5)]' : 'bg-gray-800 border-gray-600 hover:bg-gray-700 text-gray-300'}`}
                                     >
-                                        {selectedId === t.device_id ? "HIDE TRAJECTORY" : "SHOW TRAJECTORY"}
+                                        {selectedId === t.device_id ? "CLOSING VCR..." : "OPEN TACTICAL VCR"}
                                     </button>
                                 </div>
                             </Popup>
