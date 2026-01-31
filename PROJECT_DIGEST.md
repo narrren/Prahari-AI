@@ -1,55 +1,81 @@
 # PRAHARI-AI: Technical Digest & Architectural Reference
 
 **Version:** 2.1.0 "Production Candidate"  
-**Status:** Feature Complete & Securitized  
-**Context:** MoDoNER Pinnacle Project (Smart Tourist Safety System)
+# PRAHARI-AI: Project Sentinel (Digest)
+**Status**: 🟢 VERSION 3.0: MISSION READY
+**Last Updated**: 2026-01-31
+**Codebase**: `c:\Users\naren\Desktop\Prahari-AI`
 
 ---
 
-## 1. Executive Summary
-**PRAHARI-AI** is a comprehensive "Sentinel" system designed for the Ministry of Development of North Eastern Region (MoDoNER). Its primary objective is to ensure the safety of tourists trekking in remote, sensitive border areas (like Tawang, Arunachal Pradesh) using a blend of **Decentralized Identity (SSI)**, **Real-Time Geofencing**, and **AI-driven Anomaly Detection**.
-
-Unlike traditional databases, PRAHARI uses a privacy-first blockchain layer for issuing digital travel permits, ensuring that government checkpoints can verify legality without exposing a tourist's full personal history (Zero-Trust architecture).
-
----
-
-## 2. System Architecture (Production Grade)
-The system follows a modern **Event-Driven, Serverless-First** architecture, optimized for high throughput and fail-safety.
-
-### **2.1. Dual-Path Backbone**
-To handle high-frequency telemetry without blocking, the backend implements a "Dual-Path" strategy:
-*   **Fast Path (Hot Logic)**: 
-    *   **In-Memory Cache (Redis Pattern)**: Stores the latest state of every tracker.
-    *   **Kalman Filter**: Smooths GPS jitter and predicts velocity in real-time (<5ms latency).
-    *   **WebSocket Broadcast**: Pushes updates to the Dashboard immediately.
-*   **Slow Path (Cold Logic)**:
-    *   **Background Workers**: Asynchronous tasks handle heavy lifting (DynamoDB persistence, Geofence Ray-Casting, Blockchain Verification).
-    *   **Dead Man's Switch**: Usage of periodic tasks to detect silent failures.
-
-### **2.2. Infrastructure Layer**
-*   **AWS Cloud Simulator (LocalStack)**: DynamoDB for persistence.
-*   **Blockchain Network (Ganache)**: Ethereum Testnet hosting `TouristPermitRegistry.sol`.
-*   **API Security**: Endpoint protection via API Key (`x-api-key`) authentication.
+## 1. Project Identity
+**One-Liner**: An AI-augmented, Hardware-Hardened Tourist Safety & Border Surveillance Network for Arunachal Pradesh.
+**Mission**: To eliminate "Dark Zones" in remote border areas using a dual-path telemetry architecture (LoRa/Sat) and decentralized governance.
 
 ---
 
-## 3. Module Breakdown (Implemented Status)
+## 2. V3.0 Production Upgrades (Completed)
+This version bridges the gap between a prototype and a real-world Ops Center.
 
-### **Module 1: The Immutable Identity (Blockchain Core)**
-*   **Status: LIVE**
-*   **Smart Contract**: `TouristPermitRegistry.sol` (Deployed).
-    *   **Features**: Time-locked permits, Identity Hashing (SHA-256), Emergency Flagging.
-    *   **Privacy**: Only hashes are stored on-chain. PII remains off-chain.
-*   **Bridge**: `identity.py` service resolves DIDs to real-time Blockchain Permit status.
+### A. The "Control Room" Experience
+*   **Tactical Map**: Implemented **Satellite & Terrain** base layers (Esri/OpenTopo) for realistic terrain analysis.
+*   **Cluster Intelligence**: Added **Vector Clustering** to manage high-density tourist groups without UI clutter.
+*   **Mission Control Layout**: Re-engineered Dashboard into a 3-pane responsive layout (Filter Sidebar, Main Map, Live Feed) with System Health HUD.
 
-### **Module 2: High-Fidelity Telemetry & AI Engine**
-*   **Status: LIVE**
-*   **Ingestion**: `telemetry.py` processes raw GPS data via the **Fast Path**.
-*   **Smoothing**: Implemented **Kalman Filters** (4-state) to reduce GPS jitter.
-*   **The Brain**: `SentinelAI` class calculates a real-time risk score (0-100) based on:
-    *   **Spatial**: Red Zone entry (+50).
-    *   **Temporal**: Night-time operations (+20).
-    *   **Behavioral**: Stagnation/Drift (+20).
+### B. "Stone-Carved" Governance
+*   **Immutable Auditing**: Every E-FIR generated is cryptographically hashed (`SHA-256`) and recorded on the **Ethereum Blockchain**.
+*   **RBAC Enforced**: API now enforces strict roles (`RESPONDER` vs `VIEWER`). Unauthorized nodes cannot generate legal documents.
+
+### C. Context-Aware AI
+*   **Weather Engine**: SentinelAI now ingests (simulated) weather data. A "Safe Trail" becomes "High Risk" during a thunderstorm.
+*   **Behavioral Breadcrumbs**: Map now allows retrieving and visualizing the **Historical Trajectory (4H)** of any target to aid Search & Rescue teams.
+
+### D. Production Resilience
+*   **Disaster Recovery**: Implemented **S3 Snapshots** (every 5 mins) and **Startup Hydration** to ensure zero data loss during server restarts.
+*   **Dead Man's Switch**: Background scheduler actively monitors for signal loss in High-Risk zones.
+
+---
+
+## 3. System Architecture
+The system follows a "fast-path / slow-path" Clean Architecture.
+
+### A. The Backbone (Backend)
+*   **Framework**: FastAPI (Python 3.9+)
+*   **Fast Path**: In-Memory Redis-like Cache + Kalman Filter + WebSocket Broadcast (<50ms latency).
+*   **Slow Path**: Async Workers -> DynamoDB Persistence + Blockchain Logging + S3 Snapshots.
+*   **Identity**: Decentralized ID (DID) resolved against Smart Contracts.
+
+### B. The Face (Frontend)
+*   **Framework**: React 19 + Vite + TailwindCSS.
+*   **Mapping**: React-Leaflet V5 with Custom Clustering & Tile Layer Management.
+*   **State Management**: Real-time Socket.io hydration + Local Filtering logic.
+
+### C. The Ledger (Blockchain)
+*   **Network**: Private Ethereum Testnet (Ganache/Hardhat).
+*   **Contracts**: `TouristPermitRegistry.sol` (ERC-721 styled) + `AuditLog` events.
+*   **Proof**: Transaction Hashes embedded in PDF Reports.
+
+---
+
+## 4. Key Workflows (Demo Script)
+
+1.  **Infiltration (The Setup)**:
+    *   Deploy Contracts (`deploy_contract.py`).
+    *   Launch Backend & Frontend.
+2.  **The Stress Test (Simulation)**:
+    *   Run `simulation.py`.
+    *   Observe **4 Concurrent Scenarios**: Safe, SOS Panic, Stagnation (Fall), and Geofence Breach.
+3.  **The Response**:
+    *   Watch the Map auto-switch to **Satellite Mode** on breach.
+    *   Click a Red Dot -> Check **"Severe Weather"** risk factor.
+    *   Click **"Show Trajectory"** to trace the path.
+4.  **The Governance**:
+    *   Generate E-FIR.
+    *   Verify the **Blockchain TXID** on the generated PDF.
+
+---
+**Prahari-AI is now ready for deployment simulation.**
+ral**: Stagnation/Drift (+20).
     *   **SOS Override**: Immediate Critical Status.
 
 ### **Module 3: "Dead Man's Switch" (Fail-Safe)**
