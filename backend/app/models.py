@@ -25,20 +25,34 @@ class TelemetryData(BaseModel):
 
 class AlertType(str, Enum):
     GEOFENCE_BREACH = "GEOFENCE_BREACH"
-    INACTIVITY = "INACTIVITY"
+    INACTIVITY = "INACTIVITY"         # Legacy
+    SIGNAL_LOST = "SIGNAL_LOST_CRITICAL" # V3.1
     FALL_DETECTED = "FALL_DETECTED"
     SOS_MANUAL = "SOS_MANUAL"
+    Unconscious = "UNCONSCIOUS" # Matches AnomalyDetection enum usage
 
 class Alert(BaseModel):
     alert_id: str
     device_id: str
     did: str
-    type: AlertType
-    severity: str  # HIGH, MEDIUM, LOW
+    type: str # Changed to str to allow flexible types like 'SIGNAL_LOST_CRITICAL'
+    severity: str  # CRITICAL, HIGH, MEDIUM, LOW
     timestamp: float
     location: GeoPoint
     message: str
-    resolved: bool = False
+    
+    # State Management (V3.0 Operations)
+    status: str = "DETECTED" # DETECTED, ACKNOWLEDGED, RESOLVED
+    ack_by: Optional[str] = None
+    ack_time: Optional[float] = None
+    resolved_by: Optional[str] = None
+    resolved_time: Optional[float] = None
+    
+    # Smart Intelligence (V3.1)
+    confidence: float = 100.0
+    suggested_action: str = "Check Dashboard"
+
+# --- GEOFENCE GOVERNANCE MODULE ---
 
 class GeoFence(BaseModel):
     zone_id: str
@@ -47,3 +61,25 @@ class GeoFence(BaseModel):
     center: GeoPoint
     radius_meters: float
     description: str = ""
+    
+    # Governance Fields
+    version: int = 1
+    effective_from: float = 0.0 # Timestamp
+    effective_to: Optional[float] = None # None = Indefinite
+    approved_by: str = "SYSTEM_BOOTSTRAP"
+    audit_hash: str = "" # SHA256(Parameters + PreviousHash)
+    is_active: bool = True
+    reason: str = "Initial Deployment"
+
+class GeofenceAuditLog(BaseModel):
+    """
+    Immutable record of a boundary change.
+    """
+    log_id: str
+    zone_id: str
+    action: str # CREATE, UPDATE, EXPIRE
+    actor_id: str
+    timestamp: float
+    old_hash: str
+    new_hash: str
+    reason: str
