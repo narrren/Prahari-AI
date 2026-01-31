@@ -56,10 +56,10 @@ const AlertSidebar = ({ alerts }) => {
                         <div
                             key={alert.alert_id || alert.id}
                             className={`relative p-3 rounded-lg border-l-4 shadow-lg transition-all ${status === 'RESOLVED'
-                                    ? 'opacity-50 border-gray-500 bg-gray-800'
-                                    : isCritical
-                                        ? 'bg-red-950/40 border-red-500 text-red-100'
-                                        : 'bg-blue-950/40 border-blue-500 text-blue-100'
+                                ? 'opacity-50 border-gray-500 bg-gray-800'
+                                : isCritical
+                                    ? 'bg-red-950/40 border-red-500 text-red-100'
+                                    : 'bg-blue-950/40 border-blue-500 text-blue-100'
                                 }`}
                         >
                             {/* SLA Timer Bar (Visual) */}
@@ -70,13 +70,23 @@ const AlertSidebar = ({ alerts }) => {
                             )}
 
                             <div className="flex justify-between items-start mb-2">
-                                <span className="text-[10px] font-mono opacity-70 flex items-center gap-1">
-                                    <Clock size={10} />
-                                    {new Date((alert.timestamp || Date.now()) * 1000).toLocaleTimeString()}
-                                </span>
+                                <div className="flex flex-col">
+                                    <span className="text-[10px] font-mono opacity-70 flex items-center gap-1">
+                                        <Clock size={10} />
+                                        {new Date((alert.timestamp || Date.now()) * 1000).toLocaleTimeString()}
+                                    </span>
+                                    {alert.confidence !== undefined && (
+                                        <span className={`text-[9px] font-bold mt-0.5 ${alert.confidence > 80 ? 'text-green-400' :
+                                                alert.confidence > 50 ? 'text-yellow-400' :
+                                                    'text-red-400'
+                                            }`}>
+                                            CONFIDENCE: {Math.round(alert.confidence)}%
+                                        </span>
+                                    )}
+                                </div>
                                 <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded uppercase ${status === 'DETECTED' ? 'bg-red-600 text-white animate-pulse' :
-                                        status === 'ACKNOWLEDGED' ? 'bg-yellow-600 text-black' :
-                                            'bg-green-600 text-white'
+                                    status === 'ACKNOWLEDGED' ? 'bg-yellow-600 text-black' :
+                                        'bg-green-600 text-white'
                                     }`}>
                                     {status}
                                 </span>
@@ -87,9 +97,19 @@ const AlertSidebar = ({ alerts }) => {
                                 {isCritical && <ShieldAlert size={16} className="text-red-500" />}
                             </div>
 
-                            <div className="text-xs mb-3 p-2 bg-black/30 rounded border border-white/5 font-mono">
+                            <div className="text-xs mb-2 p-2 bg-black/30 rounded border border-white/5 font-mono">
                                 {alert.message}
                             </div>
+
+                            {/* SMART AI SUGGESTION */}
+                            {alert.suggested_action && (
+                                <div className="mb-3 p-2 bg-blue-900/20 border-l-2 border-blue-500 rounded-r">
+                                    <span className="text-[8px] font-bold text-blue-400 block tracking-wider mb-0.5">AI RECOMMENDATION</span>
+                                    <div className="text-[10px] text-blue-100 font-mono">
+                                        {alert.suggested_action}
+                                    </div>
+                                </div>
+                            )}
 
                             {/* CONTROL PLANE ACTIONS */}
                             <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-white/10">

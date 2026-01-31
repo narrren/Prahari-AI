@@ -6,6 +6,7 @@ import PermitIssuer from './components/PermitIssuer';
 import { downloadEFIR } from './utils/api';
 
 import AlertSidebar from './components/AlertSidebar';
+import SystemHealth from './components/SystemHealth';
 
 // Constants
 const API_BASE = "http://localhost:8000/api/v1";
@@ -163,21 +164,7 @@ function App() {
         </div>
 
         {/* System Health Indicators */}
-        <div className="flex items-center gap-6">
-          <div className="flex flex-col items-end">
-            <span className="text-[9px] text-gray-500 uppercase font-bold">System Status</span>
-            <div className="flex items-center gap-3 mt-1">
-              <div className="flex items-center gap-1.5" title="Blockchain Node Connected">
-                <Globe className="w-3 h-3 text-green-500" />
-                <span className="text-[10px] text-green-400 font-mono">ETH: ONLINE</span>
-              </div>
-              <div className="flex items-center gap-1.5" title="IoT Ingestion Active">
-                <Activity className="w-3 h-3 text-blue-500 animate-pulse" />
-                <span className="text-[10px] text-blue-400 font-mono">IoT: 50ms</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <SystemHealth />
       </header>
 
       <div className="flex flex-1 overflow-hidden relative">
