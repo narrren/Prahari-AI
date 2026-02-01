@@ -124,11 +124,63 @@ def create_governed_geofence(
         
     return fence
 
-# ... (expire_geofence remains same) ...
+def expire_geofence(zone_id: str):
+    """
+    Set active=False (Soft Delete).
+    """
+    target = next((f for f in _GEOFENCE_CACHE if f.zone_id == zone_id), None)
+    if target:
+        target.is_active = False # Cache update
+        # DB Update would go here
+        
+def load_geofences():
+    """
+    Hydrate cache from DB or Seed Default.
+    """
+    global _GEOFENCE_CACHE
+    # For this demo/prototype, we seed a default if empty to avoid crashing
+    if not _GEOFENCE_CACHE:
+        _GEOFENCE_CACHE = [
+            GeoFence(
+                 zone_id="ZONE_INIT_001",
+                 name="Tawang Monastery Perimeter",
+                 center=GeoPoint(lat=27.5861, lng=91.8594),
+                 radius_meters=300.0,
+                 risk_level="MEDIUM",
+                 description="Cultural Heritage Site - No Drone Zone",
+                 priority=50,
+                 authority="CIVIL_ADMIN",
+                 approved_by="SYSTEM",
+                 is_active=True,
+                 version=1
+            ),
+             GeoFence(
+                 zone_id="ZONE_MIL_002",
+                 name="Border Outpost Alpha",
+                 center=GeoPoint(lat=27.6000, lng=91.8000),
+                 radius_meters=500.0,
+                 risk_level="HIGH",
+                 description="Restricted Military Area",
+                 priority=100,
+                 authority="DEFENSE_MINISTRY",
+                 approved_by="SYSTEM",
+                 is_active=True,
+                 version=1
+            )
+        ]
 
-# ... (load_geofences remains same) ...
-
-# ... (haversine remains same) ...
+def haversine_distance(p1: GeoPoint, p2: GeoPoint) -> float:
+    """
+    Calculate great-circle distance between two points in meters.
+    """
+    R = 6371000 # Earth radius in meters
+    phi1, phi2 = math.radians(p1.lat), math.radians(p2.lat)
+    dphi = math.radians(p2.lat - p1.lat)
+    dlambda = math.radians(p2.lng - p1.lng)
+    
+    a = math.sin(dphi/2)**2 + math.cos(phi1)*math.cos(phi2)*math.sin(dlambda/2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+    return R * c
 
 def check_geofence_breach(location: GeoPoint) -> Optional[GeoFence]:
     """

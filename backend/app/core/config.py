@@ -1,5 +1,4 @@
-
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Prahari-AI Backend"
@@ -12,11 +11,12 @@ class Settings(BaseSettings):
     AWS_SECRET_KEY: str = "test"
     
     # Thresholds
-    GEOFENCE_ALERT_DISTANCE_M: float = 50.0  # meters
-    INACTIVITY_THRESHOLD_SECONDS: int = 1800 # 30 mins
-    AUTH_API_KEY: str # Read from env
+    GEOFENCE_ALERT_DISTANCE_M: float = 50.0 
+    INACTIVITY_THRESHOLD_SECONDS: int = 1800 
+    AUTH_API_KEY: str = "dev-secret" # Default fallback for dev
     
-    class Config:
-        env_file = ".env"
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+settings = Settings()
 
 settings = Settings()
