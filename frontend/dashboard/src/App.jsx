@@ -7,6 +7,10 @@ import { downloadEFIR } from './utils/api';
 
 import AlertSidebar from './components/AlertSidebar';
 import SystemHealth from './components/SystemHealth';
+import SecurityHUD from './components/SecurityHUD';
+// V5.0 Components
+import CyberHUD from './components/CyberHUD';
+import ForensicPanel from './components/ForensicPanel';
 
 // Constants
 const API_BASE = "http://localhost:8000/api/v1";
@@ -24,7 +28,7 @@ const DEMO_ZONES = [
 ];
 
 function App() {
-  const [view, setView] = useState('monitor'); // 'monitor' | 'issuer'
+  const [view, setView] = useState('monitor'); // 'monitor' | 'issuer' | 'forensics'
   const [selectedIncident, setSelectedIncident] = useState(null);
   const [tourists, setTourists] = useState([]);
   const [alerts, setAlerts] = useState([]);
@@ -41,6 +45,7 @@ function App() {
       const positionsRaw = posRes.data;
       const activeAlerts = alertRes.data;
 
+      // De-duplicate positions (Latest only)
       const latestPositions = Object.values(positionsRaw.reduce((acc, curr) => {
         if (!acc[curr.device_id] || curr.timestamp > acc[curr.device_id].timestamp) {
           acc[curr.device_id] = curr;
@@ -73,19 +78,21 @@ function App() {
 
       socket.on('new_alert', (alert) => {
         console.log("CRITICAL ALERT RECEIVED:", alert);
-
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        oscillator.type = 'square';
-        oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
-        oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
-        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        oscillator.start();
-        oscillator.stop(audioCtx.currentTime + 0.5);
+        // Sound Effect
+        try {
+          const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const oscillator = audioCtx.createOscillator();
+          const gainNode = audioCtx.createGain();
+          oscillator.type = 'square';
+          oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+          gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+          oscillator.connect(gainNode);
+          gainNode.connect(audioCtx.destination);
+          oscillator.start();
+          oscillator.stop(audioCtx.currentTime + 0.5);
+        } catch (e) { console.warn("Audio Blocked"); }
 
         setAlerts(prev => [alert, ...prev]);
 
@@ -105,7 +112,6 @@ function App() {
             return [...prev, data];
           }
         });
-        setStats(prev => ({ ...prev, active: prev.active }));
       });
 
       return () => socket.disconnect();
@@ -143,7 +149,7 @@ function App() {
           <Shield className="w-8 h-8 text-blue-500" />
           <div>
             <h1 className="text-lg font-bold tracking-widest text-white">PRAHARI-AI</h1>
-            <span className="text-[10px] text-blue-400 font-mono tracking-[0.2em] uppercase">Sentinel Command v3.0</span>
+            <span className="text-[10px] text-blue-400 font-mono tracking-[0.2em] uppercase">Sentinel Command v5.0 (Sovereign)</span>
           </div>
         </div>
 
@@ -161,6 +167,12 @@ function App() {
           >
             PERMIT ISSUER
           </button>
+          <button
+            onClick={() => setView('forensics')}
+            className={`px-6 py-1.5 rounded text-xs font-bold transition-all ${view === 'forensics' ? 'bg-purple-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
+          >
+            FORENSICS
+          </button>
         </div>
 
         {/* System Health Indicators */}
@@ -177,17 +189,6 @@ function App() {
             <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
               <div className="text-[10px] text-gray-400 uppercase tracking-widest font-bold mb-3">Threat Level</div>
               <div className="text-3xl font-bold text-white flex items-center gap-2">
-                {src => stats.danger > 0 ? (
-                  <>
-                    <AlertTriangle className="text-red-500 w-6 h-6 animate-bounce" />
-                    <span className="text-red-500">CRITICAL</span>
-                  </>
-                ) : (
-                  <>
-                    <Shield className="text-green-500 w-6 h-6" />
-                    <span className="text-green-500">STABLE</span>
-                  </>
-                )}
                 {stats.danger > 0 ? (
                   <>
                     <AlertTriangle className="text-red-500 w-6 h-6 animate-bounce" />
@@ -241,6 +242,12 @@ function App() {
             <div className="flex-1 relative">
               <MapComponent tourists={filteredTourists} geofences={DEMO_ZONES} />
 
+              {/* V4.1 SECURITY HUD */}
+              <SecurityHUD />
+
+              {/* V5.0 CYBER DEFENSE HUD - MOVED TO SIDEBAR */}
+              {/* <CyberHUD /> */}
+
               {/* Floating Incident Counter (if filter hides them) */}
               {filter !== 'ALL' && (
                 <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur text-white text-xs px-4 py-1 rounded-full border border-gray-600 pointer-events-none">
@@ -248,22 +255,24 @@ function App() {
                 </div>
               )}
             </div>
-          ) : (
+          ) : view === 'issuer' ? (
             <div className="h-full overflow-y-auto p-6">
               <PermitIssuer />
             </div>
+          ) : (
+            <ForensicPanel />
           )}
         </main>
 
         {/* RIGHT SIDEBAR: Alerts (Visible in Monitor) */}
         {view === 'monitor' && (
           <div className="w-96 bg-prahari-card border-l border-gray-700 z-40 flex flex-col shadow-xl">
-            <AlertSidebar alerts={alerts} />
+            <AlertSidebar alerts={alerts} tourists={tourists} />
           </div>
         )}
       </div>
 
-      {/* EMERGENCY INCIDENT REPORT MODAL (Same as V2) */}
+      {/* EMERGENCY INCIDENT REPORT MODAL */}
       {selectedIncident && (
         <div className="fixed inset-0 z-[2000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-gray-900 border-2 border-red-500/50 rounded-lg shadow-2xl max-w-lg w-full overflow-hidden animate-in fade-in zoom-in duration-200">

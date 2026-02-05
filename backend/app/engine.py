@@ -41,26 +41,14 @@ class SentinelAI:
                 factors.append("WARN_ZONE_ENTRY")
             
         # B. Behavioral (Speed/Stagnation)
-        # Using a simple moving average or Kalman logic to handle GPS Drift
-        # If speed < 0.1, we consider it potential stagnation.
-        # Ideally we check duration, but for instantaneous risk scoring:
         if speed < 0.1:
-            # Check if this state has persisted?
-            # We access 'all_states' which is the InMemory Cache.
-            # But 'current' is likely already IN 'all_states' due to ingestion order.
-            # We assume the caller checks 'time since first stopped'.
-            
-            # Simple Production Rule:
-            # If speed is virtually zero AND we are in a risk zone -> +20 Risk
             if zone:
                 score += 20
                 factors.append("STAGNATION_IN_RISK_ZONE")
             else:
-                # Just resting in Safe Zone? Low risk.
                 score += 5
                 
         # C. Temporal Weighting
-        # Night time operations are inherently riskier in border areas.
         current_dt = datetime.datetime.now()
         hour = current_dt.hour
         if hour >= 18 or hour < 5:
@@ -78,21 +66,7 @@ class SentinelAI:
             score += 10
             factors.append(f"WEATHER_ADVISORY: {weather_condition}")
 
-    @staticmethod
-    def get_weather_condition(lat, lng):
-        """
-        Mocks a call to OpenWeatherMap API for demonstration.
-        In production, this would use 'requests.get(api_url)'.
-        For the demo, we simulate bad weather in specific 'micro-climates' (zones).
-        """
-        import random
-        # Simulate a localized storm near the Red Zone coordinates
-        if 27.585 < lat < 27.590 and 91.855 < lng < 91.865:
-            return random.choice(['Thunderstorm', 'Heavy Snow', 'Blizzard'])
-        
-        return "Clear Sky"
-            
-        # D. SOS Override
+        # E. SOS Override
         if current.get('is_panic', False):
             return {"score": 100, "status": "CRITICAL", "factors": ["SOS_PANIC_BUTTON"]}
 
@@ -106,6 +80,18 @@ class SentinelAI:
             status = "WARNING"
         
         return {"score": int(score), "status": status, "factors": factors}
+
+    @staticmethod
+    def get_weather_condition(lat, lng):
+        """
+        Mocks a call to OpenWeatherMap API for demonstration.
+        """
+        import random
+        # Simulate a localized storm near the Red Zone coordinates
+        if 27.585 < lat < 27.590 and 91.855 < lng < 91.865:
+            return random.choice(['Thunderstorm', 'Heavy Snow', 'Blizzard'])
+        
+        return "Clear Sky"
 
 # Legacy Adapter to keep existing simple calls working if needed, 
 # or we refactor anomaly_detection.py to use this Class.

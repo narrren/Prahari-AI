@@ -49,15 +49,53 @@ def check_rate_limit(request: Request):
     if not limiter.check(ip):
         raise HTTPException(status_code=429, detail="Rate Limit Exceeded (Anti-DDoS Protection)")
 
+from app.services.identities import verify_device_integrity, verify_packet_signature
+
+from app.services.integrity import is_system_locked
+
 # --- SHARED CORE LOGIC ---
-async def process_telemetry_core(data: TelemetryData, background_tasks: BackgroundTasks):
+async def process_telemetry_core(data: TelemetryData, background_tasks: BackgroundTasks, 
+                                 request_fingerprint: str = None, request_cert: str = None,
+                                 request_signature: str = None, request_nonce: int = None):
     """
     Common Pipeline for JSON and Protobuf Ingestion.
     """
-    # 0. Metrics
+    # -1. GLOBAL KILL SWITCH CHECK
+    if is_system_locked():
+        raise HTTPException(status_code=503, detail="SERVICE UNAVAILABLE: SECURITY LOCKDOWN IN EFFECT")
+
+    # 0. Zero Trust Check (mTLS + Fingerprinting)
+    if request_fingerprint and request_cert: 
+        is_valid = verify_device_integrity(data.device_id, request_fingerprint, request_cert)
+        if not is_valid:
+            print(f"SECURITY ALERT: Telemetry blocked for {data.device_id} due to invalid Hardware/Cert.")
+            raise HTTPException(status_code=401, detail="Zero Trust Violation: Hardware Fingerprint or mTLS Mismatch")
+            
+    # 0a. Cryptographic Attestation & Replay Protection (Phase 4.2)
+    # MANDATORY check.
+    if not request_signature or request_nonce is None:
+         # Fail securely if signature missing
+         raise HTTPException(status_code=401, detail="Attestation Missing: X-Signature and X-Nonce are required.")
+    
+    # Reconstruct Payload String (Canonical Format)
+    # Format: device_id:timestamp:lat:lng
+    payload_string = f"{data.device_id}:{data.timestamp}:{data.location.lat}:{data.location.lng}"
+    
+    is_attested = verify_packet_signature(data.device_id, payload_string, request_signature, request_nonce)
+    if not is_attested:
+            print(f"SECURITY ALERT: Telemetry blocked for {data.device_id} due to Badge Signature/Replay Failure.")
+            raise HTTPException(status_code=401, detail="Attestation Violation: Invalid Signature or Replay Attack")
+            
+    # 0b. Metrics
     SYSTEM_METRICS['ingestion_count'] += 1
 
-    # 1. KALMAN FILTERING (Signal Smoothing)
+    # 1. BEHAVIORAL BIOMETRICS (V5.0 Turing Test)
+    from app.services.biometrics import analyze_humanity
+    data.humanity_score = analyze_humanity(data)
+    if data.humanity_score < 50.0:
+        print(f"🤖 ADVERSARIAL AI DEFENSE: {data.device_id} flagged as BOT (Score: {data.humanity_score:.1f}%)")
+
+    # 2. KALMAN FILTERING (Signal Smoothing)
     if data.device_id not in KALMAN_STATES:
         KALMAN_STATES[data.device_id] = {
             'x': [data.location.lat, data.location.lng, 0, 0], 
@@ -90,6 +128,13 @@ async def process_telemetry_core(data: TelemetryData, background_tasks: Backgrou
     
     # 2. UPDATE CACHE
     LATEST_POSITIONS[data.device_id] = data.model_dump()
+
+    # 2a. UPDATE HISTORY BUFFER (Demo Resilience)
+    # Ensure VCR works even if DynamoDB is offline/empty
+    from app.core.shared_state import TELEMETRY_HISTORY
+    TELEMETRY_HISTORY[data.device_id].append(data.model_dump())
+    if len(TELEMETRY_HISTORY[data.device_id]) > 500:
+        TELEMETRY_HISTORY[data.device_id].pop(0)
     
     # 3. AI RISK CALCULATION
     risk_report = SentinelAI.calculate_risk(data.model_dump(), LATEST_POSITIONS)
@@ -228,15 +273,32 @@ async def verify_api_key(api_key: str = Security(api_key_header)):
 
 
 @router.post("/telemetry", dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
-async def ingest_telemetry(data: TelemetryData, background_tasks: BackgroundTasks):
+async def ingest_telemetry(
+    data: TelemetryData, 
+    background_tasks: BackgroundTasks,
+    x_device_fingerprint: str = Header(None, alias="X-Device-Fingerprint"),
+    x_client_cert: str = Header(None, alias="X-Client-Cert"),
+    x_signature: str = Header(None, alias="X-Signature"),
+    x_nonce: int = Header(None, alias="X-Nonce")
+):
     """
     FAST PATH (JSON): Production-grade ingestion.
     """
-    risk_report = await process_telemetry_core(data, background_tasks)
+    # Enforce Zero Trust if headers present (Phase 4.1)
+    risk_report = await process_telemetry_core(data, background_tasks, 
+                                             x_device_fingerprint, x_client_cert,
+                                             x_signature, x_nonce)
     return {"status": "accepted", "timestamp": data.timestamp, "risk": risk_report}
 
 @router.post("/telemetry/proto", dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
-async def ingest_telemetry_proto(request: Request, background_tasks: BackgroundTasks):
+async def ingest_telemetry_proto(
+    request: Request, 
+    background_tasks: BackgroundTasks,
+    x_device_fingerprint: str = Header(None, alias="X-Device-Fingerprint"),
+    x_client_cert: str = Header(None, alias="X-Client-Cert"),
+    x_signature: str = Header(None, alias="X-Signature"),
+    x_nonce: int = Header(None, alias="X-Nonce")
+):
     """
     HIGH DENSITY PATH (Protobuf): 60% Bandwidth Saving.
     """
@@ -257,10 +319,13 @@ async def ingest_telemetry_proto(request: Request, background_tasks: BackgroundT
             is_panic=packet.is_panic
         )
         
-        await process_telemetry_core(data, background_tasks)
+        await process_telemetry_core(data, background_tasks, 
+                                   x_device_fingerprint, x_client_cert,
+                                   x_signature, x_nonce)
         return {"status": "accepted", "method": "PROTOBUF"}
         
     except Exception as e:
+        if "Zero Trust" in str(e): raise e
         raise HTTPException(status_code=400, detail=f"Invalid Protobuf: {str(e)}")
 
 @router.get("/alerts")
@@ -273,8 +338,14 @@ async def get_all_alerts():
 @router.patch("/alerts/{alert_id}/acknowledge")
 async def acknowledge_alert(
     alert_id: str,
-    x_actor_id: str = Header("operator", alias="X-Actor-ID")
+    x_actor_id: str = Header("operator", alias="X-Actor-ID"),
+    x_role: str = Header(..., alias="X-Role")
 ):
+    # RBAC CHECK
+    if x_role not in ["COMMANDER", "OFFICER", "DISTRICT_SUPERVISOR"]:
+        print(f"RBAC VIOLATION: {x_actor_id} ({x_role}) tried to ACK without permission.")
+        raise HTTPException(status_code=403, detail="Insufficient Privileges")
+
     # Find alert in cache (by ID)
     target_key = None
     for k, v in LATEST_ALERTS.items():
@@ -286,7 +357,7 @@ async def acknowledge_alert(
         LATEST_ALERTS[target_key]['status'] = 'ACKNOWLEDGED'
         LATEST_ALERTS[target_key]['ack_by'] = x_actor_id
         LATEST_ALERTS[target_key]['ack_time'] = time.time()
-        print(f"ALERT_OP: Alert {alert_id} ACKNOWLEDGED by {x_actor_id}")
+        print(f"ALERT_OP: Alert {alert_id} ACKNOWLEDGED by {x_actor_id} ({x_role})")
         return {"status": "success", "alert": LATEST_ALERTS[target_key]}
     
     raise HTTPException(status_code=404, detail="Alert not found active")
@@ -294,8 +365,14 @@ async def acknowledge_alert(
 @router.patch("/alerts/{alert_id}/resolve")
 async def resolve_alert(
     alert_id: str,
-    x_actor_id: str = Header("supervisor", alias="X-Actor-ID")
+    x_actor_id: str = Header("supervisor", alias="X-Actor-ID"),
+    x_role: str = Header(..., alias="X-Role")
 ):
+    # RBAC CHECK - STRICT
+    if x_role not in ["COMMANDER", "DISTRICT_SUPERVISOR"]:
+        print(f"RBAC VIOLATION: {x_actor_id} ({x_role}) tried to RESOLVE without permission.")
+        raise HTTPException(status_code=403, detail="Insufficient Privileges: COMMANDER Access Required")
+
     target_key = None
     for k, v in LATEST_ALERTS.items():
         if v['alert_id'] == alert_id:
@@ -311,7 +388,7 @@ async def resolve_alert(
         resolved_alert = LATEST_ALERTS.pop(target_key)
         
         # Persist final state to DB (Todo)
-        print(f"ALERT_OP: Alert {alert_id} RESOLVED by {x_actor_id}")
+        print(f"ALERT_OP: Alert {alert_id} RESOLVED by {x_actor_id} ({x_role})")
         return {"status": "success", "message": "Alert Resolved and Archived"}
         
     raise HTTPException(status_code=404, detail="Alert not found active")
@@ -325,6 +402,10 @@ async def get_alerts(device_id: str):
     device_alerts = [alert for alert in LATEST_ALERTS.values() if alert['device_id'] == device_id]
     return {"alerts": device_alerts}
 
+@router.get("/test")
+async def test_endpoint():
+    return {"status": "ok", "message": "Router is working"}
+
 @router.get("/map/positions")
 async def get_map_positions():
     """
@@ -332,9 +413,10 @@ async def get_map_positions():
     Serves from In-Memory Cache (Redis equivalent) for real-time performance.
     Hydrates from DynamoDB if cache is empty (server restart).
     """
-    if not LATEST_POSITIONS:
-        from app.core.shared_state import hydrate_cache
-        hydrate_cache()
+    # TEMPORARILY DISABLED - Blocking on DB connection
+    # if not LATEST_POSITIONS:
+    #     from app.core.shared_state import hydrate_cache
+    #     hydrate_cache()
 
     return list(LATEST_POSITIONS.values())
 
@@ -343,9 +425,19 @@ async def get_device_history(device_id: str, hours: int = 4):
     """
     Fetch historical telemetry for 'Breadcrumbs' (last N hours).
     Efficiently queries DynamoDB partition key.
+    Fallbacks to In-Memory Buffer if DB is empty (Demo Mode).
     """
     from boto3.dynamodb.conditions import Key
+    from app.core.shared_state import TELEMETRY_HISTORY
     
+    # 1. Try In-Memory Buffer First (Fastest for Demo)
+    # Since DynamoDB setup in localstack might be flaky/missing
+    memory_data = TELEMETRY_HISTORY.get(device_id, [])
+    # If we have substantial data in memory, use it.
+    if len(memory_data) > 0:
+        return memory_data
+
+    # 2. Fallback to DynamoDB (Production Path)
     t_table = get_table('Prahari_Telemetry')
     cutoff_time = Decimal(str(time.time() - (hours * 3600)))
     
@@ -376,5 +468,6 @@ async def get_device_history(device_id: str, hours: int = 4):
         return cleaned_items
         
     except Exception as e:
-        print(f"Error fetching history for {device_id}: {e}")
-        return []
+        print(f"Error fetching DB history for {device_id}: {e}")
+        # Final Fallback: Return memory data again if db failed completely
+        return TELEMETRY_HISTORY.get(device_id, [])

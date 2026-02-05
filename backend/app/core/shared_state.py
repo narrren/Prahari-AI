@@ -1,5 +1,5 @@
-
-from app.models import SystemMode
+from app.models import SystemMode, CyberHudState
+from collections import defaultdict
 
 # Shared In-Memory State for Prahari-AI Backend
 # This acts as a localized Redis replacement for the demo.
@@ -9,10 +9,10 @@ from app.models import SystemMode
 LATEST_POSITIONS = {}
 
 # Kalman Filter states
-# Kalman Filter states
 KALMAN_STATES = {}
+# Biometric History for "Turing Test"
+BIOMETRIC_HISTORY = defaultdict(list)
 
-# Active Alerts Cache (Stateful Lifecycle)
 # Active Alerts Cache (Stateful Lifecycle)
 # Format: { "device_id_TYPE": { ...AlertData... } }
 LATEST_ALERTS = {}
@@ -20,8 +20,22 @@ LATEST_ALERTS = {}
 # Governance & Accountability Logs (V3.2)
 DECISION_HISTORY = [] # List[DecisionRecord]
 
+# Forensic Verification Logs (V5.0)
+FORENSIC_LOGS = []
+
+# Demo Resilience: In-Memory Telemetry History (For VCR when DB offline)
+# Format: { "device_id": [ ...TelemetryData... ] }
+TELEMETRY_HISTORY = defaultdict(list)
+
 # Global System State (V3.2 Resilience)
 SYSTEM_MODE = SystemMode.NORMAL
+
+# V5.0 SOAR HUD State
+CYBER_HUD = CyberHudState(
+    threat_level="LOW",
+    active_countermeasures=[],
+    blacklisted_ips=[]
+)
 
 # System Health Metrics (Observability)
 SYSTEM_METRICS = {
@@ -32,7 +46,10 @@ SYSTEM_METRICS = {
     "alerts_active": 0,
     "last_db_latency": 0.0,
     "kalman_failures": 0,
-    "mode": "NORMAL" # V3.2
+    "mode": "NORMAL", # V3.2
+    "merkle_root": "PENDING", # V4.1
+    "chain_height": 150000,   # V4.1
+    "consensus_status": "LOCKED (2/3)" # V4.1
 }
 
 def hydrate_cache():

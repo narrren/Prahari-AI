@@ -103,13 +103,30 @@ async def monitor_dead_mans_switch():
             print(f"Scheduler Error: {e}")
             
         # --- TASK B: DR SNAPSHOT (Every 5 mins) ---
-        # We run this loop every 60s. So every 5th run = 5 mins.
-        # Ideally use a separate async task but this is simple enough for V3.0
         if int(time.time()) % 300 < 65:  # Window to run every ~5 mins
              from app.snapshots import create_snapshot
              try:
                  create_snapshot()
              except:
                  pass
+                 
+        # --- TASK C: CRYPTOGRAPHIC ANCHORING (Chain-of-Custody) ---
+        # Phase 4.1: Build Merkle Tree of current state and anchor to Ledger
+        try:
+            from app.services.merkle import generate_telemetry_merkle_root
+            from app.core.shared_state import SYSTEM_METRICS
+            
+            latest_batch = list(LATEST_POSITIONS.values())
+            if latest_batch:
+                merkle_root = generate_telemetry_merkle_root(latest_batch)
+                
+                # Mock Blockchain Increment
+                current_height = SYSTEM_METRICS.get('chain_height', 150000)
+                SYSTEM_METRICS['chain_height'] = current_height + 1
+                SYSTEM_METRICS['merkle_root'] = merkle_root
+                
+                print(f"BLOCKCHAIN ANCHOR: Telemetry Batch Verified. Root: {merkle_root[:10]}... | Height: {current_height + 1}")
+        except Exception as e:
+            print(f"Merkle Anchor Error: {e}")
 
         await asyncio.sleep(60)

@@ -1,6 +1,12 @@
 export const downloadEFIR = async (touristId) => {
     try {
-        const response = await fetch(`http://localhost:8000/api/v1/generate-efir/${touristId}`);
+        const response = await fetch(`http://localhost:8000/api/v1/generate-efir/${touristId}`, {
+            headers: {
+                'X-Justification': 'Immediate Incident Export',
+                'X-Role': 'DISTRICT_SUPERVISOR',
+                'X-Actor-ID': 'officer-web-01'
+            }
+        });
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }

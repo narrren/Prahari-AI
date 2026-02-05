@@ -22,6 +22,7 @@ class SystemMode(str, Enum):
     NORMAL = "NORMAL"
     DEGRADED = "DEGRADED" # Autonomous fallback
     EMERGENCY = "EMERGENCY" # Kill Switch Active
+    CYBER_LOCKDOWN = "CYBER_LOCKDOWN" # Anti-Hacking Mode
 
 class PriorityLevel(int, Enum):
     MILITARY = 100
@@ -62,6 +63,9 @@ class TelemetryData(BaseModel):
     heading: float = 0.0
     battery_level: float = 100.0
     is_panic: bool = False
+    
+    # V5.0 Behavioral Biometrics
+    humanity_score: float = 100.0 # 0-100% "Human Entropy" score
 
 class Alert(BaseModel):
     alert_id: str
@@ -83,11 +87,29 @@ class Alert(BaseModel):
     # Incident Ownership (V3.2 ICS)
     owner_id: Optional[str] = None # Functional Commander
     handoff_log: List[IncidentHandoff] = []
-    escalation_level: int = 0 # 0=Operator, 1=Supervisor, 2=Audit
+    escalation_level: int = 0
     
     # Smart Intelligence (V3.1)
     confidence: float = 100.0
     suggested_action: str = "Check Dashboard"
+    
+    # V5.0 Trustless Governance
+    attestation_status: str = "UNVERIFIED" # UNVERIFIED, ATTESTED
+    attestors: List[str] = [] 
+
+# --- V5.0 SOAR & FORENSICS ---
+class ForensicVerification(BaseModel):
+    doc_hash: str
+    status: str # VERIFIED, TAMPERED, UNKNOWN
+    timestamp: float
+    blockchain_txid: str
+    signer_did: str
+
+class CyberHudState(BaseModel):
+    threat_level: str # LOW, ELEVATED, CRITICAL
+    active_countermeasures: List[str]
+    blacklisted_ips: List[str]
+    last_attack_timestamp: float = 0.0
 
 # --- GEOFENCE GOVERNANCE MODULE ---
 class GeoFence(BaseModel):

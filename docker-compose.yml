@@ -1,31 +1,65 @@
 version: '3.8'
 
 services:
-  # AWS LocalStack for simulating DynamoDB, IoT Core, Lambda, Cognito
+  # 1. THE BRAIN: FastAPI Backend
+  backend:
+    build: ./backend
+    container_name: prahari_brain
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=PRODUCTION
+      - REDIS_URL=redis://redis:6379/0
+      - DYNAMO_ENDPOINT=http://localstack:4566
+      - BLOCKCHAIN_RPC=http://ganache:8545
+    depends_on:
+      - redis
+      - localstack
+      - ganache
+    volumes:
+      - ./backend:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # 2. THE FACE: React Dashboard
+  frontend:
+    build: ./frontend/dashboard
+    container_name: prahari_gui
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+
+  # 3. FAST PATH: Redis Cache
+  redis:
+    image: redis:alpine
+    container_name: prahari_fast_cache
+    ports:
+      - "6379:6379"
+
+  # 4. SLOW PATH: LocalStack (DynamoDB + S3)
   localstack:
     image: localstack/localstack:latest
+    container_name: prahari_cloud_sim
     ports:
-      - "4566:4566"            # Edge port
-      - "4510-4559:4510-4559"  # External service ports range
+      - "4566:4566"
     environment:
-      - SERVICES=dynamodb,iot,lambda,cognito-idp,timestream-write,timestream-query,locations
-      - DEBUG=1
-      - DOCKER_HOST=unix:///var/run/docker.sock
-    volumes:
-      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    networks:
-      - prahari-network
+      - SERVICES=dynamodb,s3
 
-  # Ganache for local Ethereum Blockchain simulation (DID & Permit Registry)
+  # 5. TRUST LAYER: Ganache Blockchain
   ganache:
-    image: trufflesuite/ganache:latest
+    image: trufflesuite/ganache-cli:latest
+    container_name: prahari_ledger
     ports:
       - "8545:8545"
-    command: ["--wallet.totalAccounts", "10", "--chain.chainId", "1337"]
-    networks:
-      - prahari-network
+    command: ganache-cli --deterministic --networkId 5777 --port 8545
 
-networks:
-  prahari-network:
-    driver: bridge
+  # 6. SIMULATION: Traffic Generator
+  simulator:
+    build: .
+    container_name: prahari_sim_users
+    network_mode: host
+    command: python traffic_generator.py
+    depends_on:
+      - backend

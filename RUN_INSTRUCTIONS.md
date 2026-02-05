@@ -1,20 +1,20 @@
-# PRAHARI-AI: The Sentinel System (Master Guide)
+# PRAHARI-AI: The Sentinel System (V4.1 Defense-Grade)
 
 ## 1. How It Works: The "Sentinel Loop"
 Understanding the data flow is key to operating the system.
 
-1.  **Generation (The Source)**: The `simulation.py` script acts as GPS trackers on 4 virtual tourists. It sends encrypted JSON packets (Telemetry) to the Cloud API every second.
+1.  **Generation (The Source)**: The `traffic_generator.py` script acts as GPS trackers. It sends **Signed & Encrypted** JSON packets to the Cloud API every second.
 2.  **Ingestion (The Backbone)**:
-    *   **Fast Path**: The API immediately caches the location (Redis pattern) and broadcasts it via WebSocket to the Dashboard for <50ms latency.
-    *   **AI Processing**: Concurrently, the `SentinelAI` engine evaluates the packet against Geofences, Time of Day, and Weather.
-    *   **Slow Path**: Background workers persist the data to DynamoDB and check for "Dead Man" signals (silence).
+    *   **Zero Trust Check**: Validates Device Fingerprint, mTLS Cert, and **HMAC Signature** before accepting data.
+    *   **Fast Path**: Caches location (Redis pattern) and broadcasts via WebSocket.
+    *   **AI Processing**: Evaluates packet against Geofences (Red Zones) and Anomaly Models.
+    *   **Slow Path**: Persists data to DynamoDB and anchors hashes to the Blockchain.
 3.  **Visualization (The Command Centre)**: The React Dashboard listens to the WebSocket.
-    *   **Context Awareness**: If the AI flags a High Risk (score > 50), the Map automatically switches to **Satellite Mode**.
-    *   **Mission Control**: The Sidebar prioritizes "Critical" alerts (SOS/Red Zone) over "Warnings" (Stagnation).
+    *   **Security HUD**: Displays Blockchain health and Merkle Root status.
+    *   **Mission Control**: Prioritizes "Critical" alerts (SOS) over warnings.
 4.  **Action (The Governance)**:
-    *   The Admin clicks **"GEN E-FIR"** on an alert.
-    *   The system generates a PDF, hashes it, and logs the action on the **Blockchain** (Audit Trail).
-    *   A legally admissible document is downloaded.
+    *   The Admin clicks **"GEN E-FIR"**.
+    *   The system generates a PDF, uploads it to **IPFS**, and logs the CID on the **Blockchain**.
 
 ---
 
@@ -53,28 +53,34 @@ npm run dev
 👉 **Open Browser**: [http://localhost:5173](http://localhost:5173)
 
 ### Step 5: Trigger the "Stress Test" (Simulation)
-This script simulates the 4 concurrent scenarios (Safe, Breach, Fall, SOS).
+This script simulates 5 concurrent units with **Cryptographic Attestation**.
 ```bash
 # In terminal 3
-python scripts/simulation.py
+python traffic_generator.py
 ```
+
+### Step 6: System Verification
+Run the integration suite to verify the full governance loop.
+```bash
+python backend/tests/integration_test.py
+```
+
+### Step 7: Cybersecurity Simulations (Defense Demo)
+Demonstrate the system's resilience against active attacks.
+1.  **Replay Attack**: The integration test captures a valid packet and re-sends it. Watch the logs for: `✅ Replay Attack Blocked: 401`.
+2.  **Cyber Lockdown**: The test floods the auth endpoint with invalid tokens. Watch the backend enter **Defense Mode**, rejecting requests with `503 Service Unavailable`.
+
+### Step 8: Forensic Audit
+Check the terminal output for **Hash Chaining**:
+```text
+FORENSIC_LOG: Chained Entry 8f2a... matched to Parent 3b1c...
+```
+This proves that the audit trail is strictly sequenced and tamper-evident.
 
 ---
 
-## 3. What To Look For (Demo Highlights)
+## 3. Important: Security Credentials
+*   **API Key**: `dev-secret` (Configured in `.env`)
+*   **Device Secrets**: Hardcoded in `backend/app/services/identities.py` for simulation (e.g., `sk_alp_01`).
+*   **Blockchain**: Uses local Ganache accounts (Account 0 = Admin).
 
-### 🔴 The Red Zone Breach
-*   **Watch**: The "Breach Tourist" (T-BREACH-99) moves into the red polygon.
-*   **Effect**: The Map automatically flips to **Satellite Mode**. The Sidebar flashes RED.
-
-### ⚡ The Dead Man's Switch (Stagnation)
-*   **Watch**: The "Accident Tourist" (T-FALL-22) stops moving.
-*   **Effect**: After a few seconds, the AI flags "STAGNATION". The risk score creeps up.
-
-### ⛈️ The Weather Engine
-*   **Watch**: Notice the Risk Score jump by +30 points when a tourist enters the "Storm Micro-Climate" near the border.
-*   **Log**: Check the backend terminal to see "SEVERE_WEATHER_WARNING" logs.
-
-### ⚖️ The E-FIR (Governance)
-*   **Action**: Click the "GEN E-FIR" button on any alert card.
-*   **Result**: Download a PDF. Notice the **QR Code** and the **Blockchain TXID** at the top. This proves the system is tamper-proof.

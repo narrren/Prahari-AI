@@ -94,13 +94,32 @@ def get_permit_info(did: str) -> str:
         
         return "[CRITICAL] Blockchain Unreachable & No Cache. Manual Verify Required."
 
+import hashlib
+
+# Hash Chain State for Forensic Readiness
+LAST_LOG_HASH = "00000000000000000000000000000000" # Genesis Hash
+
 def log_audit_event(admin_id: str, tourist_did: str, action: str, doc_hash: str) -> str:
     """
-    Writes an immutable Audit Log to the Blockchain.
+    Writes an immutable Audit Log to the Blockchain using Forensic Hash Chaining.
     Returns the Transaction Hash (TXID).
     """
+    global LAST_LOG_HASH
+    
+    # Forensic Hash Chaining (Local Tamper Evidence)
+    timestamp = time.time()
+    current_entry = f"{admin_id}:{tourist_did}:{action}:{doc_hash}:{timestamp}"
+    
+    # New Hash = SHA256(Previous Hash + Current Content)
+    chain_hash = hashlib.sha256(f"{LAST_LOG_HASH}{current_entry}".encode()).hexdigest()
+    
+    print(f"FORENSIC_LOG: Chained Entry {chain_hash[:10]}... <-- Parent {LAST_LOG_HASH[:10]}...")
+    
+    # Update Chain Tip
+    LAST_LOG_HASH = chain_hash
+
     if not contract or not w3:
-        return "0xMOCK_TXID_BLOCKCHAIN_OFFLINE"
+        return f"0xMOCK_TXID_CHAIN_{chain_hash[:8]}"
 
     try:
         # Resolve DID
@@ -113,14 +132,15 @@ def log_audit_event(admin_id: str, tourist_did: str, action: str, doc_hash: str)
         authority_acc = w3.eth.accounts[0] 
         
         # Send Transaction
+        # We embed the forensic hash in the log message itself
+        log_message = f"ADMIN:{admin_id} ACT:{action} LINK:{chain_hash[:8]}"
+        
         tx_hash = contract.functions.logIncidentAction(
             tourist_addr, 
-            f"ADMIN:{admin_id} ACTION:{action}", 
+            log_message, 
             doc_hash
         ).transact({'from': authority_acc})
         
-        # We don't wait for receipt here to keep API fast, 
-        # but in strict systems we might.
         return w3.to_hex(tx_hash)
         
     except Exception as e:

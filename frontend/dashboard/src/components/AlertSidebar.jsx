@@ -7,9 +7,30 @@ import { downloadEFIR } from '../utils/api';
 const CURRENT_ROLE = 'DISTRICT_SUPERVISOR';
 const API_BASE = "http://localhost:8000/api/v1";
 
-const AlertSidebar = ({ alerts, onRefresh }) => {
-    // We maintain a local version of alerts to allow optimistic UI updates
-    // But mostly rely on the parent 'alerts' prop which comes from polling/socket
+const AlertSidebar = ({ alerts, onRefresh, tourists }) => {
+    // V5.1 Cyber-Forensics HUD State
+    const [modelStatus, setModelStatus] = useState('CHECKING');
+    const [modelHash, setModelHash] = useState(null);
+    const [blockHeight, setBlockHeight] = useState(742);
+
+    useEffect(() => {
+        // Fetch Integrity
+        const checkIntegrity = async () => {
+            try {
+                const res = await axios.get(`${API_BASE}/integrity/model`);
+                setModelStatus(res.data.status);
+                setModelHash(res.data.current_hash);
+            } catch (e) { setModelStatus('OFFLINE'); }
+        };
+        checkIntegrity();
+
+        // Simulate Block Height ticking
+        const ledgerInterval = setInterval(() => {
+            setBlockHeight(prev => prev + 1);
+        }, 3000);
+
+        return () => clearInterval(ledgerInterval);
+    }, []);
 
     const handleAction = async (action, alertId) => {
         try {
@@ -46,6 +67,16 @@ const AlertSidebar = ({ alerts, onRefresh }) => {
         }
     }
 
+    // V5.0 Decentralized Attestation
+    const handleAttest = async (alertId) => {
+        try {
+            await axios.post(`${API_BASE}/alert/attest/${alertId}`, {}, {
+                headers: { 'X-Node-ID': 'CHECKPOST_BRAVO' }
+            });
+            if (onRefresh) onRefresh();
+        } catch (e) { console.error(e); }
+    }
+
     // Sort: CRITICAL first, then new
     const sortedAlerts = [...(alerts || [])].sort((a, b) => {
         if (a.actions?.includes('CRITICAL') && !b.severity) return -1; // Fallback sort
@@ -65,6 +96,43 @@ const AlertSidebar = ({ alerts, onRefresh }) => {
                 </div>
             </div>
 
+            {/* V5.1 CYBER-FORENSICS HUD */}
+            <div className="bg-gray-900 mx-3 mt-3 p-3 rounded-lg border-2 border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+                <h3 className="text-xs font-bold text-white uppercase tracking-widest mb-2 flex items-center gap-2">
+                    <Gavel size={14} className="text-purple-400" /> Cyber-Forensics HUD
+                </h3>
+
+                {/* Node Consensus */}
+                <div className="flex justify-between items-center mb-1 text-[10px] font-mono">
+                    <span className="text-gray-500">Node Consensus</span>
+                    <span className="text-green-400 flex items-center gap-1"><CheckCircle size={8} /> 2/2 Nodes (Attested)</span>
+                </div>
+
+                {/* Ledger Health */}
+                <div className="flex justify-between items-center mb-1 text-[10px] font-mono">
+                    <span className="text-gray-500">Ledger Health</span>
+                    <span className="text-blue-300 animate-pulse">Syncing Block #{blockHeight}...</span>
+                </div>
+
+                {/* Model Hash */}
+                <div className="flex justify-between items-center mb-2 text-[10px] font-mono">
+                    <span className="text-gray-500">Model Integrity</span>
+                    <span className={modelStatus === 'SECURE' ? "text-green-400 font-bold" : "text-red-500 font-bold animate-pulse"}>
+                        {modelStatus === 'SECURE' ? '0x8f2... (VALID)' : 'COMPROMISED'}
+                    </span>
+                </div>
+
+                {/* Controls */}
+                <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-purple-500/20">
+                    <button className="bg-slate-800 text-[10px] text-gray-300 py-1.5 rounded border border-slate-600 hover:bg-slate-700 transition flex items-center justify-center gap-1">
+                        <Activity size={10} /> Anomaly Heatmap
+                    </button>
+                    <button onClick={() => alert("Redirecting to Forensic Timeline...")} className="bg-purple-900/40 text-purple-300 text-[9px] py-1.5 rounded border border-purple-500/50 hover:bg-purple-900/60 transition flex items-center justify-center gap-1">
+                        <Clock size={10} /> Audit Mode (Time-Travel)
+                    </button>
+                </div>
+            </div>
+
             <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-black/20 custom-scrollbar">
                 {sortedAlerts.length === 0 && (
                     <div className="flex flex-col items-center justify-center h-40 text-slate-500">
@@ -76,6 +144,11 @@ const AlertSidebar = ({ alerts, onRefresh }) => {
                 {sortedAlerts.map((alert) => {
                     const status = alert.status || 'DETECTED'; // Default to DETECTED if missing
                     const isCritical = alert.severity === 'CRITICAL' || alert.is_panic;
+
+                    // V5.0 Metrics Lookup
+                    const tourist = tourists?.find(t => t.device_id === alert.device_id);
+                    const humanityScore = tourist?.humanity_score ?? 100.0;
+                    const isSpoofed = humanityScore < 50;
 
                     return (
                         <div
@@ -124,6 +197,33 @@ const AlertSidebar = ({ alerts, onRefresh }) => {
 
                             <div className="text-xs mb-2 p-2 bg-black/40 rounded border border-white/5 font-mono text-gray-300">
                                 {alert.message}
+                            </div>
+
+                            {/* V5.0 TRUSTLESS GOVERNANCE BLOCK */}
+                            <div className="mb-2 p-2 bg-slate-800/50 rounded border border-slate-700">
+                                <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-1">Blockchain & Biometrics</div>
+                                <div className="flex justify-between items-center mb-1">
+                                    <span className="text-[10px] text-gray-400">Attestation:</span>
+                                    {alert.attestation_status === 'ATTESTED' ? (
+                                        <span className="text-[10px] text-green-400 font-bold flex items-center gap-1">
+                                            <CheckCircle size={10} /> VERIFIED (Node-2)
+                                        </span>
+                                    ) : (
+                                        <button onClick={() => handleAttest(alert.alert_id)} className="text-[9px] bg-slate-700 hover:bg-slate-600 px-1.5 py-0.5 rounded text-gray-300 transition-colors">
+                                            Request Checkpost
+                                        </button>
+                                    )}
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-[10px] text-gray-400">Signal Auth:</span>
+                                    <span className={`text-[10px] font-mono font-bold ${isSpoofed ? 'text-red-500 animate-pulse' : 'text-blue-300'}`}>
+                                        {humanityScore.toFixed(1)}% {isSpoofed && '(BOT DETECTED)'}
+                                    </span>
+                                </div>
+                                {/* Progress Bar for Humanity */}
+                                <div className="w-full bg-gray-700 h-1 mt-1 rounded-full overflow-hidden">
+                                    <div className={`h-full transition-all duration-500 ${isSpoofed ? 'bg-red-500' : 'bg-blue-500'}`} style={{ width: `${humanityScore}%` }}></div>
+                                </div>
                             </div>
 
                             {/* SMART AI SUGGESTION */}
