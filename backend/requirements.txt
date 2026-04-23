@@ -11,3 +11,6 @@ geopy
 py-solc-x
 reportlab
 qrcode
+python-socketio
+websockets
+protobuf
