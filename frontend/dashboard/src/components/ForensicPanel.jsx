@@ -15,7 +15,7 @@ export default function ForensicPanel() {
         // Simulate hash calculation delay
         setTimeout(async () => {
             try {
-                const res = await axios.post("http://localhost:8000/api/v1/forensics/verify", {
+                const res = await axios.post("https://prahari-backend.onrender.com/api/v1/forensics/verify", {
                     file_hash: fileHash
                 });
                 setResult(res.data);
@@ -28,7 +28,7 @@ export default function ForensicPanel() {
 
     const handleFetchProof = async () => {
         try {
-            const res = await axios.post("http://localhost:8000/api/v1/forensics/merkle-proof", {
+            const res = await axios.post("https://prahari-backend.onrender.com/api/v1/forensics/merkle-proof", {
                 data_id: "packet_idx_452",
                 timestamp: Date.now()
             });

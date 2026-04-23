@@ -9,11 +9,11 @@ export default function CyberHUD() {
     useEffect(() => {
         const fetchHud = async () => {
             try {
-                const res = await axios.get("http://localhost:8000/api/v1/cyber/hud");
+                const res = await axios.get("https://prahari-backend.onrender.com/api/v1/cyber/hud");
                 setHud(res.data);
 
                 // Fetch Model Integrity
-                const intRes = await axios.get("http://localhost:8000/api/v1/integrity/model");
+                const intRes = await axios.get("https://prahari-backend.onrender.com/api/v1/integrity/model");
                 setModelStatus(intRes.data);
             } catch (e) { }
         };

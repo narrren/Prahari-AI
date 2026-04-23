@@ -7,7 +7,7 @@ import TacticalOverlay from './TacticalOverlay';
 
 // Tawang Coords
 const NETWORK_CENTER = [27.5861, 91.8594];
-const API_BASE = "http://localhost:8000/api/v1";
+const API_BASE = "https://prahari-backend.onrender.com/api/v1";
 
 const MapComponent = ({ tourists, geofences }) => {
     const [selectedId, setSelectedId] = useState(null);

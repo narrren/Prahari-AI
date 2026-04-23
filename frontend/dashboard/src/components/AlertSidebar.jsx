@@ -5,7 +5,7 @@ import { downloadEFIR } from '../utils/api';
 
 // Mock Config for Demo (In real app, get from Context/Auth)
 const CURRENT_ROLE = 'DISTRICT_SUPERVISOR';
-const API_BASE = "http://localhost:8000/api/v1";
+const API_BASE = "https://prahari-backend.onrender.com/api/v1";
 
 const AlertSidebar = ({ alerts, onRefresh, tourists }) => {
     // V5.1 Cyber-Forensics HUD State

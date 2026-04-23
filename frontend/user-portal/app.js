@@ -1,4 +1,4 @@
-const BACKEND_URL = "http://localhost:8000/api/v1";
+const BACKEND_URL = "https://prahari-backend.onrender.com/api/v1";
 let deviceId = "";
 let isPanic = false;
 let watchId = null;

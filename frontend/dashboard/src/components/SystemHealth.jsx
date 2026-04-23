@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Server, Database, Wifi, ShieldCheck, Activity } from 'lucide-react';
 
-const API_BASE = "http://localhost:8000/api/v1";
+const API_BASE = "https://prahari-backend.onrender.com/api/v1";
 
 const SystemHealth = () => {
     const [stats, setStats] = useState(null);

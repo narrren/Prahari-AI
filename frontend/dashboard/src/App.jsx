@@ -13,7 +13,7 @@ import CyberHUD from './components/CyberHUD';
 import ForensicPanel from './components/ForensicPanel';
 
 // Constants
-const API_BASE = "http://localhost:8000/api/v1";
+const API_BASE = "https://prahari-backend.onrender.com/api/v1";
 const POLL_INTERVAL = 3000;
 
 // Hardcoded Zones for Demo (Matches Backend Logic)
@@ -70,7 +70,7 @@ function App() {
 
   useEffect(() => {
     import('socket.io-client').then(({ io }) => {
-      const socket = io('http://localhost:8000');
+      const socket = io('https://prahari-backend.onrender.com');
 
       socket.on('connect', () => {
         console.log("Sentinel Uplink Established: WS Connected");

@@ -11,7 +11,7 @@ const SecurityHUD = () => {
     useEffect(() => {
         // Poll for metrics every 2s
         const interval = setInterval(() => {
-            fetch('http://localhost:8000/api/v1/health/metrics')
+            fetch('https://prahari-backend.onrender.com/api/v1/health/metrics')
                 .then(res => res.json())
                 .then(data => {
                     if (data.metrics) {
