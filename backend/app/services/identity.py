@@ -14,7 +14,7 @@ try:
         with open(CONFIG_PATH, "r") as f:
             config = json.load(f)
             
-        w3 = Web3(Web3.HTTPProvider(config["network_url"]))
+        w3 = Web3(Web3.HTTPProvider(config["network_url"], request_kwargs={'timeout': 0.5}))
         contract = w3.eth.contract(address=config["contract_address"], abi=config["abi"])
         tourist_mapping = config.get("tourist_mapping", {})
         print("Identity Service: Connected to Blockchain.")

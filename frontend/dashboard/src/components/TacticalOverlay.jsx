@@ -21,10 +21,10 @@ const TacticalOverlay = ({ deviceId, onClose, onPlaybackUpdate }) => {
                 // Sort ascending by time
                 const sorted = res.data.sort((a, b) => a.timestamp - b.timestamp);
                 setHistory(sorted);
-                setCurrentIndex(sorted.length - 1); // Start at end
+                setCurrentIndex(0); // Start at beginning
 
                 // Lift state up to Map for rendering the line
-                onPlaybackUpdate(sorted, sorted.length - 1);
+                onPlaybackUpdate(sorted, 0);
             } catch (err) {
                 console.error("Fetch history failed", err);
             } finally {
@@ -114,7 +114,13 @@ const TacticalOverlay = ({ deviceId, onClose, onPlaybackUpdate }) => {
             {/* SCRUBBER */}
             <div className="flex items-center gap-4">
                 <button
-                    onClick={() => setIsPlaying(!isPlaying)}
+                    onClick={() => {
+                        if (!isPlaying && currentIndex >= history.length - 1) {
+                            setCurrentIndex(0);
+                            onPlaybackUpdate(history, 0);
+                        }
+                        setIsPlaying(!isPlaying);
+                    }}
                     className={`p-2 rounded-full border ${isPlaying ? 'bg-yellow-500/20 border-yellow-500 text-yellow-400' : 'bg-green-600 border-green-500 text-white hover:bg-green-500 transition-all'}`}
                 >
                     {isPlaying ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}

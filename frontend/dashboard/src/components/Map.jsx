@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { MapContainer, TileLayer, Marker, Popup, Circle, Polyline, CircleMarker } from 'react-leaflet';
-import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import TacticalOverlay from './TacticalOverlay';
@@ -160,10 +159,12 @@ const MapComponent = ({ tourists, geofences }) => {
                 {/* TACTICAL TRAJECTORY (VCR) */}
                 {tacticalPath.length > 0 && (
                     <>
-                        <Polyline
-                            positions={tacticalPath.map(p => [p.location.lat, p.location.lng])}
-                            pathOptions={{ color: '#64748b', weight: 2, dashArray: '5,5', opacity: 0.6 }}
-                        />
+                        {tacticalIndex > 0 && (
+                            <Polyline
+                                positions={tacticalPath.slice(0, tacticalIndex + 1).map(p => [p.location.lat, p.location.lng])}
+                                pathOptions={{ color: '#3b82f6', weight: 4, dashArray: '5,5', opacity: 0.8 }}
+                            />
+                        )}
                         {/* The Ghost VCR Head */}
                         {tacticalPath[tacticalIndex] && (
                             <CircleMarker
@@ -179,10 +180,9 @@ const MapComponent = ({ tourists, geofences }) => {
                     </>
                 )}
 
-                {/* Render Tourists with Clusters */}
-                <MarkerClusterGroup chunkedLoading>
-                    {tourists.map((t) => (
-                        <Marker
+                {/* Render Tourists Directly (No Cluster) */}
+                {tourists.map((t) => (
+                    <Marker
                             key={t.device_id}
                             position={[t.location?.lat || 0, t.location?.lng || 0]}
                             icon={getCustomIcon(t)}
@@ -229,7 +229,6 @@ const MapComponent = ({ tourists, geofences }) => {
                             </Popup>
                         </Marker>
                     ))}
-                </MarkerClusterGroup>
             </MapContainer>
         </div>
     );

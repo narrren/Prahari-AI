@@ -30,11 +30,16 @@ pip install -r requirements.txt
 python -m uvicorn app.main:fastapi_app --host 0.0.0.0 --port 8000 --reload
 ```
 
-#### 2. Frontend Setup
+#### 2. Frontend Setup (Dashboard & Tourist Portal)
 ```powershell
+# In terminal 2: Start Command Dashboard
 cd frontend/dashboard
 npm install
 npm run dev -- --host
+
+# In terminal 3: Start Tourist Web Portal
+cd frontend/user-portal
+npx server -p 5000
 ```
 
 #### 3. Start Traffic Simulator
@@ -196,16 +201,20 @@ Prahari-AI/
 │   │       └── shared_state.py  # In-memory cache (TELEMETRY_HISTORY)
 │   └── requirements.txt
 ├── frontend/
-│   └── dashboard/
-│       ├── src/
-│       │   ├── App.jsx          # Main dashboard
-│       │   ├── components/
-│       │   │   ├── Map.jsx      # Leaflet map with 4 trackers
-│       │   │   ├── TacticalOverlay.jsx  # VCR replay
-│       │   │   ├── AlertSidebar.jsx     # Cyber-Forensics HUD
-│       │   │   └── SecurityHUD.jsx      # Integrity indicators
-│       │   └── utils/
-│       └── package.json
+│   ├── dashboard/
+│   │   ├── src/
+│   │   │   ├── App.jsx          # Main dashboard
+│   │   │   ├── components/
+│   │   │   │   ├── Map.jsx      # Leaflet map with trackers
+│   │   │   │   ├── TacticalOverlay.jsx  # VCR replay
+│   │   │   │   ├── AlertSidebar.jsx     # Cyber-Forensics HUD
+│   │   │   │   └── SecurityHUD.jsx      # Integrity indicators
+│   │   │   └── utils/
+│   │   └── package.json
+│   └── user-portal/
+│       ├── index.html           # Tourist interface
+│       ├── app.js               # In-browser Cryptography & GPS
+│       └── style.css            # Glassmorphic UI styles
 ├── traffic_generator.py         # Simulates 4 device profiles
 ├── v5_check.py                  # System verification script
 ├── docker-compose.yml           # Full-stack orchestration

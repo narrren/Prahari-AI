@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Prahari Sentinel</title>
+    <meta name="description" content="Prahari AI Sentinel - Tourist Safety Link">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Status Bar -->
+        <header class="header">
+            <div class="logo-container">
+                <div class="pulse-indicator" id="connection-indicator"></div>
+                <h1 class="title">PRAHARI SENTINEL</h1>
+            </div>
+            <div class="subtitle" id="status-text">MoDoNER Safety Link: CONNECTING...</div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Identity Card -->
+            <div class="card identity-card glass-panel">
+                <div class="card-header">
+                    <h2>SECURE ID</h2>
+                    <span class="badge">TOURIST PERMIT</span>
+                </div>
+                <div class="identity-info">
+                    <p class="did" id="device-id">DID: generating...</p>
+                    <p class="encryption-status"><span class="icon">🔒</span> Quantum-Safe Channel Active</p>
+                </div>
+            </div>
+
+            <!-- Location Telemetry -->
+            <div class="card location-card glass-panel">
+                <div class="card-header">
+                    <h2>LIVE TELEMETRY</h2>
+                    <span class="gps-status" id="gps-status">Acquiring...</span>
+                </div>
+                <div class="coordinates">
+                    <div class="coord-box">
+                        <span class="label">LATITUDE</span>
+                        <span class="value font-mono" id="lat-val">--.----</span>
+                    </div>
+                    <div class="coord-box">
+                        <span class="label">LONGITUDE</span>
+                        <span class="value font-mono" id="lng-val">--.----</span>
+                    </div>
+                </div>
+                <div class="map-visual">
+                    <div class="radar">
+                        <div class="sweep"></div>
+                        <div class="target"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Actions -->
+            <div class="action-area">
+                <button class="sos-button" id="sos-btn">
+                    <div class="sos-ring border-1"></div>
+                    <div class="sos-ring border-2"></div>
+                    <div class="sos-content">
+                        <span class="sos-text">HOLD FOR SOS</span>
+                        <span class="sos-lock">Hold 3s</span>
+                    </div>
+                </button>
+            </div>
+        </main>
+
+        <!-- Toast Notification -->
+        <div class="toast" id="toast">
+            <p id="toast-message">Notification</p>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

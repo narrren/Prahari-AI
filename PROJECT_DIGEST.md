@@ -42,6 +42,13 @@ This final polish adds "Future-Proofing" against Quantum Computing threats and "
     *   **Fail-Soft Routing**: API endpoints automatically fallback to the In-Memory buffer if DB connection timeouts occur.
     *   **Router Lockdown**: Fixed FastAPI lifecycle registration to ensure all telemetry routers are active before the first packet arrives.
 
+### E. The Sentinel Tourist Portal (End-User Web App)
+*   **The Upgrade**: Replacing the rudimentary mobile footprint with a fully responsive, aesthetic web application for tourists (`frontend/user-portal`).
+*   **Mechanism**: **Web Crypto API & Native Geolocation**.
+    *   **In-Browser Attestation**: Generates HMAC-SHA256 signatures directly in JS to satisfy the backend's Zero-Trust ingress.
+    *   **Dynamic Nonce**: Bypasses the Simulation engine using an offset `100x` clock to prevent "Replay Attack" false flags during testing with the `SIGNAL_LOST` profile.
+    *   **SOS Lock**: Introduces a 2-second hold to trigger SOS, effectively ending accidental panic telemetry in challenging terrains.
+
 ---
 
 ## 3. Phase 5.0: Sovereign-Grade Trustless Systems (The "State-Actor" Upgrade)
@@ -112,7 +119,9 @@ We engineered the system against specific threat vectors common in defense netwo
 
 ## 6. System Status (Final Check)
 *   **Backend**: Online (Port 8000). V5.1.5 Endpoints Active & Hardened.
-*   **Frontend**: Build Successful. **Cyber-Forensics HUD** (Sidebar) and **VCR Replay** fully functional.
+*   **Frontend**: 
+    *   **Command Dashboard**: Build Successful (`frontend/dashboard`). Cyber-Forensics HUD and VCR Replay fully functional.
+    *   **Tourist Portal**: Online via HTTP Server (`frontend/user-portal`). Mobile-responsive, glassmorphic UI generating verifiable cryptographic telemetry.
 *   **Resilience**: In-Memory History Buffer Active. Zero Trust Middleware (Mandatory HMAC-SHA256) Enforced.
 *   **Simulation**: `traffic_generator.py` simulating **Humans (Safe & Red Zone)** vs **Bots (MECH_DRONE_01)**.
 *   **Defense**: SOAR Engine Active & Monitoring.

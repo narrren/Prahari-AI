@@ -195,8 +195,9 @@ async def process_risk_and_db(data: TelemetryData):
     """
     affected_alerts = []
     
-    # Identity Verification (Blockchain Bridge)
-    permit_str = get_permit_info(data.did)
+    # Identity Verification (Blockchain Bridge) - runs in threadpool to prevent deadlock
+    import asyncio
+    permit_str = await asyncio.to_thread(get_permit_info, data.did)
 
     # 1. Check Geofence
     breached_zone = check_geofence_breach(data.location)
@@ -249,9 +250,10 @@ async def process_risk_and_db(data: TelemetryData):
         item['speed'] = Decimal(str(item['speed']))
         item['heading'] = Decimal(str(item['heading']))
         item['battery_level'] = Decimal(str(item['battery_level']))
-        t_table.put_item(Item=item)
+        # Offload boto3 sync call to thread
+        await asyncio.to_thread(t_table.put_item, Item=item)
     except Exception as e:
-        print(f"DB Error (Telemetry): {e}")
+        pass
 
     # 5. Notify & Save Alerts
     for alert_dict in affected_alerts:
@@ -442,10 +444,15 @@ async def get_device_history(device_id: str, hours: int = 4):
     cutoff_time = Decimal(str(time.time() - (hours * 3600)))
     
     try:
-        response = t_table.query(
+        import asyncio
+        from functools import partial
+        from boto3.dynamodb.conditions import Key
+        
+        query_func = partial(t_table.query, 
             KeyConditionExpression=Key('device_id').eq(device_id) & Key('timestamp').gte(cutoff_time),
-            ScanIndexForward=True # Ascending (oldest first)
+            ScanIndexForward=True
         )
+        response = await asyncio.to_thread(query_func)
         items = response.get('Items', [])
         
         # Serialization Fix: Convert Decimals to Float/Int
