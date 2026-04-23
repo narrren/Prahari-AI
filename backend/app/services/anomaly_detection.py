@@ -84,7 +84,7 @@ def detect_anomalies(data: TelemetryData) -> list[AlertType]:
 
     # --- 4. SOS OVERRIDE ---
     if data.is_panic:
-        return [AlertType.SOS]
+        return [AlertType.SOS_MANUAL]
 
     # Threshold evaluation
     # User Logic: "return min(score, 100)"
@@ -95,7 +95,7 @@ def detect_anomalies(data: TelemetryData) -> list[AlertType]:
     if final_score >= 80.0:
         # High Risk -> Treat as SOS/Critical
         if not data.is_panic: # Don't duplicate if SOS already handled
-             anomalies.append(AlertType.SOS) 
+             anomalies.append(AlertType.SOS_MANUAL) 
     elif final_score >= 50.0:
         # Warning Level -> Geofence Breach usually
         if spatial_risk:

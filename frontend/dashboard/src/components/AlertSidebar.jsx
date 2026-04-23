@@ -12,6 +12,10 @@ const AlertSidebar = ({ alerts, onRefresh, tourists }) => {
     const [modelStatus, setModelStatus] = useState('CHECKING');
     const [modelHash, setModelHash] = useState(null);
     const [blockHeight, setBlockHeight] = useState(742);
+    
+    // UI States for Dispatch
+    const [dispatchingAlert, setDispatchingAlert] = useState(null);
+    const [selectedAgency, setSelectedAgency] = useState('ITBP');
 
     useEffect(() => {
         // Fetch Integrity
@@ -59,12 +63,18 @@ const AlertSidebar = ({ alerts, onRefresh, tourists }) => {
         }
     }
 
-    const handleDispatch = (alertId) => {
-        // Mock Dispatch UX
-        const agency = prompt("SELECT AGENCY FOR HANDOFF:\n1. ITBP (Border Police)\n2. NDRF (Disaster)\n3. Local Medical");
-        if (agency) {
-            alert(`Connect: Blockchain Transaction Initiated.\nTarget: AGENCY_${agency}\nAsset: INCIDENT_${alertId}\nStatus: PENDING_CONFIRMATION`);
-        }
+    const handleDispatchClick = (alertId) => {
+        setDispatchingAlert(alertId);
+        setSelectedAgency('ITBP');
+    }
+
+    const confirmDispatch = (alertId) => {
+        alert(`Connect: Blockchain Transaction Initiated.\nTarget: AGENCY_${selectedAgency}\nAsset: INCIDENT_${alertId}\nStatus: PENDING_CONFIRMATION`);
+        setDispatchingAlert(null);
+    }
+
+    const cancelDispatch = () => {
+        setDispatchingAlert(null);
     }
 
     // V5.0 Decentralized Attestation
@@ -254,22 +264,51 @@ const AlertSidebar = ({ alerts, onRefresh, tourists }) => {
                             </div>
 
                             {/* CONTROL PLANE ACTIONS */}
-                            <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-white/10">
-                                {status === 'DETECTED' ? (
-                                    <>
-                                        <button
-                                            onClick={() => handleAction('ACK', alert.alert_id)}
-                                            className="col-span-1 bg-yellow-600 hover:bg-yellow-500 text-black text-[10px] font-bold py-1.5 rounded flex items-center justify-center gap-1"
+                            <div className="mt-2 pt-2 border-t border-white/10">
+                                {dispatchingAlert === alert.alert_id ? (
+                                    <div className="flex flex-col gap-2 p-1">
+                                        <div className="text-[9px] text-purple-400 font-bold uppercase tracking-wider">Select Agency for Handoff:</div>
+                                        <select 
+                                            className="bg-gray-800 text-white text-[10px] p-2 rounded border border-gray-600 focus:outline-none focus:border-purple-500"
+                                            value={selectedAgency}
+                                            onChange={(e) => setSelectedAgency(e.target.value)}
                                         >
-                                            <CheckCircle size={10} /> ACKNOWLEDGE
-                                        </button>
-                                        <button
-                                            onClick={() => handleDispatch(alert.alert_id)}
-                                            className="col-span-1 flex items-center justify-center gap-1 bg-purple-700 hover:bg-purple-600 text-white rounded text-[10px] font-bold transition-all"
-                                        >
-                                            <Send size={10} /> DISPATCH
-                                        </button>
-                                    </>
+                                            <option value="ITBP">ITBP (Indo-Tibetan Border Police)</option>
+                                            <option value="NDRF">NDRF (Disaster Response)</option>
+                                            <option value="MEDICAL">Local Medical Team</option>
+                                        </select>
+                                        <div className="flex gap-2 mt-1">
+                                            <button 
+                                                onClick={() => confirmDispatch(alert.alert_id)}
+                                                className="flex-1 bg-purple-600 hover:bg-purple-500 text-white text-[10px] font-bold py-1.5 rounded transition-all"
+                                            >
+                                                CONFIRM
+                                            </button>
+                                            <button 
+                                                onClick={cancelDispatch}
+                                                className="flex-1 bg-gray-700 hover:bg-gray-600 text-white text-[10px] font-bold py-1.5 rounded transition-all"
+                                            >
+                                                CANCEL
+                                            </button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {status === 'DETECTED' ? (
+                                            <>
+                                                <button
+                                                    onClick={() => handleAction('ACK', alert.alert_id)}
+                                                    className="col-span-1 bg-yellow-600 hover:bg-yellow-500 text-black text-[10px] font-bold py-1.5 rounded flex items-center justify-center gap-1"
+                                                >
+                                                    <CheckCircle size={10} /> ACKNOWLEDGE
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDispatchClick(alert.alert_id)}
+                                                    className="col-span-1 flex items-center justify-center gap-1 bg-purple-700 hover:bg-purple-600 text-white rounded text-[10px] font-bold transition-all"
+                                                >
+                                                    <Send size={10} /> DISPATCH
+                                                </button>
+                                            </>
                                 ) : status === 'ACKNOWLEDGED' ? (
                                     <>
                                         <button
@@ -290,6 +329,8 @@ const AlertSidebar = ({ alerts, onRefresh, tourists }) => {
                                         CASE CLOSED (Archived)
                                     </div>
                                 )}
+                                </div>
+                            )}
                             </div>
                         </div>
                     );

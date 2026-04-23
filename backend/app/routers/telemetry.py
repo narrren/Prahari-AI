@@ -216,7 +216,7 @@ async def process_risk_and_db(data: TelemetryData):
     anomalies = detect_anomalies(data)
     for anomaly_type in anomalies:
         severity = "MEDIUM"
-        if anomaly_type == AlertType.SOS: severity = "CRITICAL"
+        if anomaly_type == AlertType.SOS_MANUAL: severity = "CRITICAL"
         if anomaly_type == AlertType.Unconscious: severity = "CRITICAL"
         
         alert, is_new = upsert_alert(
